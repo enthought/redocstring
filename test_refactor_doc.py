@@ -122,13 +122,44 @@ class TestFunctionDocstring(unittest.TestCase):
 
     :param inputa: The first argument holds the first input!.
 
-            This is the second paragraph.
+        This is the second paragraph.
     :type inputa: str
     :param inputb: The second argument is a float.
-            the default value is 0.
+        the default value is 0.
 
-            .. note:: this is an optional value.
+        .. note:: this is an optional value.
     :type inputb: float
+
+    """
+
+        docstring_lines = docstring.splitlines()
+        FunctionDocstring(docstring_lines)
+        output = '\n'.join(docstring_lines)
+        self.assertMultiLineEqual(rst, output)
+
+    def test_refactor_strange_arguments(self):
+        docstring =\
+    """ This is a sample function docstring
+
+    Parameters
+    ----------
+    *args :
+        Positional arguments with which this constructor was called
+        from the enaml source code.
+
+    **kwards :
+        Keyword arguments with which this constructor was called
+        from the enaml source code.
+
+    """
+
+        rst = \
+    """ This is a sample function docstring
+
+    :param \*args: Positional arguments with which this constructor was called
+        from the enaml source code.
+    :param \*\*kwards: Keyword arguments with which this constructor was called
+        from the enaml source code.
 
     """
 

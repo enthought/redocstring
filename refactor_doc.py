@@ -71,7 +71,7 @@ def get_indent(line):
 #------------------------------------------------------------------------------
 
 def is_variable_field(line, indent=''):
-    regex = indent + r'\w+\s:\s*'
+    regex = indent + r'\*?\*?\w+\s:\s*'
     match = re.match(regex, line)
     return match
 
@@ -82,6 +82,13 @@ def is_method_field(line, indent=''):
 
 def is_empty(line):
     return not line.strip()
+
+#------------------------------------------------------------------------------
+#  Functions to adjust strings
+#------------------------------------------------------------------------------
+
+def fix_name(name):
+    return name.replace('*','\*')
 
 #------------------------------------------------------------------------------
 #  Classes
@@ -607,6 +614,7 @@ class FunctionDocstring(BaseDocstring):
 
         descriptions = []
         for arg_name, arg_type, desc in parameters:
+            arg_name = arg_name.replace('*','\*')
             descriptions.append(indent + ':param {0}: {1}'.\
                                 format(arg_name, desc[0].strip()))
             desc = add_indent(desc)

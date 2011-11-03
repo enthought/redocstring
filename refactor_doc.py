@@ -617,11 +617,11 @@ class FunctionDocstring(BaseDocstring):
             arg_name = arg_name.replace('*','\*')
             descriptions.append(indent + ':param {0}: {1}'.\
                                 format(arg_name, desc[0].strip()))
-            desc = add_indent(desc)
             for line in desc[1:]:
                 descriptions.append('{0}'.format(line))
-            descriptions.append(indent + ':type {0}: {1}'.\
-                                format(arg_name, arg_type))
+            if len(arg_type) > 0:
+                descriptions.append(indent + ':type {0}: {1}'.\
+                                    format(arg_name, arg_type))
         descriptions.append('')
         self.insert_lines(descriptions, index)
         self.index += len(descriptions)

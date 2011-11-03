@@ -394,17 +394,10 @@ class BaseDocstring(object):
         if self.eol:
             return False
 
-        # peek at line
         header = self.peek()
-
+        line2 = self.peek(1)
         if self.verbose:
             print 'current line is: {0} at index {1}'.format(header, self.index)
-
-        # peek at second line
-        line2 = self.peek(1)
-
-        if self.verbose:
-            print 'second line is:', header
 
         # check for underline type format
         underline = re.match(r'\s*\S+\s*\Z', line2)

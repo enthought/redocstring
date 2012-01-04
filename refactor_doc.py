@@ -71,7 +71,7 @@ def get_indent(line):
 #------------------------------------------------------------------------------
 
 def is_variable_field(line, indent=''):
-    regex = indent + r'\*?\*?\w+\s:\s*'
+    regex = indent + r'\*?\*?\w+\s:(\s+|$)'
     match = re.match(regex, line)
     return match
 
@@ -344,13 +344,13 @@ class BaseDocstring(object):
         """
         header = lines[0].strip()
         if ' :' in header:
-            arg_name, arg_type = re.split(' \:\s?', header)
+            arg_name, arg_type = re.split('\s\:\s?', header, maxsplit=1)
         else:
             arg_name, arg_type = header, ''
         if self.verbose:
             print "name is:", arg_name, " type is:", arg_type
-            print "the output of 're.split(' \:\s?', header)' was", \
-                        re.split(' \:\s?', header)
+            print "the output of 're.split('\s\:\s?', header, maxsplit=1)'"\
+                  "was", re.split(' \:\s?', header)
         if len(lines) > 1:
             lines = [line.rstrip() for line in lines]
             return arg_name.strip(), arg_type.strip(), lines[1:]
@@ -385,7 +385,7 @@ class BaseDocstring(object):
 
         del docstring[index:(index + len(lines))]
         self.index = index
-        return lines[:-1]
+        return lines
 
     def is_section(self):
         """Check if the line defines a section.

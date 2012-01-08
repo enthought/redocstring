@@ -238,18 +238,9 @@ class BaseDoc(object):
         except AttributeError:
             self._docstring = lines
         self.verbose = verbose
-        if headers is None:
-            self.headers = {}
-        else:
-            self.headers = headers
+        self.headers = {} if headers is None else headers
         self.index = 0
-        if self.verbose:
-            print 'INPUT DOCSTRING'
-            print '\n'.join(self.docstring)
         self.parse()
-        if self.verbose:
-            print 'OUTPUT DOCSTRING'
-            print '\n'.join(self.docstring)
 
     def parse(self):
         """ Parse the docstring.

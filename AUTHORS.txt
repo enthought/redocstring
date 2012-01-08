@@ -8,4 +8,5 @@ The refactor_doc extention started while working on the Enaml project
 with Chris Colbert, Robert Kern, Corran Webster and David Wyde at
 Enthought.
 
-Many people at Enthought have provided feedback and given suggestions.
+Many people at Enthought have provided feedback and given suggestions and
+fixes.

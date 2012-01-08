@@ -6,39 +6,10 @@
 #  All rights reserved.
 #------------------------------------------------------------------------------
 import unittest
-from refactor_doc import BaseDocstring, FunctionDocstring, ClassDocstring
-
-class TestBaseDocstring(unittest.TestCase):
-
-    def setUp(self):
-        self.maxDiff = None
-
-    def test_refactor_header(self):
-        docstring =\
-    """ This is a sample docstring.
-
-    My Header
-    ---------
-    This is just some sample text.
-
-    """
-
-        rst = \
-    """ This is a sample docstring.
-
-    .. rubric:: My Header
-
-    This is just some sample text.
-
-    """
-
-        docstring_lines = docstring.splitlines()
-        BaseDocstring(docstring_lines)
-        output = '\n'.join(docstring_lines)
-        self.assertMultiLineEqual(rst, output)
+from function_doc import FunctionDoc
 
 
-class TestFunctionDocstring(unittest.TestCase):
+class TestFunctionDoc(unittest.TestCase):
 
     def setUp(self):
         self.maxDiff = None
@@ -65,7 +36,7 @@ class TestFunctionDocstring(unittest.TestCase):
     """
 
         docstring_lines = docstring.splitlines()
-        FunctionDocstring(docstring_lines)
+        FunctionDoc(docstring_lines)
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
 
@@ -94,7 +65,7 @@ class TestFunctionDocstring(unittest.TestCase):
     """
 
         docstring_lines = docstring.splitlines()
-        FunctionDocstring(docstring_lines)
+        FunctionDoc(docstring_lines)
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
 
@@ -133,7 +104,7 @@ class TestFunctionDocstring(unittest.TestCase):
     """
 
         docstring_lines = docstring.splitlines()
-        FunctionDocstring(docstring_lines)
+        FunctionDoc(docstring_lines)
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
 
@@ -164,7 +135,7 @@ class TestFunctionDocstring(unittest.TestCase):
     """
 
         docstring_lines = docstring.splitlines()
-        FunctionDocstring(docstring_lines)
+        FunctionDoc(docstring_lines)
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
 
@@ -191,12 +162,12 @@ class TestFunctionDocstring(unittest.TestCase):
     """
 
         docstring_lines = docstring.splitlines()
-        FunctionDocstring(docstring_lines)
+        FunctionDoc(docstring_lines)
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
 
     def test_docstring_cases_1(self):
-        docstring =""" Sets the selection to the bounds of start and end.
+        docstring1 =""" Sets the selection to the bounds of start and end.
 
         If the indices are invalid, no selection will be made,
         and any current selection will be cleared.
@@ -206,6 +177,24 @@ class TestFunctionDocstring(unittest.TestCase):
         start : Int
             The start selection index, zero based.
 
+        end : Int
+            The end selection index, zero based.
+
+        Returns
+        -------
+        result : None
+
+        """
+
+        docstring2 =""" Sets the selection to the bounds of start and end.
+
+        If the indices are invalid, no selection will be made,
+        and any current selection will be cleared.
+
+        Arguments
+        ---------
+        start : Int
+            The start selection index, zero based.
         end : Int
             The end selection index, zero based.
 
@@ -230,129 +219,13 @@ class TestFunctionDocstring(unittest.TestCase):
 
         """
 
-        docstring_lines = docstring.splitlines()
-        FunctionDocstring(docstring_lines)
+        docstring_lines = docstring1.splitlines()
+        FunctionDoc(docstring_lines)
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
 
-
-class TestClassDocstring(unittest.TestCase):
-
-    def setUp(self):
-        self.maxDiff = None
-
-    def tearDown(self):
-        pass
-
-    def test_refactor_attributes(self):
-        docstring =\
-    """Base abstract docstring refactoring class.
-
-    The class' main purpose is to parse the dosctring and find the
-    sections that need to be refactored. It also provides a number of
-    methods to help with the refactoring. Subclasses should provide
-    the methods responsible for refactoring the sections.
-
-    Attributes
-    ----------
-    docstring : list
-        A list of strings (lines) that holds docstrings
-
-    index : int
-        The current zero-based line number of the docstring that is
-        proccessed.
-    """
-
-        rst = \
-    """Base abstract docstring refactoring class.
-
-    The class' main purpose is to parse the dosctring and find the
-    sections that need to be refactored. It also provides a number of
-    methods to help with the refactoring. Subclasses should provide
-    the methods responsible for refactoring the sections.
-
-    .. attribute:: docstring
-        *(list)*
-        A list of strings (lines) that holds docstrings
-
-    .. attribute:: index
-        *(int)*
-        The current zero-based line number of the docstring that is
-        proccessed.
-    """
-
-        docstring_lines = docstring.splitlines()
-        ClassDocstring(docstring_lines)
-        output = '\n'.join(docstring_lines)
-        self.assertMultiLineEqual(rst, output)
-
-    def test_refactor_methods(self):
-        docstring =\
-    """ This is a sample class docstring
-
-    Methods
-    -------
-    extract_fields(indent='', field_check=None)
-        Extract the fields from the docstring
-
-    get_field()
-        Get the field description.
-
-    get_next_paragraph()
-        Get the next paragraph designated by an empty line.
-    """
-
-        rst = \
-    """ This is a sample class docstring
-
-    ========================== ===================================================
-    Methods                    Descriptions
-    ========================== ===================================================
-    :meth:`extract_fields`     Extract the fields from the docstring
-    :meth:`get_field`          Get the field description.
-    :meth:`get_next_paragraph` Get the next paragraph designated by an empty line.
-    ========================== ===================================================
-    """
-
-        docstring_lines = docstring.splitlines()
-        ClassDocstring(docstring_lines)
-        output = '\n'.join(docstring_lines)
-        self.assertMultiLineEqual(rst, output)
-
-
-    def testmax_lengths(self):
-        self.fail()
-
-    def testreplace_at(self):
-        self.fail()
-
-    def test_refactor_see_also(self):
-        self.fail()
-
-    def test_refactor_notes(self):
-        docstring =\
-    """ This is a sample class docstring
-
-    Notes
-    -----
-    This is the test.
-    Wait we have not finished.
-
-    This is not a note.
-    """
-
-        rst = \
-    """ This is a sample class docstring
-
-    .. note::
-        This is the test.
-        Wait we have not finished.
-
-    This is not a note.
-    """
-
-        docstring_lines = docstring.splitlines()
-        ClassDocstring(docstring_lines)
+        docstring_lines = docstring2.splitlines()
+        FunctionDoc(docstring_lines)
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
 

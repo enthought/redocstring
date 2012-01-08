@@ -356,23 +356,14 @@ class BaseDoc(object):
             :meth:`~BaseDocstring.parse_field` method.
 
         """
-
-        #TODO raise error when there is no parameter
-
         if self.verbose:
             print "PARSING PARAMETERS"
 
-        if field_check:
-            is_field = field_check
-        else:
-            is_field = is_variable_field
-
+        is_field = is_variable_field if field_check is None else field_check
         parameters = []
-
         while (not self.eol) and (is_field(self.peek(), indent) or
                                   is_field(self.peek(1), indent)):
-            if is_empty(self.peek()):  # Remove space petween fields
-                self.remove_lines(self.index)
+            self.remove_if_empty(self.index)
             field = self.get_next_block()
             if self.verbose:
                 print "next field is: ", field

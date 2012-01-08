@@ -407,21 +407,16 @@ class BaseDoc(object):
         field_header = self.read()
         indent = get_indent(field_header) + ' '
         field = [field_header]
-        if self.verbose:
-            print "Get next field"
-            print "Field header is {}".format(field_header)
         while (not self.eol):
             peek_0 = self.peek()
             peek_1 = self.peek(1)
-            if is_empty(peek_0) and (not peek_1.startswith(indent)):
-                break
-            elif (not is_empty(peek_0)) and (not peek_0.startswith(indent)):
+            if (is_empty(peek_0) and (not peek_1.startswith(indent))) \
+                or \
+                ((not is_empty(peek_0)) and (not peek_0.startswith(indent))):
                 break
             else:
                 line = self.read()
                 field.append(line.rstrip())
-                if self.verbose:
-                    print 'add "{}" to the field'.format(line)
 
         self.remove_lines(start, len(field))
         self.index = start

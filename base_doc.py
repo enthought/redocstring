@@ -91,9 +91,8 @@ def fix_backspace(name):
 def replace_at(word, line, index):
     """ Replace the text in-line.
 
-    The text in line is replaced with the word without changing the
-    size of the line (in most cases). The replacement starts at the
-    provided index.
+    The text in line is replaced (not inserted) with the word. The
+    replacement starts at the provided index.
 
     Arguments
     ---------
@@ -266,8 +265,7 @@ class BaseDoc(object):
                 print 'current index is', self.index
             header = self.is_section()
             if header:
-                if is_empty(self.peek(2)):  # Remove space after header
-                    self.remove_lines(self.index + 2)
+                self.remove_if_empty(self.index + 2)  # Remove space after header
                 self._refactor(header)
             else:
                 self.index += 1
@@ -568,6 +566,13 @@ class BaseDoc(object):
         """
         docstring = self.docstring
         del docstring[index:(index + count)]
+
+    def remove_if_empty(self, index=None):
+        """ Remove the line from the docstring if it is empty.
+
+        """
+        if is_empty(self.docstring[index]):
+            self.remove_lines(index)
 
     def peek(self, ahead=0):
         """ Peek ahead a number of lines

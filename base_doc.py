@@ -178,38 +178,6 @@ class BaseDoc(object):
         the postfix of the method, in the subclasses, that is
         responsible for refactoring (e.g. {'Methods': 'method'}).
 
-    Methods
-    -------
-    extract_fields(indent='', field_check=None)
-        Extract the fields from the docstring
-
-    get_field()
-        Get the field description.
-
-    get_next_paragraph()
-        Get the next paragraph designated by an empty line.
-
-    is_section()
-        Check if the line defines a section.
-
-    parse_field(lines)
-        Parse a field description.
-
-    peek(count=0)
-        Peek ahead
-
-    read()
-        Return the next line and advance the index.
-
-    insert_lines(lines, index)
-        Insert refactored lines
-
-    remove_lines(index, count=1)
-        Removes the lines for the docstring
-
-    seek_to_next_non_empty_line()
-        Goto the next non_empty line
-
     """
 
     def __init__(self, lines, headers = None, verbose=False):

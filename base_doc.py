@@ -318,22 +318,14 @@ class BaseDoc(object):
             :meth:`~BaseDocstring.parse_field` method.
 
         """
-        if self.verbose:
-            print "PARSING PARAMETERS"
-
         is_field = is_variable_field if field_check is None else field_check
-        parameters = []
+        field = []
         while (not self.eol) and (is_field(self.peek(), indent) or
                                   is_field(self.peek(1), indent)):
             self.remove_if_empty(self.index)
-            field = self.get_next_block()
-            if self.verbose:
-                print "next field is: ", field
-            parameters.append(self.parse_field(field))
-
-        if self.verbose:
-            print "Fields parsed"
-        return parameters
+            field_block = self.get_next_block()
+            field.append(self.parse_field(field_block))
+        return field
 
     def get_next_block(self):
         """ Get the next field block from the docstring.

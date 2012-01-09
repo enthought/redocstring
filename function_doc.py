@@ -5,7 +5,24 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-from base_doc import BaseDoc, get_indent, is_empty, remove_indent, add_indent
+from base_doc import (BaseDoc, get_indent, is_empty, remove_indent,
+                      add_indent, Field)
+
+
+class ArgumentField(Field):
+
+    def rst(self, indent=''):
+        lines = []
+        name = self.name.replace('*','\*')
+        param_str = indent + ':param {0}: {1}'.format(name, self.desc[0].strip())
+        type_str = indent + ':type {0}: {1}'.format(name, self.type)
+        lines.append(param_str)
+        for line in self.desc[1:]:
+            lines.append('{0}'.format(line))
+        if len(self.type) > 0:
+            lines.append(type_str)
+        return lines
+
 
 class FunctionDoc(BaseDoc):
     """Docstring refactoring for functions"""
@@ -96,28 +113,20 @@ class FunctionDoc(BaseDoc):
         return
 
     def _refactor_arguments(self, header):
-        """Refactor the argument section to sphinx friendly format"""
-
-        if self.verbose:
-            print '{0} Section'.format(header)
-
+        """Refactor the argument section to sphinx friendly format
+        """
         index = self.index
         self.remove_lines(index, 2)
         indent = get_indent(self.peek())
-        parameters = self.extract_fields(indent)
+        fields = self.extract_fields(indent)
 
-        descriptions = []
-        for arg_name, arg_type, desc in parameters:
-            arg_name = arg_name.replace('*','\*')
-            descriptions.append(indent + ':param {0}: {1}'.\
-                                format(arg_name, desc[0].strip()))
-            for line in desc[1:]:
-                descriptions.append('{0}'.format(line))
-            if len(arg_type) > 0:
-                descriptions.append(indent + ':type {0}: {1}'.\
-                                    format(arg_name, arg_type))
-        self.insert_lines(descriptions, index)
-        self.index += len(descriptions)
+        lines = []
+        for field in fields:
+            argument_field = ArgumentField._make(field)
+            lines += argument_field.rst(indent)
+
+        self.insert_lines(lines, index)
+        self.index += len(lines)
         return
 
     def _refactor_notes(self, header):

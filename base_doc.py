@@ -147,6 +147,9 @@ def max_desc_length(fields):
 #------------------------------------------------------------------------------
 #  Classes
 #------------------------------------------------------------------------------
+Field = collections.namedtuple('Field', ('name','type','desc'))
+
+
 class BaseDoc(object):
     """Base abstract docstring refactoring class.
 
@@ -440,14 +443,7 @@ class BaseDoc(object):
 
         Returns
         -------
-        arg_name : str
-            The name of the parameter.
-
-        arg_type : str
-            The type of the parameter (if defined).
-
-        desc : list
-            A list of the strings that make up the description.
+        field : Field
 
         """
         header = lines[0].strip()
@@ -455,13 +451,11 @@ class BaseDoc(object):
             arg_name, arg_type = re.split('\s\:\s?', header, maxsplit=1)
         else:
             arg_name, arg_type = header, ''
-        if self.verbose:
-            print "name is:", arg_name, " type is:", arg_type
         if len(lines) > 1:
             lines = [line.rstrip() for line in lines]
-            return arg_name.strip(), arg_type.strip(), lines[1:]
+            return Field(arg_name.strip(), arg_type.strip(), lines[1:])
         else:
-            return arg_name.strip(), arg_type.strip(), ['']
+            return Field(arg_name.strip(), arg_type.strip(), [''])
 
     def is_section(self):
         """Check if the line defines a section.

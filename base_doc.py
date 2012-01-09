@@ -120,7 +120,6 @@ def replace_at(word, line, index):
 #  Functions to work with fields
 #------------------------------------------------------------------------------
 
-
 def max_header_length(fields):
     """ Find the max length of the header in a list of fields.
 
@@ -223,8 +222,6 @@ class BaseDoc(object):
         self.index = 0
         self.seek_to_next_non_empty_line()
         while not self.eol:
-            if self.verbose:
-                print 'current index is', self.index
             header = self.is_section()
             if header:
                 self.remove_if_empty(self.index + 2)  # Remove space after header
@@ -243,10 +240,6 @@ class BaseDoc(object):
         found header name as input.
 
         """
-        if self.verbose:
-            print 'Header is', header
-            print 'Line is', self.index
-
         refactor_postfix = self.headers.get(header, 'header')
         method_name = ''.join(('_refactor_', refactor_postfix))
         method = getattr(self, method_name)
@@ -265,14 +258,10 @@ class BaseDoc(object):
             The header string to use with the rubric directive.
 
         """
-        if self.verbose:
-            print 'Refactoring {0}'.format(header)
         index = self.index
         indent = get_indent(self.peek())
         self.remove_lines(index, 2)
         descriptions = []
-        if self.verbose:
-            print 'header representation is: {}'.format(repr(header))
         header = repr(header).strip("'")
         descriptions.append(indent + '.. rubric:: {0}'.format(header))
         descriptions.append('')
@@ -375,8 +364,6 @@ class BaseDoc(object):
         self.remove_lines(start, len(field))
         self.index = start
         return field
-
-
 
     def parse_field(self, lines):
         """Parse a field description.

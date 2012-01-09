@@ -23,6 +23,19 @@ class ArgumentField(Field):
             lines.append(type_str)
         return lines
 
+class RaisesField(Field):
+
+    def rst(self, indent='', prefix=''):
+        lines = []
+        name_pattern = indent + '    ' + prefix + '**{0}** '
+        if not is_empty(self.desc[0]):
+            name_pattern += '- '
+        name = name_pattern.format(self.name)
+        paragraph = ' '.join(remove_indent(self.desc))
+        lines.append(name + paragraph)
+        return lines
+
+
 
 class FunctionDoc(BaseDoc):
     """Docstring refactoring for functions"""
@@ -78,38 +91,18 @@ class FunctionDoc(BaseDoc):
 
     def _refactor_raises(self, header):
         """Refactor the raises section to sphinx friendly format"""
-
-        if self.verbose:
-            print 'Raised section refactoring'
-
-        descriptions = []
         index = self.index
         self.remove_lines(index, 2)
         indent = get_indent(self.peek())
         fields = self.extract_fields(indent)
-
-        if self.verbose:
-            print 'Raised Errors'
-            print fields
-
-        descriptions = []
-        descriptions.append(indent + ':raises:')
-        if len(fields) == 1:
-            name_format = '**{0}** '
-        else:
-            name_format = '- **{0}** '
-
-        for arg_name, arg_type, desc in fields:
-            if not is_empty(desc[0]):
-                arg_name = name_format.format(arg_name) + '- '
-            else:
-                arg_name = name_format.format(arg_name)
-            arg_name = indent + '    ' + arg_name
-            paragraph = ' '.join(remove_indent(desc))
-            descriptions.append(arg_name + paragraph)
-
-        self.insert_lines(descriptions, index)
-        self.index += len(descriptions)
+        lines = []
+        lines.append(indent + ':raises:')
+        prefix = '' if len(fields) == 1 else '- '
+        for field in fields:
+            raises_field = RaisesField._make(field)
+            lines += raises_field.rst(indent, prefix)
+        self.insert_lines(lines, index)
+        self.index += len(lines)
         return
 
     def _refactor_arguments(self, header):

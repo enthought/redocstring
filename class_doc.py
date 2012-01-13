@@ -5,20 +5,9 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-import re
-from base_doc import (BaseDoc, get_indent, replace_at, max_header_length,
-                      max_desc_length, add_indent, is_method_field)
-
-def max_name_length(method_fields):
-    """ Find the max length of the function name in a list of method fields.
-
-    Arguments
-    ---------
-    fields : list
-        The list of the parsed fields.
-
-    """
-    return max([field[0].find('(') for field in method_fields])
+from base_doc import BaseDoc
+from util import get_indent, replace_at, add_indent
+from fields import max_header_length, max_desc_length, max_name_length, MethodField
 
 
 class ClassDoc(BaseDoc):
@@ -72,7 +61,7 @@ class ClassDoc(BaseDoc):
         index = self.index
         self.remove_lines(index, 2)
         indent = get_indent(self.peek())
-        method_fields = self.extract_fields(indent, is_method_field)
+        method_fields = self.extract_fields(indent, MethodField)
 
         lines = []
         if len(method_fields) > 0 :
@@ -84,7 +73,7 @@ class ClassDoc(BaseDoc):
             second_column_start = first_column_start + first_column_length + 1
             table_line = '{0}{1} {2}'.format(indent, '=' * first_column_length,
                                              '=' * desc_length)
-            empty_line = table_line.replace('=', ' ')
+            empty_line = len(table_line) * ' '
             headings_line = empty_line[:]
             headings_line = replace_at(
                                         'Methods', headings_line,
@@ -95,15 +84,9 @@ class ClassDoc(BaseDoc):
             lines.append(table_line)
             lines.append(headings_line)
             lines.append(table_line)
-            for arg_name, arg_type, desc in method_fields:
-                split_result = re.split('\((.*)\)', arg_name)
-                name = split_result[0]
-                method_text = ':meth:`{0} <{1}>`'.format(arg_name, name)
-                summary = ' '.join([line.strip() for line in desc])
-                line = empty_line[:]
-                line = replace_at(method_text, line, first_column_start)
-                line = replace_at(summary, line, second_column_start)
-                lines.append(line)
+            for field in method_fields:
+                line = field.to_rst(len(empty_line), first_column_start, second_column_start)
+                lines += line
             lines.append(table_line)
 
         lines = [line.rstrip() for line in lines]
@@ -115,16 +98,11 @@ class ClassDoc(BaseDoc):
         """Refactor the note section to use the rst ``.. note`` directive.
 
         """
-        if self.verbose:
-            print '{0} Section'.format(header)
         descriptions = []
         index = self.index
         self.remove_lines(index, 2)
         indent = get_indent(self.peek())
         paragraph = self.get_next_paragraph()
-        if self.verbose:
-            print 'PARAGRAPH'
-            print ''.join(paragraph)
         descriptions.append(indent + '.. note::')
         descriptions += add_indent(paragraph)
         self.insert_lines(descriptions, index)

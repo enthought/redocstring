@@ -1,3 +1,4 @@
+﻿# -*- coding: UTF-8 -*-
 #------------------------------------------------------------------------------
 #  file: refactor_doc.py
 #  License: LICENSE.TXT
@@ -6,148 +7,13 @@
 #  All rights reserved.
 #------------------------------------------------------------------------------
 import re
-import collections
 
-#------------------------------------------------------------------------------
-#  Precompiled regexes
-#------------------------------------------------------------------------------
-indent_regex = re.compile(r'\s+')
-
-#------------------------------------------------------------------------------
-#  Functions to manage indention
-#------------------------------------------------------------------------------
-
-def add_indent(lines, indent=4):
-    """ Add spaces to indent a list of lines.
-
-    Arguments
-    ---------
-    lines : list
-        The list of strings to indent.
-
-    indent : int
-        The number of spaces to add.
-
-    Returns
-    -------
-    lines : list
-        The indented strings (lines).
-
-    .. note:: Empty strings are not changed
-
-    """
-    indent_str = ' ' * indent
-    output = []
-    for line in lines:
-        if is_empty(line):
-            output.append(line)
-        else:
-            output.append(indent_str + line)
-    return output
-
-def remove_indent(lines):
-    """ Remove all indentation from the lines.
-
-    """
-    return [line.lstrip() for line in lines]
-
-def get_indent(line):
-    """ Return the indent portion of the line.
-
-    """
-    indent = indent_regex.match(line)
-    if indent is None:
-        return ''
-    else:
-        return indent.group()
-
-#------------------------------------------------------------------------------
-#  Functions to detect line type
-#------------------------------------------------------------------------------
-
-def is_variable_field(line, indent=''):
-    regex = indent + r'\*?\*?\w+\s:(\s+|$)'
-    match = re.match(regex, line)
-    return match
-
-def is_method_field(line, indent=''):
-    regex = indent + r'\w+\(.*\)\s*'
-    match = re.match(regex, line)
-    return match
-
-def is_empty(line):
-    return not line.strip()
-
-#------------------------------------------------------------------------------
-#  Functions to adjust strings
-#------------------------------------------------------------------------------
-
-def fix_star(name):
-    return name.replace('*','\*')
-
-def fix_backspace(name):
-    pass
-
-def replace_at(word, line, index):
-    """ Replace the text in-line.
-
-    The text in line is replaced (not inserted) with the word. The
-    replacement starts at the provided index.
-
-    Arguments
-    ---------
-    word : str
-        The text to copy into the line.
-
-    line : str
-        The line where the copy takes place.
-
-    index : int
-        The index to start coping.
-
-    Returns
-    -------
-    result : str
-        line of text with the text replaced.
-
-    """
-    word_length = len(word)
-    line_list = list(line)
-    line_list[index: (index + word_length)] = list(word)
-    return ''.join(line_list)
-
-#------------------------------------------------------------------------------
-#  Functions to work with fields
-#------------------------------------------------------------------------------
-
-def max_header_length(fields):
-    """ Find the max length of the header in a list of fields.
-
-    Arguments
-    ---------
-    fields : list
-        The list of the parsed fields.
-
-    """
-    return max([len(field[0]) for field in fields])
-
-def max_desc_length(fields):
-    """ Find the max length of the description in a list of fields.
-
-    Arguments
-    ---------
-    fields : list
-        The list of the parsed fields.
-
-    """
-    return max([len(' '.join([line.strip() for line in field[2]]))
-                for field in fields])
+from fields import Field
+from util import is_empty, get_indent
 
 #------------------------------------------------------------------------------
 #  Classes
 #------------------------------------------------------------------------------
-Field = collections.namedtuple('Field', ('name','type','desc'))
-
 
 class BaseDoc(object):
     """Base abstract docstring refactoring class.
@@ -199,7 +65,7 @@ class BaseDoc(object):
             {'Methods': 'method'}).
 
         verbose : bool
-            When set the class prints a lot of info about the proccess
+            When set the class logs info about the proccess
             during runtime.
 
         """
@@ -270,7 +136,7 @@ class BaseDoc(object):
         return descriptions
 
 
-    def extract_fields(self, indent='', field_check=None):
+    def extract_fields(self, indent='', field_type=None):
         """Extract the fields from the docstring
 
         Parse the fields in the description of a section into tuples of
@@ -307,14 +173,16 @@ class BaseDoc(object):
             :meth:`~BaseDocstring.parse_field` method.
 
         """
-        is_field = is_variable_field if field_check is None else field_check
-        field = []
+        field_type = Field if (field_type is None) else field_type
+        is_field = field_type.is_field
+        fields = []
         while (not self.eol) and (is_field(self.peek(), indent) or
                                   is_field(self.peek(1), indent)):
             self.remove_if_empty(self.index)
             field_block = self.get_next_block()
-            field.append(self.parse_field(field_block))
-        return field
+            field = field_type.parse(field_block)
+            fields.append(field)
+        return fields
 
     def get_next_block(self):
         """ Get the next field block from the docstring.
@@ -364,45 +232,6 @@ class BaseDoc(object):
         self.remove_lines(start, len(field))
         self.index = start
         return field
-
-    def parse_field(self, lines):
-        """Parse a field description.
-
-        The field is assumed to be in one of the following formats::
-
-            <name> : <type>
-                <description>
-
-        or::
-
-            <name> :
-                <description>
-
-        or::
-
-            <name>
-                <description>
-
-        Arguments
-        ---------
-        lines :
-            docstring lines of the field.
-
-        Returns
-        -------
-        field : Field
-
-        """
-        header = lines[0].strip()
-        if ' :' in header:
-            arg_name, arg_type = re.split('\s\:\s?', header, maxsplit=1)
-        else:
-            arg_name, arg_type = header, ''
-        if len(lines) > 1:
-            lines = [line.rstrip() for line in lines]
-            return Field(arg_name.strip(), arg_type.strip(), lines[1:])
-        else:
-            return Field(arg_name.strip(), arg_type.strip(), [''])
 
     def is_section(self):
         """Check if the line defines a section.

@@ -72,11 +72,13 @@ def is_empty(line):
 #  Functions to adjust strings
 #------------------------------------------------------------------------------
 
-def fix_star(name):
-    return name.replace('*','\*')
+def fix_star(word):
+    return word.replace('*','\*')
 
-def fix_backspace(name):
-    pass
+# Not the best but it works for now
+def fix_backspace(word):
+    return repr(word).strip("'")
+
 
 def replace_at(word, line, index):
     """ Replace the text in-line.

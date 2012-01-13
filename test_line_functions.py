@@ -41,8 +41,8 @@ class TestLineFunctions(unittest.TestCase):
         self.assertEqual(r'\*\*sfg', output)
 
     def test_fix_backspace(self):
-        output = line_functions.fix_star('ar\g')
-        self.assertEqual(r'ar\\g', output)
+        output = line_functions.fix_backspace('Input\Output header')
+        self.assertEqual('Input\\Output header', output)
 
     def test_replace_at(self):
         input =    ' This is where the new starts'

@@ -75,11 +75,6 @@ def is_empty(line):
 def fix_star(word):
     return word.replace('*','\*')
 
-# Not the best but it works for now
-def fix_backspace(word):
-    return repr(word).strip("'")
-
-
 def replace_at(word, line, index):
     """ Replace the text in-line.
 

@@ -3,13 +3,7 @@
 import unittest
 import line_functions
 
-class TestGlobalFunctions(unittest.TestCase):
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
+class TestLineFunctions(unittest.TestCase):
 
     def test_add_indent(self):
         input = ["This is the first line", "",

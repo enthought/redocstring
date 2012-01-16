@@ -6,7 +6,7 @@
 #  All rights reserved.
 #------------------------------------------------------------------------------
 from base_doc import BaseDoc
-from util import get_indent, add_indent
+from line_functions import get_indent, add_indent
 from fields import ArgumentField, ListItemWithTypeField, ListItemField
 
 

@@ -19,7 +19,7 @@ Repository
 The RefactorDoc extension lives at Github. You can clone the repository
 using::
 
-    git clone git@github.com:enthought/RefactorDoc.git
+    git clone ...
 
 Installation
 ------------

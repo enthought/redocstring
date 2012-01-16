@@ -9,7 +9,7 @@
 import collections
 import re
 
-from util import add_indent, is_empty, remove_indent, replace_at
+from line_functions import add_indent, is_empty, remove_indent, replace_at
 
 
 class Field(collections.namedtuple('Field', ('name','signature','desc'))):

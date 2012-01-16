@@ -6,7 +6,7 @@
 #  All rights reserved.
 #------------------------------------------------------------------------------
 from base_doc import BaseDoc
-from util import get_indent, replace_at, add_indent
+from line_functions import get_indent, replace_at, add_indent
 from fields import max_header_length, max_desc_length, max_name_length, MethodField
 
 

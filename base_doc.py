@@ -9,7 +9,7 @@
 import re
 
 from fields import Field
-from util import is_empty, get_indent
+from line_functions import is_empty, get_indent
 
 #------------------------------------------------------------------------------
 #  Classes

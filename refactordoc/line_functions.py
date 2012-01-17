@@ -1,11 +1,12 @@
 ﻿# -*- coding: UTF-8 -*-
 #------------------------------------------------------------------------------
-#  file: refactor_doc.py
+#  file: line_functions.py
 #  License: LICENSE.TXT
 #
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
+#!/usr/bin/env python
 import re
 
 #------------------------------------------------------------------------------
@@ -74,6 +75,9 @@ def is_empty(line):
 
 def fix_star(word):
     return word.replace('*','\*')
+
+def fix_backspace(word):
+    return word.replace('\\', '\\\\')
 
 def replace_at(word, line, index):
     """ Replace the text in-line.

@@ -1,12 +1,13 @@
+# -*- coding: UTF-8 -*-
 #------------------------------------------------------------------------------
-#  file: test_refactor_doc.py
+#  file: test_base_doc.py
 #  License: LICENSE.TXT
 #
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
 import unittest
-from base_doc import BaseDoc
+from refactordoc.base_doc import BaseDoc
 
 class TestBaseDoc(unittest.TestCase):
 

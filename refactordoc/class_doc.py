@@ -60,26 +60,26 @@ class ClassDoc(BaseDoc):
             name_length = max_name_length(method_fields)
             method_length = max_header_length(method_fields)
             desc_length = max_desc_length(method_fields)
-            first_column_start = len(indent)
-            first_column_length = method_length + name_length + 7
-            second_column_start = first_column_start + first_column_length + 1
-            table_line = '{0}{1} {2}'.format(indent, '=' * first_column_length,
-                                             '=' * desc_length)
-            empty_line = len(table_line) * ' '
-            headings_line = empty_line[:]
-            headings_line = replace_at(
-                                        'Methods', headings_line,
-                                        first_column_start)
-            headings_line = replace_at(
-                                        'Description', headings_line,
-                                        second_column_start)
-            lines.append(table_line)
-            lines.append(headings_line)
-            lines.append(table_line)
+
+            first_column = len(indent)
+            second_column = first_column + method_length + name_length + 8
+            first_column_str = '=' * (method_length + name_length + 7)
+            second_column_str = '=' * desc_length
+
+            border = '{0}{1} {2}'.format(indent,
+                                              first_column_str,
+                                              second_column_str)
+            length = len(border)
+            empty = length * ' '
+            headings = empty[:]
+            headings = replace_at('Methods', headings, first_column)
+            headings = replace_at('Description', headings, second_column)
+            lines.append(border)
+            lines.append(headings)
+            lines.append(border)
             for field in method_fields:
-                line = field.to_rst(len(empty_line), first_column_start, second_column_start)
-                lines += line
-            lines.append(table_line)
+                lines += field.to_rst(length, first_column, second_column)
+            lines.append(border)
 
         lines = [line.rstrip() for line in lines]
         self.insert_lines(lines, index)

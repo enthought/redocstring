@@ -135,11 +135,13 @@ class AttributeField(Field):
         """
         lines = []
         _type = self.signature
-        type_str = '' if is_empty(_type) else ':annotation: = {0}'.format(_type)
-        directive = '{0}.. attribute:: {1}\n{0}    {2}\n'
-        lines.append(directive.format(indent * ' ', self.name, type_str))
-        for line in self.desc:
-            lines.append(line)
+        annotation = '{0}    :annotation: = {1}'
+        type_str = '' if is_empty(_type) else annotation.format(indent * ' ', _type)
+        directive = '{0}.. attribute:: {1}'
+        lines += [directive.format(indent * ' ', self.name), type_str]
+        if type_str != '':
+            lines.append('')
+        lines += self.desc
         lines.append('')
         return lines
 

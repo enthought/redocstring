@@ -1,5 +1,6 @@
+# -*- coding: UTF-8 -*-
 #------------------------------------------------------------------------------
-#  file: test_refactor_doc.py
+#  file: test_class_doc.py
 #  License: LICENSE.TXT
 #
 #  Copyright (c) 2011, Enthought, Inc.

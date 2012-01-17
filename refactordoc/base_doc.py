@@ -1,6 +1,6 @@
 ﻿# -*- coding: UTF-8 -*-
 #------------------------------------------------------------------------------
-#  file: refactor_doc.py
+#  file: base_doc.py
 #  License: LICENSE.TXT
 #
 #  Copyright (c) 2011, Enthought, Inc.

@@ -9,7 +9,7 @@
 import re
 
 from fields import Field
-from line_functions import is_empty, get_indent
+from line_functions import is_empty, get_indent, fix_backspace
 
 #------------------------------------------------------------------------------
 #  Classes
@@ -128,9 +128,8 @@ class BaseDoc(object):
         indent = get_indent(self.peek())
         self.remove_lines(index, 2)
         descriptions = []
-        header = repr(header).strip("'")
-        descriptions.append(indent + '.. rubric:: {0}'.format(header))
-        descriptions.append('')
+        header = fix_backspace(header)
+        descriptions += [indent + '.. rubric:: {0}'.format(header), '']
         self.insert_lines(descriptions, index)
         self.index += len(descriptions)
         return descriptions

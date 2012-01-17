@@ -41,7 +41,7 @@ class TestBaseDoc(unittest.TestCase):
         docstring =\
         """ This is a sample docstring.
 
-        Input\Output header
+        Input\\Output header
         -------------------
 
         This is just some sample text.

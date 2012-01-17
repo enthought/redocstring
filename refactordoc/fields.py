@@ -113,6 +113,36 @@ class Field(collections.namedtuple('Field', ('name','signature','desc'))):
         lines += add_indent(self.desc, indent)
         return lines
 
+class AttributeField(Field):
+    """ Field for the argument function docstrings """
+
+    def to_rst(self, indent=4):
+        """ Outputs field in rst using the ``:param:`` role.
+
+        Arguments
+        ---------
+        indent : int
+            The indent to use for the decription block.
+
+        Example
+        -------
+
+        >>> Field('indent', 'int', 'The indent to use for the decription block.')
+        >>> print Field.to_rst()
+        :param indent: The indent to use for the description block
+        :type indent: int
+
+        """
+        lines = []
+        _type = self.signature
+        type_str = '' if is_empty(_type) else ':annotation: = {0}'.format(_type)
+        directive = '{0}.. attribute:: {1}\n{0}    {2}\n'
+        lines.append(directive.format(indent * ' ', self.name, type_str))
+        for line in self.desc:
+            lines.append(line)
+        lines.append('')
+        return lines
+
 
 class ArgumentField(Field):
     """ Field for the argument function docstrings """

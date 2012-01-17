@@ -8,7 +8,8 @@
 #------------------------------------------------------------------------------
 from base_doc import BaseDoc
 from line_functions import get_indent, replace_at, add_indent
-from fields import max_header_length, max_desc_length, max_name_length, MethodField
+from fields import (max_header_length, max_desc_length,
+                    max_name_length, MethodField, AttributeField)
 
 
 class ClassDoc(BaseDoc):
@@ -33,21 +34,11 @@ class ClassDoc(BaseDoc):
         index = self.index
         self.remove_lines(index, 2)
         indent = get_indent(self.peek())
-        parameters = self.extract_fields(indent)
+        fields = self.extract_fields(indent, AttributeField)
 
         descriptions = []
-        for arg_name, arg_type, desc in parameters:
-            descriptions.append(indent + '.. attribute:: {0}'.\
-                                format(arg_name))
-            description_indent = get_indent(desc[0])
-            descriptions.append('')
-            if arg_type != '':
-                arg_type = description_indent + '*({0})*'.format(arg_type)
-                descriptions.append(arg_type)
-            for line in desc:
-                descriptions.append('{0}'.format(line))
-            descriptions.append('')
-
+        for field in fields:
+            descriptions += field.to_rst(len(indent))
         self.insert_lines(descriptions[:-1], index)
         self.index += len(descriptions)
         return

@@ -7,7 +7,7 @@
 #  All rights reserved.
 #------------------------------------------------------------------------------
 import unittest
-from class_doc import ClassDoc
+from refactordoc.class_doc import ClassDoc
 
 
 class TestClassDoc(unittest.TestCase):
@@ -46,13 +46,13 @@ class TestClassDoc(unittest.TestCase):
         the methods responsible for refactoring the sections.
 
         .. attribute:: docstring
+            :annotation: = list
 
-            *(list)*
             A list of strings (lines) that holds docstrings
 
         .. attribute:: index
+            :annotation: = int
 
-            *(int)*
             The current zero-based line number of the docstring that is
             proccessed.
         """

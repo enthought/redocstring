@@ -2,6 +2,7 @@
 #------------------------------------------------------------------------------
 #  file: fields.py
 #  License: LICENSE.TXT
+#  Author: Ioannis Tziakos
 #
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
@@ -9,11 +10,11 @@
 import collections
 import re
 
-from line_functions import add_indent, is_empty, remove_indent, replace_at, insert_empty
+from line_functions import add_indent, is_empty, remove_indent, replace_at
 
 
-header_regex = re.compile('\s\:\s?')
-definition_regex = re.compile('\*?\*?\w+\s:(\s+|$)')
+header_regex = re.compile(r'\s:\s')
+definition_regex = re.compile(r'\*?\*?\w+(\s:\s\w+)?$')
 
 class DefinitionItem(collections.namedtuple('Field', ('term','classifier','definition'))):
     """ A docstring definition item
@@ -21,7 +22,7 @@ class DefinitionItem(collections.namedtuple('Field', ('term','classifier','defin
     Syntax diagram::
 
     +----------------------------+
-    | term [ " : " classifier ]* |
+    | term [ " : " classifier ]  |
     +--+-------------------------+--+
        | definition                 |
        | (body elements)+           |
@@ -45,8 +46,8 @@ class DefinitionItem(collections.namedtuple('Field', ('term','classifier','defin
 
         .. note:: Currently only one classifier is supported.
 
-    definition : str
-        The description of the definition item.
+    definition : list
+        The list of strings that holdes the description the defintion item.
 
     """
 
@@ -63,14 +64,20 @@ class DefinitionItem(collections.namedtuple('Field', ('term','classifier','defin
         | term [ " : " classifier ]  |
         +----------------------------+
 
-        Subclasses can subclass to restict or expand this format.
+        Subclasses can subclass to restrict or expand this format.
 
         """
-        return definition_regex.match(line)
+        return definition_regex.match(line) is not None
 
     @classmethod
     def parse(cls, lines):
         """Parse a definition item from a set of lines.
+
+        The class method parses the defintion list item from the list of
+        docstring lines and produces a DefinitionItem with the term,
+        classifier and the definition.
+
+        .. note:: The indention in the definition lines is not striped
 
         The field is assumed to be in one of the following formats::
 
@@ -89,6 +96,7 @@ class DefinitionItem(collections.namedtuple('Field', ('term','classifier','defin
         term : classifier
             Definition.
 
+
         Arguments
         ---------
         lines :
@@ -97,19 +105,15 @@ class DefinitionItem(collections.namedtuple('Field', ('term','classifier','defin
 
         Returns
         -------
-        definition : Definition
+        definition : DefinitionItem
 
         """
         header = lines[0].strip()
-        if ' :' in header:
-            term, classifier = header_regex.split(header, maxsplit=1)
-        else:
-            arg_name, signature = header, ''
-        if len(lines) > 1:
-            lines = [line.rstrip() for line in lines]
-            return cls(arg_name.strip(), signature.strip(), lines[1:])
-        else:
-            return cls(arg_name.strip(), signature.strip(), [''])
+        term, classifier = header_regex.split(header, maxsplit=1) if \
+                           (' :' in header) else (header, '')
+        definition = [line.rstrip() for line in lines[1:]] if \
+                     (len(lines) > 1) else ['']
+        return cls(term.strip(), classifier.strip(), definition)
 
 
     def to_rst(self):
@@ -140,23 +144,24 @@ class DefinitionItem(collections.namedtuple('Field', ('term','classifier','defin
         Example
         -------
 
-        >>> Field('Ioannis', 'Ιωάννης', 'Is the greek guy.')
-        >>> print Field.to_rst()
-        Ioannis
+        >>> item = DefintionItem('lines', 'list', 'A list of string lines rendered in rst.')
+        >>> print item.to_rst()
+        lines
 
-            *(Ιωάννης)* --
-            Is the greek guy.
+            *(list)* --
+            A list of string lines rendered in rst.
 
         """
+        postfix = ' --' if (len(self.definition) > 0) else ''
         lines = []
         lines += [self.term]
-        iines += ['*({0})*'.format(self.classifier)]
-        lines += [self.definition]
+        lines += ['']
+        lines += ['    *({0})*{1}'.format(self.classifier, postfix)]
+        lines += self.definition  # definition is all ready a list
         return lines
 
 
-
-class AttributeField(Field):
+class AttributeField(DefinitionItem):
     """ Field that renders the rst output as an attribute """
 
     def to_rst(self, indent=4):
@@ -189,7 +194,7 @@ class AttributeField(Field):
         return lines
 
 
-class ArgumentField(Field):
+class ArgumentField(DefinitionItem):
     """ Field for the argument function docstrings """
 
     def to_rst(self, indent=4):
@@ -220,7 +225,7 @@ class ArgumentField(Field):
             lines.append(type_str)
         return lines
 
-class ListItemField(Field):
+class ListItemField(DefinitionItem):
     """ Field that in rst is formated as an item in the list ignoring any
     field.type information.
 
@@ -255,7 +260,7 @@ class ListItemField(Field):
         return [rst_pattern.format(indent_str, prefix, self.name, description)]
 
 
-class ListItemWithTypeField(Field):
+class ListItemWithTypeField(DefinitionItem):
     """ Field for the return section of the function docstrings """
     def to_rst(self, indent=4, prefix=''):
         indent_str = ' ' * indent
@@ -267,7 +272,7 @@ class ListItemWithTypeField(Field):
         return [rst_pattern.format(indent_str, prefix, self.name, _type, description)]
 
 
-class FunctionField(Field):
+class FunctionField(DefinitionItem):
     """ A field that represents a function """
 
     @classmethod
@@ -292,7 +297,7 @@ MethodField = FunctionField
 #  Functions to work with fields
 #------------------------------------------------------------------------------
 
-def max_name_length(method_fields):
+def max_name_length(method_definition_items):
     """ Find the max length of the function name in a list of method fields.
 
     Arguments

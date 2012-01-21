@@ -10,7 +10,7 @@
 import collections
 import re
 
-from line_functions import add_indent, is_empty, remove_indent, replace_at
+from line_functions import add_indent, is_empty, remove_indent, replace_at, fix_star
 
 
 header_regex = re.compile(r'\s:\s')
@@ -116,7 +116,7 @@ class DefinitionItem(collections.namedtuple('Field', ('term','classifier','defin
         return cls(term.strip(), classifier.strip(), definition)
 
 
-    def to_rst(self):
+    def to_rst(self, **kwards):
         """ Outputs the Definition in sphinx friendly rst.
 
         The method renders the definition into a list of lines that follow
@@ -129,12 +129,9 @@ class DefinitionItem(collections.namedtuple('Field', ('term','classifier','defin
            <definition>
 
         Subclasses will ussualy override the method to provide custom made
-        behaviour.
-
-        Arguments
-        ---------
-        indent : int
-            The indent to use for the decription block. Default is 4 spaces
+        behaviour. However the singature of the method should hold only
+        kword arguments which have default values. The keyword arguments
+        can be used to pass addition rendering information to subclasses.
 
         Returns
         -------
@@ -158,71 +155,86 @@ class DefinitionItem(collections.namedtuple('Field', ('term','classifier','defin
         lines += ['']
         lines += ['    *({0})*{1}'.format(self.classifier, postfix)]
         lines += self.definition  # definition is all ready a list
+        lines += ['']
         return lines
 
 
-class AttributeField(DefinitionItem):
-    """ Field that renders the rst output as an attribute """
+class AttributeItem(DefinitionItem):
+    """ Definition that renders the rst output using the attribute directive.
+    """
 
-    def to_rst(self, indent=4):
-        """ Outputs field in rst using the ``:param:`` role.
+    def to_rst(self, ):
+        """ Return the attribute info ousing the attrbiute sphinx markup.
 
-        Arguments
-        ---------
-        indent : int
-            The indent to use for the decription block.
+        Examples
+        --------
+
+        >>> item = AttributeItem('indent', 'int',
+        ... ['    The indent to use for the decription block.'])
+        >>> print item.to_rst()
+        .. attribute:: indent
+            :annotation: = int
+
+            The indent to use for the description block
+        >>>
+
+
+        >>> item = AttributeItem('indent', '',
+        ... ['    The indent to use for the decription block.'])
+        >>> print item.to_rst()
+        .. attribute:: indent
+
+            The indent to use for the description block
+        >>>
+
+        """
+        attr_type = self.classifier
+        directive = '.. attribute:: {0}'
+        annotation = '' if is_empty(attr_type) else '    :annotation: = {0}'
+        definition = self.definition if (annotation == '') \
+                     else [''] + self.definition
+        lines = []
+        lines += [directive.format(self.term)]
+        lines += [annotation.format(attr_type)]
+        lines += definition
+        lines += ['']
+        return lines
+
+
+class ArgumentItem(DefinitionItem):
+    """ A definition item for function argument sections """
+
+    def to_rst(self):
+        """ Render ArgumentItem in sphinx friendly rst using the
+        ``:param:`` role.
 
         Example
         -------
 
-        >>> Field('indent', 'int', 'The indent to use for the decription block.')
-        >>> print Field.to_rst()
-        The indent to use for the description block
+        >>> item = ArgumentItem('indent', 'int',
+        ... ['    The indent to use for the description block.',
+             ''
+             '    This is the second paragraph of the argument definition.'])
+        >>> print item.to_rst()
+        :param indent: The indent to use for the description block.
+
+            This is the second paragraph of the argument definition.
         :type indent: int
 
         """
+        argument = fix_star(self.term)
+        argumemt_type = self.classifier
+        type_role = [''] if (_type == '') else \
+                    [':type {0}: {1}'.format(parameter, argumemt_type)]
+        header =  ':param {0}: ' + self.definition[0].strip()
+        definition = [''] + self.definition[1:]
+        footer = parameter_type if (argument_type == '') else \
+                 parameter_type + ['']
+
         lines = []
-        _type = self.signature
-        annotation = '{0}    :annotation: = {1}'
-        type_str = '' if is_empty(_type) else annotation.format(indent * ' ', _type)
-        directive = '{0}.. attribute:: {1}'
-        lines += [directive.format(indent * ' ', self.name), type_str]
-        if type_str != '':
-            lines.append('')
-        lines += self.desc
-        lines.append('')
-        return lines
-
-
-class ArgumentField(DefinitionItem):
-    """ Field for the argument function docstrings """
-
-    def to_rst(self, indent=4):
-        """ Outputs field in rst using the ``:param:`` role.
-
-        Arguments
-        ---------
-        indent : int
-            The indent to use for the decription block.
-
-        Example
-        -------
-
-        >>> Field('indent', 'int', 'The indent to use for the decription block.')
-        >>> print Field.to_rst()
-        :param indent: The indent to use for the description block
-        :type indent: int
-
-        """
-        lines = []
-        name = self.name.replace('*','\*')  # Fix cases like *args and **kwargs
-        indent_str = ' ' * indent
-        param_str = '{0}:param {1}: {2}'.format(indent_str, name, self.desc[0].strip())
-        type_str = '{0}:type {1}: {2}'.format(indent_str, name, self.signature)
-        lines.append(param_str)
-        lines += self.desc[1:]
-        if len(self.signature) > 0:
-            lines.append(type_str)
+        lines += [header.format(parameter)]
+        lines += definition
+        lines += footer
         return lines
 
 class ListItemField(DefinitionItem):

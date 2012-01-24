@@ -82,7 +82,7 @@ class TestAttributeItem(unittest.TestCase):
     The indent to use for the description block.
 """
         item = AttributeItem('indent', 'int',
-                             ['    The indent to use for the description block.'])
+                             ['The indent to use for the description block.'])
         rendered = '\n'.join(item.to_rst())
         self.assertMultiLineEqual(rendered, rst)
 
@@ -93,9 +93,10 @@ class TestAttributeItem(unittest.TestCase):
     The indent to use for the description block.
 """
         item = AttributeItem('indent', '',
-                             ['    The indent to use for the description block.'])
+                             ['The indent to use for the description block.'])
         rendered = '\n'.join(item.to_rst())
         self.assertMultiLineEqual(rendered, rst)
+
 
 class TestArgumentItem(unittest.TestCase):
 

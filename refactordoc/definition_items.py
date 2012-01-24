@@ -170,7 +170,7 @@ class AttributeItem(DefinitionItem):
         --------
 
         >>> item = AttributeItem('indent', 'int',
-        ... ['    The indent to use for the decription block.'])
+        ... ['The indent to use for the decription block.'])
         >>> print item.to_rst()
         .. attribute:: indent
             :annotation: = int
@@ -180,7 +180,7 @@ class AttributeItem(DefinitionItem):
 
 
         >>> item = AttributeItem('indent', '',
-        ... ['    The indent to use for the decription block.'])
+        ... ['The indent to use for the decription block.'])
         >>> print item.to_rst()
         .. attribute:: indent
 
@@ -196,7 +196,7 @@ class AttributeItem(DefinitionItem):
         lines = []
         lines += [directive.format(self.term)]
         lines += [annotation.format(attr_type)]
-        lines += definition
+        lines += add_indent(definition)
         lines += ['']
         return lines
 

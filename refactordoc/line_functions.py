@@ -6,8 +6,8 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-#!/usr/bin/env python
 import re
+
 
 #------------------------------------------------------------------------------
 #  Precompiled regexes
@@ -51,6 +51,16 @@ def remove_indent(lines):
 
     """
     return [line.lstrip() for line in lines]
+
+def trim_indent(lines):
+    """ Trim global intention level from lines.
+
+    """
+    non_empty_lines = filter(lambda x: not is_empty(x), lines)
+    indent = {len(get_indent(line)) for line in non_empty_lines}
+    indent.discard(0)
+    global_indent = min(indent)
+    return [line[global_indent:] for line in lines]
 
 def get_indent(line):
     """ Return the indent portion of the line.

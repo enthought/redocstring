@@ -9,7 +9,9 @@
 #------------------------------------------------------------------------------
 import unittest
 from refactordoc.definition_items import (DefinitionItem, AttributeItem,
-                                          ArgumentItem)
+                                          ArgumentItem, ListItem, TableLineItem,
+                                          MethodItem)
+
 
 class TestDefinitionItem(unittest.TestCase):
 
@@ -112,10 +114,84 @@ class TestArgumentItem(unittest.TestCase):
 :type indent: int
 """
         item = ArgumentItem('indent', 'int',
-            ['    The indent to use for the description block.',
+            ['The indent to use for the description block.',
              ''
-             '    This is the second paragraph of the argument definition.'])
+             'This is the second paragraph of the argument definition.'])
         rendered = '\n'.join(item.to_rst())
+        self.assertMultiLineEqual(rendered, rst)
+
+
+class TestListItem(unittest.TestCase):
+
+    def setUp(self):
+        self.maxDiff = None
+
+    def test_to_rst(self):
+        # with annotation
+        rst ="""\
+- indent (`int`) --
+  The indent to use for the description block.
+
+  This is the second paragraph of the argument definition.
+"""
+        item = ListItem('indent', 'int',
+            ['The indent to use for the description block.',
+             '',
+             'This is the second paragraph of the argument definition.'])
+        rendered = '\n'.join(item.to_rst(prefix='-'))
+        self.assertMultiLineEqual(rendered, rst)
+
+        rst ="""\
+- indent (`int`) -- The indent to use for the description block.
+"""
+        item = ListItem('indent', 'int',
+            ['The indent to use for the description block.'])
+        rendered = '\n'.join(item.to_rst(prefix='-'))
+        self.assertMultiLineEqual(rendered, rst)
+
+
+class TestTableLineItem(unittest.TestCase):
+
+    def setUp(self):
+        self.maxDiff = None
+
+    def test_to_rst(self):
+        # with annotation
+        rst ="""\
+function(arg1, arg2)   This is the best fun
+"""
+        item = TableLineItem('function(arg1, arg2)', 'and',
+            ['This is the best function ever.'])
+        rendered = '\n'.join(item.to_rst(columns=(22, 0, 20)))
+        self.assertMultiLineEqual(rendered, rst)
+
+
+class TestMethodItem(unittest.TestCase):
+
+    def setUp(self):
+        self.maxDiff = None
+
+
+    def test_is_definition(self):
+        self.assertTrue(MethodItem.is_definition("term()"))
+        self.assertTrue(MethodItem.is_definition("term(*args, my_keyword=None)"))
+        self.assertFalse(MethodItem.is_definition("term"))
+        self.assertFalse(MethodItem.is_definition("term : *args"))
+
+    def test_parse(self):
+        item = MethodItem.parse(['method(arguments)',
+                                     '    Definition in a single line'])
+        self.assertEqual(item, MethodItem('method', 'arguments',
+                                             ['Definition in a single line']))
+
+    def test_to_rst(self):
+        # with annotation
+        rst ="""\
+:meth:`function <function(arg1, arg2)>` This is the best fun
+"""
+        item = MethodItem('function','arg1, arg2',
+            ['This is the best function ever.'])
+        rendered = '\n'.join(item.to_rst(columns=(39, 20)))
         self.assertMultiLineEqual(rendered, rst)
 
 if __name__ == '__main__':

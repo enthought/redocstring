@@ -212,9 +212,9 @@ class ArgumentItem(DefinitionItem):
         -------
 
         >>> item = ArgumentItem('indent', 'int',
-        ... ['    The indent to use for the description block.',
+        ... ['The indent to use for the description block.',
              ''
-             '    This is the second paragraph of the argument definition.'])
+             'This is the second paragraph of the argument definition.'])
         >>> print item.to_rst()
         :param indent: The indent to use for the description block.
 
@@ -223,87 +223,178 @@ class ArgumentItem(DefinitionItem):
 
         """
         argument = fix_star(self.term)
-        argumemt_type = self.classifier
-        type_role = [''] if (_type == '') else \
-                    [':type {0}: {1}'.format(parameter, argumemt_type)]
+        argument_type = self.classifier
+        type_role = [''] if (argument_type == '') else \
+                    [':type {0}: {1}'.format(argument, argument_type)]
         header =  ':param {0}: ' + self.definition[0].strip()
         definition = [''] + self.definition[1:]
-        footer = parameter_type if (argument_type == '') else \
-                 parameter_type + ['']
+        footer = type_role if (argument_type == '') else type_role + ['']
 
         lines = []
-        lines += [header.format(parameter)]
-        lines += definition
+        lines += [header.format(argument)]
+        lines += add_indent(definition)
         lines += footer
         return lines
 
-class ListItemField(DefinitionItem):
-    """ Field that in rst is formated as an item in the list ignoring any
-    field.type information.
+class ListItem(DefinitionItem):
+    """ A defintion item that is rendered as an ordered/unordered list
 
     """
 
-    def to_rst(self, indent=4, prefix=''):
-        """ Outputs field in rst using as items in an list.
+    def to_rst(self, prefix=''):
+        """ Outputs ListItem in rst using as items in an list.
 
         Arguments
         ---------
-        indent : int
-            The indent to use for the decription block.
-
         prefix : str
             The prefix to use. For example if the item is part of a numbered
-            list then ``prefix='# '``.
+            list then ``prefix='#'``.
 
         Example
         -------
 
+        >>> item = ListItem('indent', 'int',
+        ... ['The indent to use for the description block.'])
+        >>> item.to_rst(prefix='-')
+        - indent (`int`) -- The indent to use for the descirption block.
 
-        Note
-        ----
-        The field descrption is reformated into a line.
+        >>> item = ListItem('indent', 'int',
+        ... ['The indent to use for'
+             'the description block.'])
+        >>> item.to_rst(prefix='-')
+        - indent (`int`) -- The indent to use for the descirption block.
 
         """
-        indent_str = ' ' * indent
-        rst_pattern = '{0}{1}**{2}**{3}' if is_empty(self.desc[0]) else \
-                       '{0}{1}**{2}** -- {3}'
-        description = '' if is_empty(self.desc[0]) else \
-                      ' '.join(remove_indent(self.desc))
-        return [rst_pattern.format(indent_str, prefix, self.name, description)]
+        header = '' if prefix == '' else '{0} '.format(prefix)
+        indent = len(header)
+        header += '{0}' if self.classifier == '' else '{0} (`{1}`)'
+        header += '' if self.definition[0] == '' else ' --'
+        header += '' if len(self.definition) > 1 else ' {2}'
+        definition = self.definition + [''] if len(self.definition) > 1 else ['']
+        lines = []
+        lines += [header.format(self.term, self.classifier, self.definition[0])]
+        lines += add_indent(definition, indent=indent)
+        return lines
 
 
-class ListItemWithTypeField(DefinitionItem):
-    """ Field for the return section of the function docstrings """
-    def to_rst(self, indent=4, prefix=''):
-        indent_str = ' ' * indent
-        _type = '' if self.signature == '' else '({0})'.format(self.signature)
-        rst_pattern = '{0}{1}**{2}** {3}{4}' if is_empty(self.desc[0]) else \
-                       '{0}{1}**{2}** {3} -- {4}'
-        description = '' if is_empty(self.desc[0]) else \
-                    ' '.join(remove_indent(self.desc))
-        return [rst_pattern.format(indent_str, prefix, self.name, _type, description)]
+class TableLineItem(DefinitionItem):
+    """ A Definition Item that represents a table line.
 
+    """
 
-class FunctionField(DefinitionItem):
-    """ A field that represents a function """
+    def to_rst(self, columns=(0, 0, 0)):
+        """ Outputs definition in rst as a line in a table.
 
+        Arguments
+        ---------
+        columns : tuple
+            The three item tuple of column widths for the term, classifier
+            and definition fields of the TableLineItem. When the column width
+            is 0 then the field
+
+        .. note:: The strings attributes are cliped to the column width.
+
+        Example
+        -------
+
+        >>> item = TableLineItem('function(arg1, arg2)', '',
+        ... ['This is the best function ever.'])
+        >>> item.to_rst(columns=(22, 0, 20))
+        function(arg1, arg2)   This is the best fun
+
+        """
+        definition = ' '.join([line.strip() for line in self.definition])
+        term = self.term[:columns[0]]
+        classifier = self.classifier[:columns[1]]
+        definition = definition[:columns[2]]
+
+        first_column = '' if columns[0] == 0 else '{0:<{first}} '
+        second_column = '' if columns[1] == 0 else '{1:<{second}} '
+        third_column = '' if columns[2] == 0 else '{2:<{third}}'
+        table_line = ''.join((first_column, second_column, third_column))
+
+        lines = []
+        lines += [table_line.format(term, classifier, definition,
+                  first=columns[0], second=columns[1], third=columns[2])]
+        lines += ['']
+        return lines
+
+class MethodItem(DefinitionItem):
+    """ A TableLineItem subclass to parse and render class methods.
+
+    """
     @classmethod
-    def is_field(cls, line, indent=''):
-        regex = indent + r'\w+\(.*\)\s*'
-        match = re.match(regex, line)
+    def is_definition(cls, line):
+        """ Check if the definition header is a function signature.
+
+
+        """
+        match = function_regex.match(line)
         return match
 
-    def to_rst(self, length, first_column, second_column):
-                split_result = re.split('\((.*)\)', self.name)
-                method_name = split_result[0]
-                method_text = ':meth:`{0} <{1}>`'.format(self.name, method_name)
-                summary = ' '.join([line.strip() for line in self.desc])
-                line = ' ' * length
-                line = replace_at(method_text, line, first_column)
-                line = replace_at(summary, line, second_column)
-                return [line]
+    @classmethod
+    def parse(cls, lines):
+        """Parse a method definition item from a set of lines.
 
-MethodField = FunctionField
+        The class method parses the method signature and defintion from the
+        list of docstring lines and produces a MethodItem where the term
+        is the method name and the classifier is arguments
+
+        .. note:: The global indention in the definition lines is striped
+
+        The method definition item is assumed to be as follows::
+
+        method(arguments)
+            Definition in a single line.
+
+
+        Arguments
+        ---------
+        lines :
+            docstring lines of the method definition item without any empty
+            lines before or after.
+
+        Returns
+        -------
+        definition : MethodItem
+
+        """
+        header = lines[0].strip()
+        term, classifier, _ = signature_regex.split(header)
+        definition = trim_indent(lines[1:]) if (len(lines) > 1) else ['']
+        return cls(term, classifier, definition)
+
+    def to_rst(self, columns=(0,0)):
+        """ Outputs definition in rst as a line in a table.
+
+        Arguments
+        ---------
+        columns : tuple
+            The two item tuple of column widths for the :meth: role column
+            and the definition (i.e. summary) of the MethodItem
+
+        .. note:: The strings attributes are cliped to the column width.
+
+        Example
+        -------
+
+        >>> item = MethodItem('function', 'arg1, arg2',
+        ... ['This is the best function ever.'])
+        >>> item.to_rst(columns=(40, 20))
+        :meth:`function <function(arg1, arg2)>` This is the best fun
+
+        """
+        definition = ' '.join([line.strip() for line in self.definition])
+        method_role = ':meth:`{0} <{0}({1})>`'.format(self.term, self.classifier)
+        table_line = '{0:<{first}} {1:<{second}}'
+
+        lines = []
+        lines += [table_line.format(method_role[:columns[0]],
+                                    definition[:columns[1]], first=columns[0],
+                                    second=columns[1])]
+        lines += ['']
+        return lines
+
 
 #------------------------------------------------------------------------------
 #  Functions to work with fields

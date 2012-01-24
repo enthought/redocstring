@@ -29,21 +29,31 @@ class TestDefinitionItem(unittest.TestCase):
         item = DefinitionItem.parse(['term',
                                      '    Definition.'])
         self.assertEqual(item, DefinitionItem('term', '',
-                                             ['    Definition.']))
+                                             ['Definition.']))
 
         item = DefinitionItem.parse(['term',
                                      '    Definition, paragraph 1.',
                                      '',
                                      '    Definition, paragraph 2.'])
         self.assertEqual(item, DefinitionItem('term', '',
-                                              ['    Definition, paragraph 1.',
+                                              ['Definition, paragraph 1.',
                                                '',
-                                               '    Definition, paragraph 2.']))
+                                               'Definition, paragraph 2.']))
 
         item = DefinitionItem.parse(['term : classifier',
                                      '    Definition.'])
         self.assertEqual(item, DefinitionItem('term', 'classifier',
-                                              ['    Definition.']))
+                                              ['Definition.']))
+
+        item = DefinitionItem.parse(['term : classifier',
+                                     '    Block.',
+                                     '        Definition.'])
+        self.assertEqual(item, DefinitionItem('term', 'classifier',
+                                              ['Block.',
+                                               '    Definition.']))
+
+#    def test_parse_errors(self):
+
 
     def test_to_rst(self):
         rst ="""\
@@ -53,9 +63,10 @@ lines
     A list of string lines rendered in rst.
 """
         item = DefinitionItem('lines', 'list',
-                             ['    A list of string lines rendered in rst.'])
+                             ['A list of string lines rendered in rst.'])
         rendered = '\n'.join(item.to_rst())
         self.assertMultiLineEqual(rendered, rst)
+
 
 class TestAttributeItem(unittest.TestCase):
 

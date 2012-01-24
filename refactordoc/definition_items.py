@@ -10,8 +10,8 @@
 import collections
 import re
 
-from line_functions import add_indent, is_empty, remove_indent, replace_at, fix_star
-
+from line_functions import (add_indent, is_empty, remove_indent, replace_at,
+                            fix_star, trim_indent)
 
 header_regex = re.compile(r'\s:\s')
 definition_regex = re.compile(r'\*?\*?\w+(\s:\s\w+)?$')
@@ -77,9 +77,9 @@ class DefinitionItem(collections.namedtuple('Field', ('term','classifier','defin
         docstring lines and produces a DefinitionItem with the term,
         classifier and the definition.
 
-        .. note:: The indention in the definition lines is not striped
+        .. note:: The global indention in the definition lines is striped
 
-        The field is assumed to be in one of the following formats::
+        The term definition is assumed to be in one of the following formats::
 
         term
             Definition.
@@ -111,8 +111,7 @@ class DefinitionItem(collections.namedtuple('Field', ('term','classifier','defin
         header = lines[0].strip()
         term, classifier = header_regex.split(header, maxsplit=1) if \
                            (' :' in header) else (header, '')
-        definition = [line.rstrip() for line in lines[1:]] if \
-                     (len(lines) > 1) else ['']
+        definition = trim_indent(lines[1:]) if (len(lines) > 1) else ['']
         return cls(term.strip(), classifier.strip(), definition)
 
 
@@ -141,7 +140,8 @@ class DefinitionItem(collections.namedtuple('Field', ('term','classifier','defin
         Example
         -------
 
-        >>> item = DefintionItem('lines', 'list', 'A list of string lines rendered in rst.')
+        >>> item = DefintionItem('lines', 'list',
+                                 ['A list of string lines rendered in rst.'])
         >>> print item.to_rst()
         lines
 
@@ -154,7 +154,7 @@ class DefinitionItem(collections.namedtuple('Field', ('term','classifier','defin
         lines += [self.term]
         lines += ['']
         lines += ['    *({0})*{1}'.format(self.classifier, postfix)]
-        lines += self.definition  # definition is all ready a list
+        lines += add_indent(self.definition)  # definition is all ready a list
         lines += ['']
         return lines
 

@@ -13,8 +13,8 @@ import re
 from line_functions import (add_indent, is_empty, remove_indent, replace_at,
                             fix_star, trim_indent, NEW_LINE)
 
-header_regex = re.compile(r'\s:\s')
-definition_regex = re.compile(r'\*?\*?\w+(\s:\s\w+)?$')
+header_regex = re.compile(r'\s:\s?')
+definition_regex = re.compile(r'\*?\*?\w+\s:\s?(\w+)?$')
 function_regex=re.compile(r'\w+\(.*\)\s*')
 signature_regex = re.compile('\((.*)\)')
 

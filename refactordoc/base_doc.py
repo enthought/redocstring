@@ -340,6 +340,13 @@ class BaseDoc(object):
             line = ''
         return line
 
+    def pop(self, index=None):
+        """ Pop a line from the dostrings.
+
+        """
+        index = self.index if (index is None) else index
+        return self._docstring.pop(index)
+
     @property
     def eod(self):
         """ End of docstring.

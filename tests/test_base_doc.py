@@ -16,49 +16,47 @@ class TestBaseDoc(unittest.TestCase):
 
     def test_refactor_header(self):
         docstring =\
-        """ This is a sample docstring.
+""" This is a sample docstring.
 
-        My Header
-        ---------
-        This is just some sample text.
+My Header
+---------
+This is just some sample text.
+"""
 
-        """
+        rst =\
+""" This is a sample docstring.
 
-        rst = \
-        """ This is a sample docstring.
+.. rubric:: My Header
 
-        .. rubric:: My Header
-
-        This is just some sample text.
-
-        """
+This is just some sample text.
+"""
         docstring_lines = docstring.splitlines()
-        BaseDoc(docstring_lines)
-        output = '\n'.join(docstring_lines)
+        base_doc = BaseDoc(docstring_lines)
+        base_doc.parse()
+        output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)
 
     def test_refactor_complex_header(self):
         docstring =\
-        """ This is a sample docstring.
+""" This is a sample docstring.
 
-        Input\\Output header
-        -------------------
+Input\\Output header
+-------------------
 
-        This is just some sample text.
+This is just some sample text.
+"""
 
-        """
+        rst =\
+""" This is a sample docstring.
 
-        rst = \
-        """ This is a sample docstring.
+.. rubric:: Input\\\\Output header
 
-        .. rubric:: Input\\\\Output header
-
-        This is just some sample text.
-
-        """
+This is just some sample text.
+"""
         docstring_lines = docstring.splitlines()
-        BaseDoc(docstring_lines)
-        output = '\n'.join(docstring_lines)
+        base_doc = BaseDoc(docstring_lines)
+        base_doc.parse()
+        output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)
 
 if __name__ == '__main__':

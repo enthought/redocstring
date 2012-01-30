@@ -13,7 +13,17 @@ import re
 from line_functions import add_indent, fix_star, trim_indent, NEW_LINE
 
 header_regex = re.compile(r'\s:\s?')
-definition_regex = re.compile(r'\*?\*?\w+\s:\s?([\w\.]+)?$')
+definition_regex = re.compile(r"""
+\*{0,2}            #  no, one or two stars
+\w+\s:             #  a word followed by a semicolumn and optionally a space
+(
+        \s         # just a space
+    |              # OR
+        \s[\w.]+   # dot sepearated words
+        (\(.*\))?  # woth maybe a signature
+)?
+$             # match at the end of the line
+""", re.VERBOSE)
 function_regex = re.compile(r'\w+\(.*\)\s*')
 signature_regex = re.compile('\((.*)\)')
 

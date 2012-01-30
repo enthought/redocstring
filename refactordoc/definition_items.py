@@ -11,7 +11,7 @@ import collections
 import re
 
 from line_functions import (add_indent, is_empty, remove_indent, replace_at,
-                            fix_star, trim_indent)
+                            fix_star, trim_indent, NEW_LINE)
 
 header_regex = re.compile(r'\s:\s')
 definition_regex = re.compile(r'\*?\*?\w+(\s:\s\w+)?$')
@@ -154,10 +154,10 @@ class DefinitionItem(collections.namedtuple('Field', ('term','classifier','defin
         postfix = ' --' if (len(self.definition) > 0) else ''
         lines = []
         lines += [self.term]
-        lines += ['']
+        lines += [NEW_LINE]
         lines += ['    *({0})*{1}'.format(self.classifier, postfix)]
         lines += add_indent(self.definition)  # definition is all ready a list
-        lines += ['']
+        lines += [NEW_LINE]
         return lines
 
 

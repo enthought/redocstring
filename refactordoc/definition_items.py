@@ -18,7 +18,7 @@ definition_regex = re.compile(r'\*?\*?\w+\s:\s?(\w+)?$')
 function_regex=re.compile(r'\w+\(.*\)\s*')
 signature_regex = re.compile('\((.*)\)')
 
-class DefinitionItem(collections.namedtuple('Field', ('term','classifier','definition'))):
+class DefinitionItem(collections.namedtuple('DefinitionItem', ('term','classifier','definition'))):
     """ A docstring definition item
 
     Syntax diagram::

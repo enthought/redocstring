@@ -240,5 +240,74 @@ and any current selection will be cleared.
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
 
+    def test_docstring_cases_2(self):
+
+        docstring = \
+""" Verify that the requested attribute is properly set
+
+The method compares the attribute value in the Enaml object and
+check if it is synchronized with the toolkit widget. The component
+attribute is retrieved directly while the widget value is retrieved
+through a call to a method function in the test case.
+
+Arguments
+---------
+component : enaml.widgets.component.Component
+    The Enaml component to check.
+
+attribute_name : str
+    The string name of the Enaml attribute to check.
+
+value :
+    The expected value.
+
+.. note:: It is expected that the user has defined an appropriate
+    method get_<attribute_name>(widget) or the extentded version
+    get_<attribute_name>(component, widget) in the current test
+    case. The extended signature is commonly used because additional
+    information on the component's attributes is required to return
+    a sensible result (e.g. the component uses Converters to set
+    and retrieve the value of the attribute). The assert method
+    The get methods can raise assertion errors when it is not
+    possible to retrieve a sensible value for the attribute.
+
+"""
+
+        rst = \
+""" Verify that the requested attribute is properly set
+
+The method compares the attribute value in the Enaml object and
+check if it is synchronized with the toolkit widget. The component
+attribute is retrieved directly while the widget value is retrieved
+through a call to a method function in the test case.
+
+:param component:
+    The Enaml component to check.
+:type compoent: enaml.widgets.component.Component
+:param attribute_name:
+    The string name of the Enaml attribute to check.
+:type  str:
+:param value:
+    The expected value.
+
+.. note:: It is expected that the user has defined an appropriate
+    method get_<attribute_name>(widget) or the extentded version
+    get_<attribute_name>(component, widget) in the current test
+    case. The extended signature is commonly used because additional
+    information on the component's attributes is required to return
+    a sensible result (e.g. the component uses Converters to set
+    and retrieve the value of the attribute). The assert method
+    The get methods can raise assertion errors when it is not
+    possible to retrieve a sensible value for the attribute.
+
+"""
+
+        docstring_lines = docstring.splitlines()
+        function_doc = FunctionDoc(docstring_lines)
+        function_doc.parse()
+        output = '\n'.join(docstring_lines)
+        self.assertMultiLineEqual(rst, output)
+
+
 if __name__ == '__main__':
     unittest.main()

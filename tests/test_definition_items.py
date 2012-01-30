@@ -27,6 +27,10 @@ class TestDefinitionItem(unittest.TestCase):
         self.assertFalse(DefinitionItem.is_definition(":term : classifier"))
         self.assertFalse(DefinitionItem.is_definition("term : classifier:"))
 
+        # special cases
+        header = 'component : class.component.instance'
+        self.assertTrue(DefinitionItem.is_definition(header))
+
     def test_parse(self):
         item = DefinitionItem.parse(['term',
                                      '    Definition.'])

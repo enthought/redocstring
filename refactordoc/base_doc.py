@@ -263,6 +263,12 @@ class BaseDoc(object):
         for line in reversed(lines):
             docstring.insert(index, line)
 
+    def insert_and_move(self, lines, index):
+        """ Insert refactored lines and move current index to the end.
+
+        """
+        self.insert_lines(lines, index)
+        self.index += len(lines)
     def seek_to_next_non_empty_line(self):
         """ Goto the next non_empty line
 

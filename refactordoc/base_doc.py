@@ -118,15 +118,11 @@ class BaseDoc(object):
             The header string to use with the rubric directive.
 
         """
-        index = self.index
-        indent = get_indent(self.peek())
-        self.remove_lines(index, 2)
-        descriptions = []
         header = fix_backspace(header)
-        descriptions += [indent + '.. rubric:: {0}'.format(header), '']
-        self.insert_lines(descriptions, index)
-        self.index += len(descriptions)
-        return descriptions
+        directive = '.. rubric:: {0}'.format(header)
+        lines = []
+        lines += [directive, NEW_LINE]
+        self.insert_and_move(lines, self.index)
 
 
     def extract_fields(self, indent='', field_type=None):

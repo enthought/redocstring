@@ -11,6 +11,8 @@ import re
 from fields import Field
 from line_functions import is_empty, get_indent, fix_backspace
 
+
+underline_regex = re.compile(r'\s*\S+\s*\Z')
 #------------------------------------------------------------------------------
 #  Classes
 #------------------------------------------------------------------------------
@@ -245,7 +247,7 @@ class BaseDoc(object):
             print 'current line is: {0} at index {1}'.format(header, self.index)
 
         # check for underline type format
-        underline = re.match(r'\s*\S+\s*\Z', line2)
+        underline = underline_regex.match(line2)
         if underline is None:
             return False
         # is the nextline an rst underline?

@@ -83,7 +83,8 @@ class BaseDoc(object):
         while not self.eod:
             header = self.is_section()
             if header:
-                self.remove_if_empty(self.index + 2)  # Remove space after header
+                self.remove_lines(self.index, 2)  #  Remove header
+                self.remove_if_empty(self.index)  # Remove space after header
                 self._refactor(header)
             else:
                 self.index += 1

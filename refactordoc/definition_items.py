@@ -175,6 +175,7 @@ class AttributeItem(DefinitionItem):
     _no_classifier = (".. attribute:: {0}\n\n"
                       "{2}\n\n")
     _only_term = ".. attribute:: {0}\n\n"
+
     def to_rst(self, ):
         """ Return the attribute info ousing the attrbiute sphinx markup.
 

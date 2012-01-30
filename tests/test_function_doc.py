@@ -30,7 +30,7 @@ myvalue : list
 """ This is a sample function docstring.
 
 :returns:
-    **myvalue** (`list`) --
+    **myvalue** (*list*) --
     A list of important values.
     But we need to say more things about it.
 """
@@ -225,7 +225,7 @@ and any current selection will be cleared.
 :type end: Int
 
 :returns:
-    **result** (`None`)
+    **result** (*None*)
 """
 
         docstring_lines = docstring1.splitlines()

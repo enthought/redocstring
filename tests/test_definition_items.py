@@ -141,7 +141,7 @@ class TestListItem(unittest.TestCase):
 
     def test_to_rst_normal(self):
         rst ="""\
-- **indent** (`int`) --
+- **indent** (*int*) --
   The indent to use for the description block.
 
   This is the second paragraph of the argument definition.
@@ -173,7 +173,7 @@ class TestListItem(unittest.TestCase):
 
     def test_to_rst_no_defintition(self):
         rst ="""\
-- **indent** (`int`)
+- **indent** (*int*)
 """
         item = ListItem('indent', 'int', [''])
         rendered = '\n'.join(item.to_rst(prefix='-'))
@@ -223,6 +223,7 @@ class TestMethodItem(unittest.TestCase):
             ['This is the best function ever.'])
         rendered = '\n'.join(item.to_rst(columns=(39, 20))) + '\n'
         self.assertMultiLineEqual(rst, rendered)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -299,10 +299,10 @@ class ListItem(DefinitionItem):
 
     """
 
-    _normal = ("**{0}** (`{1}`) --\n"
+    _normal = ("**{0}** (*{1}*) --\n"
                "{2}\n\n")
     _only_term = "**{0}**\n\n"
-    _no_definition = "**{0}** (`{1}`)\n\n"
+    _no_definition = "**{0}** (*{1}*)\n\n"
     _no_classifier = ("**{0}** --\n"
                       "{2}\n\n")
 

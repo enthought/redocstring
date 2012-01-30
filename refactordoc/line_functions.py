@@ -37,7 +37,7 @@ def add_indent(lines, indent=4):
     .. note:: Empty strings are not changed
 
     """
-    indent_str = ' ' * indent
+    indent_str = ' ' * indent if indent != 0 else ''
     output = []
     for line in lines:
         if is_empty(line):

@@ -220,6 +220,17 @@ class AttributeItem(DefinitionItem):
 class ArgumentItem(DefinitionItem):
     """ A definition item for function argument sections """
 
+
+    _normal = (":param {0}:\n"
+               "{2}\n"
+               ":type {0}: {1}")
+    _no_definition = (":param {0}:\n"
+                      ":type {0}: {1}")
+    _no_classifier = (":param {0}:\n"
+                      "{2}")
+    _only_term = ":param {0}:"
+
+
     def to_rst(self):
         """ Render ArgumentItem in sphinx friendly rst using the
         ``:param:`` role.
@@ -240,17 +251,23 @@ class ArgumentItem(DefinitionItem):
         """
         argument = fix_star(self.term)
         argument_type = self.classifier
-        type_role = [''] if (argument_type == '') else \
-                    [':type {0}: {1}'.format(argument, argument_type)]
-        header =  ':param {0}: ' + self.definition[0].strip()
-        definition = [''] + self.definition[1:]
-        footer = type_role if (argument_type == '') else type_role + ['']
+        definition = '\n'.join(add_indent(self.definition))
+        template = self.template.format(argument, argument_type, definition)
+        return template.splitlines()
 
-        lines = []
-        lines += [header.format(argument)]
-        lines += add_indent(definition)
-        lines += footer
-        return lines
+    @property
+    def template(self):
+        if self.classifier == '' and self.definition == ['']:
+            template = self._only_term
+        elif self.classifier == '':
+            template = self._no_classifier
+        elif self.definition == ['']:
+            template = self._no_definition
+        else:
+            template = self._normal
+        return template
+
+
 
 class ListItem(DefinitionItem):
     """ A defintion item that is rendered as an ordered/unordered list

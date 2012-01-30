@@ -22,6 +22,17 @@ class TestLineFunctions(unittest.TestCase):
         output = add_indent(input, indent=3)
         self.assertEqual(output, expected)
 
+        expected = ["This is the first line", "",
+                 "   This is the third line"]
+        output = add_indent(input, indent=0)
+        self.assertEqual(output, expected)
+
+        expected = ["    This is the first line", "",
+                 "       This is the third line"]
+        output = add_indent(input)
+        self.assertEqual(output, expected)
+
+
     def test_remove_indent(self):
         input = ["   This is the first line", "",
                  "      This is the third line"]

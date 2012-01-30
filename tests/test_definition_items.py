@@ -19,10 +19,10 @@ class TestDefinitionItem(unittest.TestCase):
         self.maxDiff = None
 
     def test_is_definition(self):
-        self.assertTrue(DefinitionItem.is_definition("term"))
+        self.assertFalse(DefinitionItem.is_definition("term"))
         self.assertFalse(DefinitionItem.is_definition("term "))
-        self.assertFalse(DefinitionItem.is_definition("term :"))
-        self.assertFalse(DefinitionItem.is_definition("term : "))
+        self.assertTrue(DefinitionItem.is_definition("term :"))
+        self.assertTrue(DefinitionItem.is_definition("term : "))
         self.assertTrue(DefinitionItem.is_definition("term : classifier"))
         self.assertFalse(DefinitionItem.is_definition(":term : classifier"))
         self.assertFalse(DefinitionItem.is_definition("term : classifier:"))
@@ -41,6 +41,12 @@ class TestDefinitionItem(unittest.TestCase):
                                               ['Definition, paragraph 1.',
                                                '',
                                                'Definition, paragraph 2.']))
+
+        item = DefinitionItem.parse(['term :',
+                                     '    Definition.'])
+        self.assertEqual(item, DefinitionItem('term', '',
+                                              ['Definition.']))
+
 
         item = DefinitionItem.parse(['term : classifier',
                                      '    Definition.'])
@@ -67,7 +73,7 @@ lines
         item = DefinitionItem('lines', 'list',
                              ['A list of string lines rendered in rst.'])
         rendered = '\n'.join(item.to_rst())
-        self.assertMultiLineEqual(rendered, rst)
+        self.assertMultiLineEqual(rst, rendered)
 
 
 class TestAttributeItem(unittest.TestCase):
@@ -86,7 +92,7 @@ class TestAttributeItem(unittest.TestCase):
         item = AttributeItem('indent', 'int',
                              ['The indent to use for the description block.'])
         rendered = '\n'.join(item.to_rst())
-        self.assertMultiLineEqual(rendered, rst)
+        self.assertMultiLineEqual(rst, rendered)
 
         # without annotation
         rst ="""\
@@ -97,7 +103,7 @@ class TestAttributeItem(unittest.TestCase):
         item = AttributeItem('indent', '',
                              ['The indent to use for the description block.'])
         rendered = '\n'.join(item.to_rst())
-        self.assertMultiLineEqual(rendered, rst)
+        self.assertMultiLineEqual(rst, rendered)
 
 
 class TestArgumentItem(unittest.TestCase):
@@ -106,19 +112,18 @@ class TestArgumentItem(unittest.TestCase):
         self.maxDiff = None
 
     def test_to_rst(self):
-        # with annotation
         rst ="""\
-:param indent: The indent to use for the description block.
-
+:param indent:
+    The indent to use for the description block.
     This is the second paragraph of the argument definition.
-:type indent: int
-"""
+:type indent: int"""
+
         item = ArgumentItem('indent', 'int',
             ['The indent to use for the description block.',
              ''
              'This is the second paragraph of the argument definition.'])
         rendered = '\n'.join(item.to_rst())
-        self.assertMultiLineEqual(rendered, rst)
+        self.assertMultiLineEqual(rst, rendered)
 
 
 class TestListItem(unittest.TestCase):
@@ -126,10 +131,9 @@ class TestListItem(unittest.TestCase):
     def setUp(self):
         self.maxDiff = None
 
-    def test_to_rst(self):
-        # with annotation
+    def test_to_rst_normal(self):
         rst ="""\
-- indent (`int`) --
+- **indent** (`int`) --
   The indent to use for the description block.
 
   This is the second paragraph of the argument definition.
@@ -139,15 +143,33 @@ class TestListItem(unittest.TestCase):
              '',
              'This is the second paragraph of the argument definition.'])
         rendered = '\n'.join(item.to_rst(prefix='-'))
-        self.assertMultiLineEqual(rendered, rst)
+        self.assertMultiLineEqual(rst, rendered)
 
+    def test_to_rst_no_classifier(self):
         rst ="""\
-- indent (`int`) -- The indent to use for the description block.
+- **indent** --
+  The indent to use for the description block.
 """
-        item = ListItem('indent', 'int',
+        item = ListItem('indent', '',
             ['The indent to use for the description block.'])
         rendered = '\n'.join(item.to_rst(prefix='-'))
-        self.assertMultiLineEqual(rendered, rst)
+        self.assertMultiLineEqual(rst, rendered)
+
+    def test_to_rst_only_term(self):
+        rst ="""\
+- **indent**
+"""
+        item = ListItem('indent', '', [''])
+        rendered = '\n'.join(item.to_rst(prefix='-'))
+        self.assertMultiLineEqual(rst, rendered)
+
+    def test_to_rst_no_defintition(self):
+        rst ="""\
+- **indent** (`int`)
+"""
+        item = ListItem('indent', 'int', [''])
+        rendered = '\n'.join(item.to_rst(prefix='-'))
+        self.assertMultiLineEqual(rst, rendered)
 
 
 class TestTableLineItem(unittest.TestCase):
@@ -163,7 +185,7 @@ function(arg1, arg2)   This is the best fun
         item = TableLineItem('function(arg1, arg2)', 'and',
             ['This is the best function ever.'])
         rendered = '\n'.join(item.to_rst(columns=(22, 0, 20)))
-        self.assertMultiLineEqual(rendered, rst)
+        self.assertMultiLineEqual(rst, rendered)
 
 
 class TestMethodItem(unittest.TestCase):
@@ -187,12 +209,12 @@ class TestMethodItem(unittest.TestCase):
     def test_to_rst(self):
         # with annotation
         rst ="""\
-:meth:`function <function(arg1, arg2)>` This is the best fun
+:meth:`function(arg1, arg2) <function>` This is the best fun
 """
         item = MethodItem('function','arg1, arg2',
             ['This is the best function ever.'])
-        rendered = '\n'.join(item.to_rst(columns=(39, 20)))
-        self.assertMultiLineEqual(rendered, rst)
+        rendered = '\n'.join(item.to_rst(columns=(39, 20))) + '\n'
+        self.assertMultiLineEqual(rst, rendered)
 
 if __name__ == '__main__':
     unittest.main()

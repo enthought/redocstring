@@ -166,6 +166,15 @@ class AttributeItem(DefinitionItem):
     """ Definition that renders the rst output using the attribute directive.
     """
 
+    _normal = (".. attribute:: {0}\n"
+               "    :annotation: = {1}\n"
+               "\n"
+               "{2}\n\n")
+    _no_definition = (".. attribute:: {0}\n"
+                      "    :annotation: = {1}\n\n")
+    _no_classifier = (".. attribute:: {0}\n\n"
+                      "{2}\n\n")
+    _only_term = ".. attribute:: {0}\n\n"
     def to_rst(self, ):
         """ Return the attribute info ousing the attrbiute sphinx markup.
 
@@ -191,17 +200,21 @@ class AttributeItem(DefinitionItem):
         >>>
 
         """
-        attr_type = self.classifier
-        directive = '.. attribute:: {0}'
-        annotation = '' if is_empty(attr_type) else '    :annotation: = {0}'
-        definition = self.definition if (annotation == '') \
-                     else [''] + self.definition
-        lines = []
-        lines += [directive.format(self.term)]
-        lines += [annotation.format(attr_type)]
-        lines += add_indent(definition)
-        lines += ['']
-        return lines
+        definition = '\n'.join(add_indent(self.definition))
+        template = self.template.format(self.term, self.classifier, definition)
+        return template.splitlines()
+
+    @property
+    def template(self):
+        if self.classifier == '' and self.definition == ['']:
+            template = self._only_term
+        elif self.classifier == '':
+            template = self._no_classifier
+        elif self.definition == ['']:
+            template = self._no_definition
+        else:
+            template = self._normal
+        return template
 
 
 class ArgumentItem(DefinitionItem):

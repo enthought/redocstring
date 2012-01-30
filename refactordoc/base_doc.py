@@ -75,6 +75,7 @@ class BaseDoc(object):
             self._docstring = lines
         self.verbose = verbose
         self.headers = {} if headers is None else headers
+        self.bookmarks = []
         self.index = 0
         self.parse()
 
@@ -318,6 +319,27 @@ class BaseDoc(object):
         """
         if is_empty(self.docstring[index]):
             self.remove_lines(index)
+
+    def bookmark(self):
+        """ Push the current index to the end of the list of bookmarks.
+
+        """
+        self.bookmarks.append(self.index)
+
+    def goto_bookmark(self, bookmark_index=-1):
+        """ Move to bookmark.
+
+        Move the current index to the  docstring line given my the
+        ``self.bookmarks[bookmark_index]`` and  remove it fromn the bookmark
+        list. Default value will pop the last entry.
+
+        Returns
+        -------
+        The bookmark value.
+
+        """
+        self.index = self.bookmarks[bookmark_index]
+        return self.bookmarks.pop(bookmark_index)
 
     def peek(self, ahead=0):
         """ Peek ahead a number of lines

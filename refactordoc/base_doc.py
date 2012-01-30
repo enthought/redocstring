@@ -34,10 +34,6 @@ class BaseDoc(object):
         The current zero-based line number of the docstring that is
         proccessed.
 
-    verbose : bool
-        When set the class prints a lot of info about the proccess
-        during runtime.
-
     headers : dict
         The sections that the class refactors. Each entry in the
         dictionary should have as key the name of the section in the
@@ -47,7 +43,7 @@ class BaseDoc(object):
 
     """
 
-    def __init__(self, lines, headers = None, verbose=False):
+    def __init__(self, lines, headers = None):
         """ Initialize the class
 
         The method setups the class attributes and starts parsing the
@@ -66,16 +62,11 @@ class BaseDoc(object):
             subclasses, that is responsible for refactoring (e.g.
             {'Methods': 'method'}).
 
-        verbose : bool
-            When set the class logs info about the proccess
-            during runtime.
-
         """
         try:
             self._docstring = lines.splitlines()
         except AttributeError:
             self._docstring = lines
-        self.verbose = verbose
         self.headers = {} if headers is None else headers
         self.bookmarks = []
         self.index = 0
@@ -243,8 +234,6 @@ class BaseDoc(object):
 
         header = self.peek()
         line2 = self.peek(1)
-        if self.verbose:
-            print 'current line is: {0} at index {1}'.format(header, self.index)
 
         # check for underline type format
         underline = underline_regex.match(line2)

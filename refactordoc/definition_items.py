@@ -23,15 +23,12 @@ class DefinitionItem(collections.namedtuple('DefinitionItem', ('term','classifie
 
     Syntax diagram::
 
-    +----------------------------+
-    | term [ " : " classifier ]  |
-    +--+-------------------------+--+
+    +---------------------------+
+    | term [ " : " classifier ] |
+    +--+------------------------+---+
        | definition                 |
        | (body elements)+           |
        +----------------------------+
-
-    A Definition item is the base item of a section definition list.
-    (please see _http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#sections)
 
     The Definition class is based on the nametuple class and is responsible
     for to check, parse and refactor a docstring definition item into sphinx
@@ -50,6 +47,10 @@ class DefinitionItem(collections.namedtuple('DefinitionItem', ('term','classifie
 
     definition : list
         The list of strings that holdes the description the defintion item.
+
+    .. note:: A Definition item is based on the item of a section definition
+        list as it defined in restructed text
+        (_http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#sections).
 
     """
 
@@ -81,6 +82,7 @@ class DefinitionItem(collections.namedtuple('DefinitionItem', ('term','classifie
 
         .. note:: The global indention in the definition lines is striped
 
+
         The term definition is assumed to be in one of the following formats::
 
         term
@@ -98,12 +100,12 @@ class DefinitionItem(collections.namedtuple('DefinitionItem', ('term','classifie
         term : classifier
             Definition.
 
-
         Arguments
         ---------
-        lines :
+        lines
             docstring lines of the definition without any empty lines before or
             after.
+
 
         Returns
         -------
@@ -125,10 +127,10 @@ class DefinitionItem(collections.namedtuple('DefinitionItem', ('term','classifie
         the rst markup. The default behaviour is to render the definition
         as an sphinx definition item::
 
-        <term>
+            <term>
 
-           (<classifier>) --
-           <definition>
+               (<classifier>) --
+               <definition>
 
         Subclasses will ussualy override the method to provide custom made
         behaviour. However the singature of the method should hold only
@@ -145,11 +147,16 @@ class DefinitionItem(collections.namedtuple('DefinitionItem', ('term','classifie
 
         >>> item = DefintionItem('lines', 'list',
                                  ['A list of string lines rendered in rst.'])
-        >>> print item.to_rst()
+        >>> item.to_rst()
         lines
 
             *(list)* --
             A list of string lines rendered in rst.
+
+        .. note:: An empty line is added at the end of the list of strings so
+            that the results can be concatenated directly and rendered properly
+            by shpinx.
+
 
         """
         postfix = ' --' if (len(self.definition) > 0) else ''
@@ -184,7 +191,7 @@ class AttributeItem(DefinitionItem):
 
         >>> item = AttributeItem('indent', 'int',
         ... ['The indent to use for the decription block.'])
-        >>> print item.to_rst()
+        >>> item.to_rst()
         .. attribute:: indent
             :annotation: = int
 
@@ -194,11 +201,15 @@ class AttributeItem(DefinitionItem):
 
         >>> item = AttributeItem('indent', '',
         ... ['The indent to use for the decription block.'])
-        >>> print item.to_rst()
+        >>> item.to_rst()
         .. attribute:: indent
 
             The indent to use for the description block
         >>>
+
+        .. note:: An empty line is added at the end of the list of strings so
+            that the results can be concatenated directly and rendered properly
+            by shpinx.
 
         """
         definition = '\n'.join(add_indent(self.definition))
@@ -243,11 +254,16 @@ class ArgumentItem(DefinitionItem):
         ... ['The indent to use for the description block.',
              ''
              'This is the second paragraph of the argument definition.'])
-        >>> print item.to_rst()
-        :param indent: The indent to use for the description block.
+        >>> item.to_rst()
+        :param indent:
+            The indent to use for the description block.
 
             This is the second paragraph of the argument definition.
         :type indent: int
+
+
+        .. note:: There is no new line added at the last line of the
+        :meth:`to_rst` method.
 
         """
         argument = fix_star(self.term)
@@ -289,7 +305,7 @@ class ListItem(DefinitionItem):
         ---------
         prefix : str
             The prefix to use. For example if the item is part of a numbered
-            list then ``prefix='#'``.
+            list then ``prefix='-'``.
 
         Example
         -------
@@ -297,13 +313,21 @@ class ListItem(DefinitionItem):
         >>> item = ListItem('indent', 'int',
         ... ['The indent to use for the description block.'])
         >>> item.to_rst(prefix='-')
-        - indent (`int`) -- The indent to use for the descirption block.
+        - **indent** (`int`) --
+          The indent to use for the description block.
 
         >>> item = ListItem('indent', 'int',
         ... ['The indent to use for'
              'the description block.'])
         >>> item.to_rst(prefix='-')
-        - indent (`int`) -- The indent to use for the descirption block.
+        - **indent** (`int`) --
+          The indent to use for
+          the descirption block.
+
+
+        .. note:: An empty line is added at the end of the list of strings so
+            that the results can be concatenated directly and rendered properly
+            by shpinx.
 
         """
         indent = 0 if (prefix is None) else len(prefix) + 1
@@ -341,7 +365,8 @@ class TableLineItem(DefinitionItem):
             and definition fields of the TableLineItem. When the column width
             is 0 then the field
 
-        .. note:: The strings attributes are cliped to the column width.
+        .. note::
+            - The strings attributes are cliped to the column width.
 
         Example
         -------

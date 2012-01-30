@@ -449,6 +449,7 @@ class MethodItem(DefinitionItem):
 
         .. note:: The strings attributes are cliped to the column width.
 
+
         Example
         -------
 
@@ -457,53 +458,65 @@ class MethodItem(DefinitionItem):
         >>> item.to_rst(columns=(40, 20))
         :meth:`function <function(arg1, arg2)>` This is the best fun
 
+        .. note:: An empty line is added at the end of the list of strings so
+            that the results can be concatenated directly and rendered properly
+            by shpinx.
+
+
         """
         definition = ' '.join([line.strip() for line in self.definition])
-        method_role = ':meth:`{0} <{0}({1})>`'.format(self.term, self.classifier)
+        method_role = ':meth:`{0}({1}) <{0}>`'.format(self.term, self.classifier)
         table_line = '{0:<{first}} {1:<{second}}'
 
         lines = []
         lines += [table_line.format(method_role[:columns[0]],
                                     definition[:columns[1]], first=columns[0],
                                     second=columns[1])]
-        lines += ['']
         return lines
 
+    @property
+    def signature(self):
+        return '{}({})'.format(self.term, self.classifier)
 
 #------------------------------------------------------------------------------
-#  Functions to work with fields
+#  Functions to work with Definition Items
 #------------------------------------------------------------------------------
 
-def max_name_length(method_definition_items):
-    """ Find the max length of the function name in a list of method fields.
+def max_attribute_length(items, attr):
+    """ Find the max length of the attribute in a list of DefinitionItems.
 
     Arguments
     ---------
-    fields : list
-        The list of the parsed fields.
+    items : list
+        The list of the DefitionItems (or subclasses).
+
+    attr : str
+        Attribute to look at.
 
     """
-    return max([field[0].find('(') for field in method_fields])
+    if attr == 'definition':
+        maximum = max([len(' '.join(item.definition)) for item in items])
+    else:
+        maximum = max([len(getattr(item, attr)) for item in items])
+    return maximum
 
-def max_header_length(fields):
-    """ Find the max length of the header in a list of fields.
+def max_attribute_index(items, attr):
+    """ Find the index of the attribute with the maximum length in a list of
+    DefinitionItems.
 
     Arguments
     ---------
-    fields : list
-        The list of the parsed fields.
+    items : list
+        The list of the DefitionItems (or subclasses).
+
+    attr : str
+        Attribute to look at.
 
     """
-    return max([len(field[0]) for field in fields])
+    if attr == 'definition':
+        attributes = [len(' '.join(item.definition)) for item in items]
+    else:
+        attributes = [len(getattr(item, attr)) for item in items]
 
-def max_desc_length(fields):
-    """ Find the max length of the description in a list of fields.
-
-    Arguments
-    ---------
-    fields : list
-        The list of the parsed fields.
-
-    """
-    return max([len(' '.join([line.strip() for line in field[2]]))
-                for field in fields])
+    maximum = max(attributes)
+    return attributes.index(maximum)

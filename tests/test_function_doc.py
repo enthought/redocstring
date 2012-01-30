@@ -283,10 +283,10 @@ through a call to a method function in the test case.
 
 :param component:
     The Enaml component to check.
-:type compoent: enaml.widgets.component.Component
+:type component: enaml.widgets.component.Component
 :param attribute_name:
     The string name of the Enaml attribute to check.
-:type  str:
+:type attribute_name: str
 :param value:
     The expected value.
 
@@ -305,7 +305,7 @@ through a call to a method function in the test case.
         docstring_lines = docstring.splitlines()
         function_doc = FunctionDoc(docstring_lines)
         function_doc.parse()
-        output = '\n'.join(docstring_lines)
+        output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)
 
 

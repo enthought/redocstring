@@ -1,4 +1,4 @@
-﻿# -*- coding: UTF-8 -*-
+﻿#  -*- coding: UTF-8 -*-
 #------------------------------------------------------------------------------
 #  file: base_doc.py
 #  License: LICENSE.TXT
@@ -8,8 +8,8 @@
 #------------------------------------------------------------------------------
 import re
 
-from fields import Field
-from line_functions import is_empty, get_indent, fix_backspace
+from definition_items import DefinitionItem
+from line_functions import is_empty, get_indent, fix_backspace, NEW_LINE
 
 
 underline_regex = re.compile(r'\s*\S+\s*\Z')
@@ -17,12 +17,12 @@ underline_regex = re.compile(r'\s*\S+\s*\Z')
 #  Classes
 #------------------------------------------------------------------------------
 
+
 class BaseDoc(object):
     """Base abstract docstring refactoring class.
 
     The class' main purpose is to parse the dosctring and find the
-    sections that need to be refactored. It also provides a number of
-    methods to help with the refactoring. Subclasses should provide
+    sections that need to be refactored. Subclasses should provide
     the methods responsible for refactoring the sections.
 
     Attributes
@@ -31,7 +31,7 @@ class BaseDoc(object):
         A list of strings (lines) that holds docstrings
 
     index : int
-        The current zero-based line number of the docstring that is
+        The current zero-based line number of the docstring that is currently
         proccessed.
 
     headers : dict
@@ -41,9 +41,14 @@ class BaseDoc(object):
         the postfix of the method, in the subclasses, that is
         responsible for refactoring (e.g. {'Methods': 'method'}).
 
+
+
+    BaseDoc also provides a number of methods that operate on the docstring to
+    help with the refactoring.
+
     """
 
-    def __init__(self, lines, headers = None):
+    def __init__(self, lines, headers=None):
         """ Initialize the class
 
         The method setups the class attributes and starts parsing the
@@ -69,7 +74,6 @@ class BaseDoc(object):
             self._docstring = lines
         self.headers = {} if headers is None else headers
         self.bookmarks = []
-        self.index = 0
 
     def parse(self):
         """ Parse the docstring.
@@ -83,7 +87,7 @@ class BaseDoc(object):
         while not self.eod:
             header = self.is_section()
             if header:
-                self.remove_lines(self.index, 2)  #  Remove header
+                self.remove_lines(self.index, 2)  # Remove header
                 self.remove_if_empty(self.index)  # Remove space after header
                 self._refactor(header)
             else:
@@ -124,105 +128,103 @@ class BaseDoc(object):
         lines += [directive, NEW_LINE]
         self.insert_and_move(lines, self.index)
 
+    def extract_items(self, item_class=None):
+        """Extract the definition items from a docstring.
 
-    def extract_fields(self, indent='', field_type=None):
-        """Extract the fields from the docstring
+        Parse the items in the description of a section into items of the
+        provided class time. Given a DefinitionItem or a subclass defined by
+        the ``item_class`` parameter. Staring from the current index position,
+        the method checks if in the next two lines a valid  header exists.
+        If successful, then the lines that belong to the item description
+        block (i.e. header + definition) are poped put from the docstring and
+        passed to the ``item_class`` parser and create an instance of
+        ``item_class``.
 
-        Parse the fields in the description of a section into tuples of
-        name, type and description in a list of strings. The parsed lines
-        are also removed from original list.
+        The process is repeated until there is no compatible ``item_class``
+        found or we run out of docstring. Then the method returns a list of
+        item_class instances.
+
+        The exit conditions allow for two valid section item layouts:
+
+        1. No lines between items::
+
+            <header1>
+                <description1>
+
+                <more description>
+            <header2>
+                <description2>
+
+        2. One line between items::
+
+            <header1>
+                <description1>
+
+                <more description>
+
+            <header2>
+                <description2>
+
 
         Arguments
         ---------
-        indent : str, optional
-            the indent argument is used to make sure that only the lines
-            with the same indent are considered when checking for a
-            field header line. The value is used to define the field
-            checking function.
+        item_class : DefinitionItem
+            A DefinitionItem or a subclass. This argument is used to check
+            if a line in the docstring is a valid item and to parse the
+            individual list items in the section. When ``None`` (default) the
+            base DefinitionItem class is used.
 
-        field_check : function
-            Optional function to use for checking if the next line is a
-            field. The signature of the function is ``foo(line)`` and it
-            should return ``True`` if the line contains a valid field
-            The default function is checking for fields of the following
-            formats::
-
-                <name> : <type>
-
-            or::
-
-                <name> :
-
-            Where the name has to be one word.
 
         Returns
         -------
-        parameters : list of tuples
-            list of parsed parameter tuples as returned from the
-            :meth:`~BaseDocstring.parse_field` method.
+        parameters : list
+            List of the parsed item instances of ``item_class`` type.
 
         """
-        field_type = Field if (field_type is None) else field_type
-        is_field = field_type.is_field
-        fields = []
-        while (not self.eod) and (is_item(self.peek()) or is_item(self.peek(1))):
+        item_type = DefinitionItem if (item_class is None) else item_class
+        is_item = item_type.is_definition
+        item_blocks = []
+        while (not self.eod) and \
+                (is_item(self.peek()) or is_item(self.peek(1))):
             self.remove_if_empty(self.index)
-            field_block = self.get_next_block()
-            field = field_type.parse(field_block)
-            fields.append(field)
-        return fields
+            item_blocks.append(self.get_next_block())
+        items = [item_type.parse(block) for block in item_blocks]
+        return items
 
     def get_next_block(self):
-        """ Get the next field block from the docstring.
+        """ Get the next item block from the docstring.
 
-        The method reads the next block in the docstring. The first line
-        assumed to be the field header and the following lines to belong to
-        the description::
+        The method reads the next item block in the docstring. The first line
+        is assumed to be the DefinitionItem header and the following lines to
+        belong to the definition::
 
             <header line>
-                <descrition>
+                <definition>
 
         The end of the field is designated by a line with the same indent
-        as the field header or two empty lines are found in sequence. Thus,
-        there are two valid field layouts:
-
-        1. No lines between fields::
-
-            <field1>
-                <description1>
-            <fieldd2>
-                <description2>
-
-        2. One line between fields::
-
-            <field1>
-                <description1>
-
-            <field2>
-                <description2>
+        as the field header or two empty lines are found in sequence.
 
         """
-        start = self.index
-        field_header = self.read()
-        indent = get_indent(field_header) + ' '
-        field = [field_header]
+        item_header = self.pop()
+        sub_indent = get_indent(item_header) + ' '
+        block = [item_header]
         while (not self.eod):
             peek_0 = self.peek()
             peek_1 = self.peek(1)
-            if (is_empty(peek_0) and (not peek_1.startswith(indent))) \
-                or \
-                ((not is_empty(peek_0)) and (not peek_0.startswith(indent))):
+            if (is_empty(peek_0) and (not peek_1.startswith(sub_indent))) \
+                    or ((not is_empty(peek_0)) \
+                    and (not peek_0.startswith(sub_indent))):
                 break
             else:
-                line = self.read()
-                field.append(line.rstrip())
-
-        self.remove_lines(start, len(field))
-        self.index = start
-        return field
+                line = self.pop()
+                block += [line.rstrip()]
+        return block
 
     def is_section(self):
-        """Check if the line defines a section.
+        """Check if the current line defines a section.
+
+
+        .. todo:: split and cleanup this method.
 
         """
         if self.eod:
@@ -266,8 +268,9 @@ class BaseDoc(object):
         """
         self.insert_lines(lines, index)
         self.index += len(lines)
+
     def seek_to_next_non_empty_line(self):
-        """ Goto the next non_empty line
+        """ Goto the next non_empty line.
 
         """
         docstring = self.docstring
@@ -276,18 +279,14 @@ class BaseDoc(object):
                 break
             self.index += 1
 
-
     def get_next_paragraph(self):
         """ Get the next paragraph designated by an empty line.
 
         """
-        docstring = self.docstring
         lines = []
         while (not self.eod) and (not is_empty(self.peek())):
-        start = self.index
-            line = self.read()
+            line = self.pop()
             lines.append(line)
-        del docstring[start:self.index]
         return lines
 
     def read(self):
@@ -375,4 +374,3 @@ class BaseDoc(object):
 
         """
         return self._docstring
-

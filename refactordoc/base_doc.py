@@ -87,7 +87,7 @@ class BaseDoc(object):
         """
         self.index = 0
         self.seek_to_next_non_empty_line()
-        while not self.eol:
+        while not self.eod:
             header = self.is_section()
             if header:
                 self.remove_if_empty(self.index + 2)  # Remove space after header
@@ -175,8 +175,7 @@ class BaseDoc(object):
         field_type = Field if (field_type is None) else field_type
         is_field = field_type.is_field
         fields = []
-        while (not self.eol) and (is_field(self.peek(), indent) or
-                                  is_field(self.peek(1), indent)):
+        while (not self.eod) and (is_item(self.peek()) or is_item(self.peek(1))):
             self.remove_if_empty(self.index)
             field_block = self.get_next_block()
             field = field_type.parse(field_block)
@@ -217,7 +216,7 @@ class BaseDoc(object):
         field_header = self.read()
         indent = get_indent(field_header) + ' '
         field = [field_header]
-        while (not self.eol):
+        while (not self.eod):
             peek_0 = self.peek()
             peek_1 = self.peek(1)
             if (is_empty(peek_0) and (not peek_1.startswith(indent))) \
@@ -236,7 +235,7 @@ class BaseDoc(object):
         """Check if the line defines a section.
 
         """
-        if self.eol:
+        if self.eod:
             return False
 
         header = self.peek()
@@ -290,8 +289,8 @@ class BaseDoc(object):
         """
         docstring = self.docstring
         lines = []
+        while (not self.eod) and (not is_empty(self.peek())):
         start = self.index
-        while (not self.eol) and (not is_empty(self.peek())):
             line = self.read()
             lines.append(line)
         del docstring[start:self.index]
@@ -342,7 +341,10 @@ class BaseDoc(object):
         return line
 
     @property
-    def eol(self):
+    def eod(self):
+        """ End of docstring.
+
+        """
         return self.index >= len(self.docstring)
 
     @property

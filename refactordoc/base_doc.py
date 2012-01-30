@@ -70,7 +70,6 @@ class BaseDoc(object):
         self.headers = {} if headers is None else headers
         self.bookmarks = []
         self.index = 0
-        self.parse()
 
     def parse(self):
         """ Parse the docstring.

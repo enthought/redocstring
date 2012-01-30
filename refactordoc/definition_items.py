@@ -274,7 +274,14 @@ class ListItem(DefinitionItem):
 
     """
 
-    def to_rst(self, prefix=''):
+    _normal = ("**{0}** (`{1}`) --\n"
+               "{2}\n\n")
+    _only_term = "**{0}**\n\n"
+    _no_definition = "**{0}** (`{1}`)\n\n"
+    _no_classifier = ("**{0}** --\n"
+                      "{2}\n\n")
+
+    def to_rst(self, prefix=None):
         """ Outputs ListItem in rst using as items in an list.
 
         Arguments
@@ -298,16 +305,24 @@ class ListItem(DefinitionItem):
         - indent (`int`) -- The indent to use for the descirption block.
 
         """
-        header = '' if prefix == '' else '{0} '.format(prefix)
-        indent = len(header)
-        header += '{0}' if self.classifier == '' else '{0} (`{1}`)'
-        header += '' if self.definition[0] == '' else ' --'
-        header += '' if len(self.definition) > 1 else ' {2}'
-        definition = self.definition + [''] if len(self.definition) > 1 else ['']
-        lines = []
-        lines += [header.format(self.term, self.classifier, self.definition[0])]
-        lines += add_indent(definition, indent=indent)
-        return lines
+        indent = 0 if (prefix is None) else len(prefix) + 1
+        definition = '\n'.join(add_indent(self.definition, indent))
+        template = self.template.format(self.term, self.classifier, definition)
+        if prefix is not None:
+            template = prefix + ' ' + template
+        return template.splitlines()
+
+    @property
+    def template(self):
+        if self.classifier == '' and self.definition == ['']:
+            template = self._only_term
+        elif self.classifier == '':
+            template = self._no_classifier
+        elif self.definition == ['']:
+            template = self._no_definition
+        else:
+            template = self._normal
+        return template
 
 
 class TableLineItem(DefinitionItem):

@@ -1,4 +1,4 @@
-﻿# -*- coding: UTF-8 -*-
+﻿#  -*- coding: UTF-8 -*-
 #------------------------------------------------------------------------------
 #  file: fields.py
 #  License: LICENSE.TXT
@@ -10,15 +10,17 @@
 import collections
 import re
 
-from line_functions import (add_indent, is_empty, remove_indent, replace_at,
-                            fix_star, trim_indent, NEW_LINE)
+from line_functions import add_indent, fix_star, trim_indent, NEW_LINE
 
 header_regex = re.compile(r'\s:\s?')
 definition_regex = re.compile(r'\*?\*?\w+\s:\s?(\w+)?$')
-function_regex=re.compile(r'\w+\(.*\)\s*')
+function_regex = re.compile(r'\w+\(.*\)\s*')
 signature_regex = re.compile('\((.*)\)')
 
-class DefinitionItem(collections.namedtuple('DefinitionItem', ('term','classifier','definition'))):
+
+class DefinitionItem(collections.namedtuple(
+        'DefinitionItem',
+        ('term', 'classifier', 'definition'))):
     """ A docstring definition item
 
     Syntax diagram::
@@ -118,7 +120,6 @@ class DefinitionItem(collections.namedtuple('DefinitionItem', ('term','classifie
         trimed_lines = trim_indent(lines[1:]) if (len(lines) > 1) else ['']
         definition = [line.rstrip() for line in trimed_lines]
         return cls(term.strip(), classifier.strip(), definition)
-
 
     def to_rst(self, **kwards):
         """ Outputs the Definition in sphinx friendly rst.
@@ -232,7 +233,6 @@ class AttributeItem(DefinitionItem):
 class ArgumentItem(DefinitionItem):
     """ A definition item for function argument sections """
 
-
     _normal = (":param {0}:\n"
                "{2}\n"
                ":type {0}: {1}")
@@ -241,7 +241,6 @@ class ArgumentItem(DefinitionItem):
     _no_classifier = (":param {0}:\n"
                       "{2}")
     _only_term = ":param {0}:"
-
 
     def to_rst(self):
         """ Render ArgumentItem in sphinx friendly rst using the
@@ -283,7 +282,6 @@ class ArgumentItem(DefinitionItem):
         else:
             template = self._normal
         return template
-
 
 
 class ListItem(DefinitionItem):
@@ -393,6 +391,7 @@ class TableLineItem(DefinitionItem):
         lines += ['']
         return lines
 
+
 class MethodItem(DefinitionItem):
     """ A TableLineItem subclass to parse and render class methods.
 
@@ -438,7 +437,7 @@ class MethodItem(DefinitionItem):
         definition = trim_indent(lines[1:]) if (len(lines) > 1) else ['']
         return cls(term, classifier, definition)
 
-    def to_rst(self, columns=(0,0)):
+    def to_rst(self, columns=(0, 0)):
         """ Outputs definition in rst as a line in a table.
 
         Arguments
@@ -482,6 +481,7 @@ class MethodItem(DefinitionItem):
 #  Functions to work with Definition Items
 #------------------------------------------------------------------------------
 
+
 def max_attribute_length(items, attr):
     """ Find the max length of the attribute in a list of DefinitionItems.
 
@@ -499,6 +499,7 @@ def max_attribute_length(items, attr):
     else:
         maximum = max([len(getattr(item, attr)) for item in items])
     return maximum
+
 
 def max_attribute_index(items, attr):
     """ Find the index of the attribute with the maximum length in a list of

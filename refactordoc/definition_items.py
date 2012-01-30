@@ -457,11 +457,6 @@ class MethodItem(DefinitionItem):
         >>> item.to_rst(columns=(40, 20))
         :meth:`function <function(arg1, arg2)>` This is the best fun
 
-        .. note:: An empty line is added at the end of the list of strings so
-            that the results can be concatenated directly and rendered properly
-            by shpinx.
-
-
         """
         definition = ' '.join([line.strip() for line in self.definition])
         method_role = ':meth:`{0}({1}) <{0}>`'.format(self.term, self.classifier)

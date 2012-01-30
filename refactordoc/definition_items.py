@@ -113,7 +113,8 @@ class DefinitionItem(collections.namedtuple('Field', ('term','classifier','defin
         header = lines[0].strip()
         term, classifier = header_regex.split(header, maxsplit=1) if \
                            (' :' in header) else (header, '')
-        definition = trim_indent(lines[1:]) if (len(lines) > 1) else ['']
+        trimed_lines = trim_indent(lines[1:]) if (len(lines) > 1) else ['']
+        definition = [line.rstrip() for line in trimed_lines]
         return cls(term.strip(), classifier.strip(), definition)
 
 

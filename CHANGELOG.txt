@@ -1,12 +1,18 @@
 Change Log
 ==========
 
-Version 0.2dev (current)
-------------------------
+31/01/2012
 
-- Draft version of the documentation
+Version 0.2 (current)
+---------------------
+
+- First of the documentation and rename to refactordoc
 - Removed depedancy to docscrape.py
-- Refactor_doc is now a valid sphinx extention
+- Refactordoc is now a valid sphinx extention
+- Factor out boilerplate code from refactoring methods to class methods.
+- Factored out DefinitionItem class.
+- Better test coverage.
+- Code and Docstring cleanup.
 
 26/10/2011
 

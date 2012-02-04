@@ -81,9 +81,9 @@ class DefinitionItem(collections.namedtuple(
 
         The expected format is::
 
-        +----------------------------+
-        | term [ " : " classifier ]  |
-        +----------------------------+
+            +-----------------------------+
+            | term [ " : " classifiers ]  |
+            +-----------------------------+
 
         Subclasses can subclass to restrict or expand this format.
 
@@ -103,20 +103,20 @@ class DefinitionItem(collections.namedtuple(
 
         The term definition is assumed to be in one of the following formats::
 
-        term
-            Definition.
+            term
+                Definition.
 
         ::
 
-        term
-            Definition, paragraph 1.
+            term
+                Definition, paragraph 1.
 
-            Definition, paragraph 2.
+                Definition, paragraph 2.
 
         ::
 
-        term : classifier
-            Definition.
+            term : classifier
+                Definition.
 
         Arguments
         ---------
@@ -162,13 +162,15 @@ class DefinitionItem(collections.namedtuple(
         Example
         -------
 
-        >>> item = DefintionItem('lines', 'list',
-                                 ['A list of string lines rendered in rst.'])
-        >>> item.to_rst()
-        lines
+        ::
 
-            *(list)* --
-            A list of string lines rendered in rst.
+            >>> item = DefintionItem('lines', 'list',
+                                     ['A list of string lines rendered in rst.'])
+            >>> item.to_rst()
+            lines
+
+                *(list)* --
+                A list of string lines rendered in rst.
 
         .. note:: An empty line is added at the end of the list of strings so
             that the results can be concatenated directly and rendered properly
@@ -206,23 +208,26 @@ class AttributeItem(DefinitionItem):
         Examples
         --------
 
-        >>> item = AttributeItem('indent', 'int',
-        ... ['The indent to use for the decription block.'])
-        >>> item.to_rst()
-        .. attribute:: indent
-            :annotation: = int
+        ::
 
-            The indent to use for the description block
-        >>>
+            >>> item = AttributeItem('indent', 'int',
+            ... ['The indent to use for the decription block.'])
+            >>> item.to_rst()
+            .. attribute:: indent
+                :annotation: = int
 
+                The indent to use for the description block
+            >>>
 
-        >>> item = AttributeItem('indent', '',
-        ... ['The indent to use for the decription block.'])
-        >>> item.to_rst()
-        .. attribute:: indent
+        ::
 
-            The indent to use for the description block
-        >>>
+            >>> item = AttributeItem('indent', '',
+            ... ['The indent to use for the decription block.'])
+            >>> item.to_rst()
+            .. attribute:: indent
+
+                The indent to use for the description block
+            >>>
 
         .. note:: An empty line is added at the end of the list of strings so
             that the results can be concatenated directly and rendered properly
@@ -259,26 +264,29 @@ class ArgumentItem(DefinitionItem):
     _only_term = ":param {0}:"
 
     def to_rst(self):
-        """ Render ArgumentItem in sphinx friendly rst using the
-        ``:param:`` role.
+        """ Render ArgumentItem in sphinx friendly rst using the ``:param:``
+        role.
 
         Example
         -------
 
-        >>> item = ArgumentItem('indent', 'int',
-        ... ['The indent to use for the description block.',
-             ''
-             'This is the second paragraph of the argument definition.'])
-        >>> item.to_rst()
-        :param indent:
-            The indent to use for the description block.
+        ::
 
-            This is the second paragraph of the argument definition.
-        :type indent: int
+            >>> item = ArgumentItem('indent', 'int',
+            ... ['The indent to use for the description block.',
+                 ''
+                 'This is the second paragraph of the argument definition.'])
+            >>> item.to_rst()
+            :param indent:
+                The indent to use for the description block.
 
+                This is the second paragraph of the argument definition.
+            :type indent: int
 
-        .. note:: There is no new line added at the last line of the
-        :meth:`to_rst` method.
+        .. note::
+
+            There is no new line added at the last line of the :meth:`to_rst`
+            method.
 
         """
         argument = fix_star(self.term)
@@ -433,9 +441,12 @@ class MethodItem(DefinitionItem):
 
         The method definition item is assumed to be as follows::
 
-        method(arguments)
-            Definition in a single line.
-
+            +------------------------------+
+            | term "(" [  classifier ] ")" |
+            +--+---------------------------+---+
+               | definition                    |
+               | (body elements)+              |
+               +--------------------- ---------+
 
         Arguments
         ---------
@@ -468,10 +479,12 @@ class MethodItem(DefinitionItem):
         Example
         -------
 
-        >>> item = MethodItem('function', 'arg1, arg2',
-        ... ['This is the best function ever.'])
-        >>> item.to_rst(columns=(40, 20))
-        :meth:`function <function(arg1, arg2)>` This is the best fun
+        ::
+
+            >>> item = MethodItem('function', 'arg1, arg2',
+            ... ['This is the best function ever.'])
+            >>> item.to_rst(columns=(40, 20))
+            :meth:`function <function(arg1, arg2)>` This is the best fun
 
         """
         definition = ' '.join([line.strip() for line in self.definition])

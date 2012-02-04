@@ -21,8 +21,14 @@ definition_regex = re.compile(r"""
     |              # OR
         \s[\w.]+   # dot sepearated words
         (\(.*\))?  # woth maybe a signature
+    |
+        \s[\w.]+   # dot sepearated words
+        (\(.*\))?
+        \sor       # with an or in between
+        \s[\w.]+
+        (\(.*\))?
 )?
-$             # match at the end of the line
+$                  # match at the end of the line
 """, re.VERBOSE)
 function_regex = re.compile(r'\w+\(.*\)\s*')
 signature_regex = re.compile('\((.*)\)')
@@ -35,24 +41,24 @@ class DefinitionItem(collections.namedtuple(
 
     Syntax diagram::
 
-    +---------------------------+
-    | term [ " : " classifier ] |
-    +--+------------------------+---+
-       | definition                 |
-       | (body elements)+           |
-       +----------------------------+
+        +----------------------------+
+        | term [ " : " classifiers ] |
+        +--+-------------------------+---+
+           | definition                  |
+           | (body elements)+            |
+           +-----------------------------+
 
     The Definition class is based on the nametuple class and is responsible
-    for to check, parse and refactor a docstring definition item into sphinx
+    to check, parse and refactor a docstring definition item into sphinx
     friently rst.
 
     Attributes
     ----------
     term : str
-        The term ussualy relects the name of a parameter or an attribute.
+        The term ussualy reflects the name of a parameter or an attribute.
 
     classifier: str
-        The classifier of the defintion. Commonly used to reflect the type
+        The classifier of the definition. Commonly used to reflect the type
         of an argument or the signature of a function.
 
         .. note:: Currently only one classifier is supported.

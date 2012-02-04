@@ -22,10 +22,10 @@ Refactor classes
 .. automodule:: refactordoc.class_doc
     :members:
 
-Fields
-------
+DefinitionItems
+---------------
 
-.. automodule:: refactordoc.fields
+.. automodule:: refactordoc.definition_items
     :members:
 
 

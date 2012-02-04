@@ -5,22 +5,22 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-from function_doc import FunctionDoc
-from class_doc import ClassDoc
+from .function_doc import FunctionDoc
+from .class_doc import ClassDoc
 
 #------------------------------------------------------------------------------
 # Extension definition
 #------------------------------------------------------------------------------
 def refactor_docstring(app, what, name, obj, options, lines):
 
-    verbose = False
-    # if 'component.Component' in name:
-        # verbose = True
-
+    refactor = None
     if ('class' in what):
-        ClassDoc(lines, verbose=verbose)
+        refactor = ClassDoc(lines)
     elif ('function' in what) or ('method' in what):
-        FunctionDoc(lines, verbose=verbose)
+        refactor = FunctionDoc(lines)
+
+    if refactor is not None:
+        refactor.parse()
 
 def setup(app):
     app.setup_extension('sphinx.ext.autodoc')

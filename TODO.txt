@@ -1,5 +1,7 @@
 Enhancements:
-    * Update documentation to the latest changes
-    * Allow directives to exist inside sections (done for arguments).
-    * Add error messages when formating is wrong.
-    * Clean up code.
+    * Add error or warning messages when formating is wrong.
+    * Add conf.py configuration variable to define objects and the corresponding
+      refactoring class
+    * Move DefinitionItem and subclasses to use templates similar to
+      AttributeItem
+    * Allow DefinitionItem templates to be described in jinja2

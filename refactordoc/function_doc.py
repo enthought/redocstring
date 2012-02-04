@@ -17,14 +17,14 @@ class FunctionDoc(BaseDoc):
     def __init__(self, lines, headers=None):
 
         if headers is None:
-            headers = {'Returns': 'field_list', 'Arguments': 'arguments',
-                       'Parameters': 'arguments', 'Raises': 'field_list',
-                       'Yields': 'field_list', 'Notes':'notes'}
+            headers = {'Returns': 'as_items_list', 'Arguments': 'arguments',
+                       'Parameters': 'arguments', 'Raises': 'as_items_list',
+                       'Yields': 'as_items_list', 'Notes':'notes'}
 
         super(FunctionDoc, self).__init__(lines, headers)
         return
 
-    def _refactor_field_list(self, header):
+    def _refactor_as_items_list(self, header):
         """Refactor the a section to sphinx friendly item list.
 
         """

@@ -35,6 +35,9 @@ class TestDefinitionItem(unittest.TestCase):
         header_with_trait = 'properies : Dict(Str, Any)'
         self.assertTrue(DefinitionItem.is_definition(header_with_trait))
 
+        header_with_or = 'item : ModelIndex or None'
+        self.assertTrue(DefinitionItem.is_definition(header_with_or))
+
     def test_parse(self):
         item = DefinitionItem.parse(['term',
                                      '    Definition.'])

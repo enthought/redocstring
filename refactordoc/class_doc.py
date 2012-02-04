@@ -13,7 +13,22 @@ from definition_items import (MethodItem, AttributeItem, TableLineItem,
 
 
 class ClassDoc(BaseDoc):
-    """Docstring refactoring for classes"""
+    """ Docstring refactoring for classes.
+
+    The class provides the following refactoring methods.
+
+    Methods
+    -------
+    _refactor_attributes(self, header):
+        Refactor the attributes section to sphinx friendly format.
+
+    _refactor_methods(self, header):
+        Refactor the methods section to sphinx friendly format.
+
+    _refactor_notes(self, header):
+        Refactor the note section to use the rst ``.. note`` directive.
+
+    """
 
     def __init__(self, lines, headers=None):
 

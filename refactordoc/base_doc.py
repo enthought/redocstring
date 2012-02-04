@@ -1,4 +1,4 @@
-﻿#  -*- coding: UTF-8 -*-
+﻿# -*- coding: UTF-8 -*-
 #------------------------------------------------------------------------------
 #  file: base_doc.py
 #  License: LICENSE.TXT
@@ -41,10 +41,10 @@ class BaseDoc(object):
         the postfix of the method, in the subclasses, that is
         responsible for refactoring (e.g. {'Methods': 'method'}).
 
-
-
     BaseDoc also provides a number of methods that operate on the docstring to
-    help with the refactoring.
+    help with the refactoring. This is neccessary because the docstring has to
+    change inplace and thus it is better to live the docstring manipulation to
+    the class methods instead of accessing the lines directly.
 
     """
 
@@ -129,7 +129,7 @@ class BaseDoc(object):
         self.insert_and_move(lines, self.index)
 
     def extract_items(self, item_class=None):
-        """Extract the definition items from a docstring.
+        """ Extract the definition items from a docstring.
 
         Parse the items in the description of a section into items of the
         provided class time. Given a DefinitionItem or a subclass defined by
@@ -221,8 +221,7 @@ class BaseDoc(object):
         return block
 
     def is_section(self):
-        """Check if the current line defines a section.
-
+        """ Check if the current line defines a section.
 
         .. todo:: split and cleanup this method.
 
@@ -299,7 +298,7 @@ class BaseDoc(object):
         return line
 
     def remove_lines(self, index, count=1):
-        """ Removes the lines for the docstring
+        """ Removes the lines from the docstring
 
         """
         docstring = self.docstring
@@ -327,7 +326,7 @@ class BaseDoc(object):
 
         Returns
         -------
-        The bookmark value.
+        bookmark : int
 
         """
         self.index = self.bookmarks[bookmark_index]

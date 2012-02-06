@@ -2,6 +2,7 @@
 #------------------------------------------------------------------------------
 #  file: line_functions.py
 #  License: LICENSE.TXT
+#  Author: Ioannis Tziakos
 #
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
@@ -40,7 +41,9 @@ def add_indent(lines, indent=4):
     lines : list
         The indented strings (lines).
 
-    .. note:: Empty strings are not changed
+    Notes
+    -----
+    Empty strings are not changed.
 
     """
     indent_str = ' ' * indent if indent != 0 else ''
@@ -54,6 +57,11 @@ def add_indent(lines, indent=4):
 
 def remove_indent(lines):
     """ Remove all indentation from the lines.
+
+    Returns
+    -------
+    result : list
+        A new list of left striped strings.
 
     """
     return [line.lstrip() for line in lines]
@@ -90,9 +98,15 @@ def is_empty(line):
 #------------------------------------------------------------------------------
 
 def fix_star(word):
+    """ Replace ``*`` with ``\*`` so that is will be parse properly by docutils.
+
+    """
     return word.replace('*','\*')
 
 def fix_backspace(word):
+    """ Replace ``\\`` with ``\\\\`` so that it will printed properly in the
+    documentation.
+    """
     return word.replace('\\', '\\\\')
 
 def replace_at(word, line, index):

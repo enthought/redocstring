@@ -2,6 +2,7 @@
 #------------------------------------------------------------------------------
 #  file: function_doc.py
 #  License: LICENSE.TXT
+#  Author: Ioannis Tziakos
 #
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
@@ -12,7 +13,23 @@ from definition_items import ArgumentItem, ListItem
 
 
 class FunctionDoc(BaseDoc):
-    """Docstring refactoring for functions"""
+    """Docstring refactoring for functions
+
+    The class provides the following refactoring methods.
+
+    Methods
+    -------
+    _refactor_arguments(self, header):
+        Refactor the Arguments and Parameters section to sphinx friendly format.
+
+    _refactor_as_items_list(self, header):
+        Refactor the Returns, Raises and Yields sections to sphinx friendly
+        format.
+
+    _refactor_notes(self, header):
+        Refactor the note section to use the rst ``.. note`` directive.
+
+    """
 
     def __init__(self, lines, headers=None):
 
@@ -25,7 +42,12 @@ class FunctionDoc(BaseDoc):
         return
 
     def _refactor_as_items_list(self, header):
-        """Refactor the a section to sphinx friendly item list.
+        """ Refactor the a section to sphinx friendly item list.
+
+        Arguments
+        ---------
+        header : str
+            The header name that is used for the fields (i.e. ``:<header>:``).
 
         """
         items = self.extract_items(item_class=ListItem)
@@ -37,7 +59,13 @@ class FunctionDoc(BaseDoc):
         return
 
     def _refactor_arguments(self, header):
-        """Refactor the argument section to sphinx friendly format
+        """ Refactor the argument section to sphinx friendly format.
+
+        Arguments
+        ---------
+        header : unused
+            This parameter is ingnored in thi method.
+
         """
         items = self.extract_items(item_class=ArgumentItem)
         lines = []
@@ -47,7 +75,12 @@ class FunctionDoc(BaseDoc):
         return
 
     def _refactor_notes(self, header):
-        """Refactor the notes section to sphinx friendly format.
+        """ Refactor the notes section to sphinx friendly format.
+
+        Arguments
+        ---------
+        header : unused
+            This parameter is ingnored in this method.
 
         """
         paragraph = self.get_next_paragraph()

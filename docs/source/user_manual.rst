@@ -1,206 +1,242 @@
 User Manual
-===========
+###########
 
-RefactorDoc refactors the docstrings of classes and functions. However
-unlike numpydoc only sections are replaced (inplace) by sphinx friendly
-rst and the rest of the docstring is left untouched. Thus the original
-form remains untouched.
+RefactorDoc is a sphinx extension is designed to re-factor the doc-strings of
+python objects. The sections are replaced (in-place) by sphinx friendly rst and
+the rest of the doc-string is left untouched. Thus the original form remains as
+intended by the author.
 
-To help the extension module to detect those sections the docstring author
-needs to follow the following rules:
+Summary
+*******
 
-    - Sections are defined using ``-`` or ``=``::
+The base implementation of RefactorDoc provides refactoring for class and
+function doc-strings. A number of known (i.e. predefined) sections are processed
+by the ClassDoc and FunctionDoc classes and all unknown sections are re-factored
+using the ``.. rubric::`` directive by default.
 
-        Section
-        -------
+For class objects the :class:`~refactordoc.class_doc.ClassDoc` includes code to
+re-factor three types of sections.
 
-      or::
+========== ================================ ========== === ====================
+Heading    Description                      Item       Max Rendered as
+========== ================================ ========== === ====================
+Methods    Class methods with summary       MethodItem --  Table with links to
+                                                           the method
+Attributes Class attributes and their usage Attribute  --  Sphinx attributes
+Notes      Useful notes                     paragraph  1   Note admonition
+========== ================================ ========== === ====================
 
-        Section
-        =======
+For function objects the :class:`~refactordoc.function_doc.FunctionDoc` includes
+code to re-factor three types of sections.
 
-      Each section is followed by on or more fields. Which format are
-      accepted depend on the type of section that is currently parsed.
+========= =========================== ============ === =====================
+Heading   Description                 Item         Max Rendered as
+========= =========================== ============ === =====================
+Arguments function arguments and type ArgumentItem --  Parameters field list
+Returns   Return value                ListItem     --  Unordered list
+Raises    Raised exceptions           ListItem     --  Unordered list
+Notes     Useful notes                paragraph    1   Note admonition
+========= =========================== ============ === =====================
 
-      .. note:: Both section definitions will be treated the same and
-        there is no concept of subsection (not yet!).
 
-    - Field blocks (i.e. the items that belong to each section) start
-      immediately after section definition with not indention. The fields
-      can take the following formats::
+Section components
+******************
 
-        Section
-        -------
-        <name> : [<type>]
-            [<description>]
+Each section is composed into a number of components these components are
+described below.
 
-      where ``<name>`` is the single word (e.g. my_field) and
-      ``<description>`` is a indented block of rst code. The ``<type>``
-      attribute is optional. This type of field is commonly used to
-      describe class attributes and function arguments. In this
-      documentation we will refer to this format as `variable` field. All
-      `variable` fields should be separated by a single empty line.
+Section header
+^^^^^^^^^^^^^^
 
-      A similar field format is::
+The start of the section is designated with the section header, which is
+a standard rst header. The underline is however restricted to using only
+``-`` or ``=``::
 
-        Section
-        -------
-        <signature>
-            [<description>]
+    Section
+    -------
 
-      This field is commonly used to describe methods that are provided by
-      a class ans thus is refered to as the `method` field. The
-      ``<signature>`` in this case is a method signature and
-      ``<description>`` the method summary (one sentence). All
-      `method` fields should be separated by a single empty line.
+and::
 
-      Finally the `paragraph` field, defined as::
+    Section
+    =======
 
-        Section
-        -------
-        [paragraphs]
+Each section header is followed by a section definition block which can be
+either a list of items or one or more definition items.
 
-      This type of field is used for info sections like ``Notes``.
+Definition list
+^^^^^^^^^^^^^^^
 
-      .. note:: Currently the ``<paragraph>`` is a single unindented block
-        with no empty lines. However, this should change in the next
-        versions of RefactorDoc.
+In general, The number and format of these items depends on the type of
+section that is currently parsed. Two of the most common formats are described
+bellow:
 
-Classes
--------
-
-The current parser extension supports the following headings for classes:
-
-========== ================= ==========
-Heading    Description       Field type
-========== ================= ==========
-Methods    Class methods     method
-Attributes Set of attributes variable
-Notes      Useful notes      paragraph
-See Also   References        paragraph
-========== ================= ==========
-
-Example
-~~~~~~~
+The *standard definition item* format is based on the item of a variation
+of the definition list item as it defined in `restructured text
+<http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#sections>`_
 
 ::
 
-    """Base abstract docstring refactoring class.
+    +-------------------------------------------------+
+    | term [ " : " classifier [ " or " classifier] ]  |
+    +--+----------------------------------------------+---+
+       | definition                                       |
+       | (body elements)+                                 |
+       +--------------------------------------------------+
 
-    The class' main purpose is to parse the dosctring and find the
-    sections that need to be refactored. It also provides a number of
-    methods to help with the refactoring. Subclasses should provide
-    the methods responsible for refactoring the sections.
+where ``<term>`` is the single word (e.g. my_field) and
+``<definition>`` is a indented block of rst code. The item header can
+optionally include the ``<classifier>`` attribute. This type of item is
+commonly used to describe class attributes and function arguments. In this
+documentation we will refer to this format as `variable` item to avoid
+confusion with sphinx directives.
+
+A similar definition item format is the method item where the item header is
+composed of a function signature::
+
+    +------------------------------+
+    | term "(" [  classifier ] ")" |
+    +--+---------------------------+---+
+       | definition                    |
+       | (body elements)+              |
+       +-------------------------------+
+
+This item is commonly used to describe provided functions (or methods) and
+thus is referred to as the `method item`. The
+``<classifier>`` in this case is a list of arguments as it appears in the
+signature and ``<definition>`` the method summary (one sentence). All
+`method` fields should be separated by a single empty line.
+
+Paragraph
+^^^^^^^^^
+
+Instead of a list of items the section can contain a paragraph::
+
+    +-------------------------+
+    | definition              |
+    | (body elements)+        |
+    +-------------------------+
+
+This type of field is used for information sections like ``Notes``.
+
+.. note:: Currently the ``<paragraph>`` is a single unindented block with no
+    empty lines. However, this will probably should change in future
+    versions of RefactorDoc.
+
+Usage rules
+***********
+
+To be able to re-factor the sections properly the doc-strings should follow
+theses rules:
+
+.. admonition:: Rules
+
+    - Between the section header and the first section item there can be at
+      most only one empty line.
+
+    - The end of the section is designated by one of the following:
+
+        - The allowed number of items by the section has been parsed.
+        - Two consecutive empty lines are found.
+        - The line is not identified as a possible header of the section item.
+
+          .. hint:: Please check the doc-string of the specific definition item
+            class to have more information regarding the  valid item header
+            format.
+
+Examples
+********
+
+Argument sections
+^^^^^^^^^^^^^^^^^
+::
+
+    Arguments
+    ---------
+    new_lines : list
+        The list of lines to insert
+
+    index : int
+        Index to start the insertion
+    """
+
+.. automethod:: refactordoc.base_doc.BaseDoc.insert_lines
+    :noindex:
+
+
+Method sections
+^^^^^^^^^^^^^^^
+::
+
+    Methods
+    -------
+    _refactor_attributes(self, header):
+        Re-factor the attributes section to sphinx friendly format.
+
+    _refactor_methods(self, header):
+        Re-factor the methods section to sphinx friendly format.
+
+    _refactor_notes(self, header):
+        Re-factor the note section to use the rst ``.. note`` directive.
+
+
+.. note:: The table that is created in this example does not have the links
+    enabled because the methods are not rendered by autodoc (the
+    ``:no-members`` option is set).
+
+.. autoclass:: refactordoc.class_doc.ClassDoc
+    :noindex:
+    :no-members:
+
+Attribute sections
+------------------
+::
 
     Attributes
     ----------
     docstring : list
-        A list of strings (lines) that holds docstrings
+        A list of strings (lines) that holds doc-strings
 
     index : int
-        The current zero-based line number of the docstring that is
-        proccessed.
-
-    verbose : bool
-        When set the class prints a lot of info about the proccess
-        during runtime.
+        The current zero-based line number of the doc-string that is currently
+        processed.
 
     headers : dict
-        The sections that the class refactors. Each entry in the
+        The sections that the class re-factors. Each entry in the
         dictionary should have as key the name of the section in the
-        form that it appears in the docstrings. The value should be
+        form that it appears in the doc-strings. The value should be
         the postfix of the method, in the subclasses, that is
         responsible for refactoring (e.g. {'Methods': 'method'}).
 
-    Methods
-    -------
-    extract_fields(indent='', field_check=None)
-        Extract the fields from the docstring
+.. autoclass:: refactordoc.base_doc.BaseDoc
+    :noindex:
+    :no-members:
 
-    get_field()
-        Get the field description.
-
-    get_next_paragraph()
-        Get the next paragraph designated by an empty line.
-
-    is_section()
-        Check if the line defines a section.
-
-    parse_field(lines)
-        Parse a field description.
-
-    peek(count=0)
-        Peek ahead
-
-    read()
-        Return the next line and advance the index.
-
-    insert_lines(lines, index)
-        Insert refactored lines
-
-    remove_lines(index, count=1)
-        Removes the lines for the docstring
-
-    seek_to_next_non_empty_line()
-        Goto the next non_empty line
-    """
-
-.. currentmodule:: refactor_doc
-
-The output can be seen at :func:`~BaseDocstring`
-
-Functions
----------
-
-The current parser extension supports the following headings for functions:
-
-========= ==========================================================
-Heading   Description
-========= ==========================================================
-Arguments Set of function arguments and their usage
-Returns   Return values of the function
-Raises    Errors and the cases in which they are raised
-Yields    Successive results of the generator
-========= ==========================================================
-
-
-Example
-~~~~~~~
-
+Returns sections
+----------------
 ::
 
-    """Extract the fields from the docstring
+    Returns
+    -------
+    result : list
+        A new list of left striped strings.
 
-        Parse the fields into tuples of name, type and description in a
-        list of strings. The strings are also removed from the list.
+.. autofunction:: refactordoc.line_functions.remove_indent
+    :noindex:
 
-        Arguments
-        ---------
-        indent : str, optional
-            the indent argument is used to make sure that only the lines
-            with the same indent are considered when checking for a
-            field header line. The value is used to define the field
-            checking function.
+Raises section
+--------------
 
-        field_check : function
-            Optional function to use for checking if the next line is a
-            field. The signature of the function is ``foo(line)`` and it
-            should return ``True`` if the line contains a valid field
-            The default function is checking for fields of the following
-            formats::
+.. todo:: Add example
 
-                <name> : <type>
-                <name> :
 
-            Where the name has to be one word.
+Notes
+-----
+::
 
-        Returns
-        -------
-        parameters : list of tuples
-            list of parsed parameter tuples as returned from the
-            :meth:`~BaseDocstring.parse_field` method.
+    Notes
+    -----
+    Empty strings are not changed.
 
-        """
+.. autofunction:: refactordoc.line_functions.add_indent
+    :noindex:
 
-The output can be seen at
-:func:`~BaseDocstring.extract_fields`

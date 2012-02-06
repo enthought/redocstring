@@ -41,12 +41,12 @@ class DefinitionItem(collections.namedtuple(
 
     Syntax diagram::
 
-        +----------------------------+
-        | term [ " : " classifiers ] |
-        +--+-------------------------+---+
-           | definition                  |
-           | (body elements)+            |
-           +-----------------------------+
+        +-------------------------------------------------+
+        | term [ " : " classifier [ " or " classifier] ]  |
+        +--+----------------------------------------------+---+
+           | definition                                       |
+           | (body elements)+                                 |
+           +--------------------------------------------------+
 
     The Definition class is based on the nametuple class and is responsible
     to check, parse and refactor a docstring definition item into sphinx
@@ -81,9 +81,9 @@ class DefinitionItem(collections.namedtuple(
 
         The expected format is::
 
-            +-----------------------------+
-            | term [ " : " classifiers ]  |
-            +-----------------------------+
+            +-------------------------------------------------+
+            | term [ " : " classifier [ " or " classifier] ]  |
+            +-------------------------------------------------+
 
         Subclasses can subclass to restrict or expand this format.
 

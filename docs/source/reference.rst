@@ -18,12 +18,14 @@ Refactor classes
 
 .. automodule:: refactordoc.function_doc
     :members:
+    :private-members:
 
 .. automodule:: refactordoc.class_doc
     :members:
+    :private-members:
 
-DefinitionItems
----------------
+Definition items
+----------------
 
 .. automodule:: refactordoc.definition_items
     :members:

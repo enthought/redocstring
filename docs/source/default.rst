@@ -1,13 +1,5 @@
-User Manual
-###########
-
-RefactorDoc is a sphinx extension is designed to re-factor the doc-strings of
-python objects. The sections are replaced (in-place) by sphinx friendly rst and
-the rest of the doc-string is left untouched. Thus the original form remains as
-intended by the author.
-
-Summary
-*******
+Default refactoring
+*******************
 
 The base implementation of RefactorDoc provides refactoring for class and
 function doc-strings. A number of known (i.e. predefined) sections are processed

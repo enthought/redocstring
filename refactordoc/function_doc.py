@@ -34,14 +34,14 @@ class FunctionDoc(BaseDoc):
     def __init__(self, lines, headers=None):
 
         if headers is None:
-            headers = {'Returns': 'as_items_list', 'Arguments': 'arguments',
-                       'Parameters': 'arguments', 'Raises': 'as_items_list',
-                       'Yields': 'as_items_list', 'Notes':'notes'}
+            headers = {'Returns': 'as_item_list', 'Arguments': 'arguments',
+                       'Parameters': 'arguments', 'Raises': 'as_item_list',
+                       'Yields': 'as_item_list', 'Notes':'notes'}
 
         super(FunctionDoc, self).__init__(lines, headers)
         return
 
-    def _refactor_as_items_list(self, header):
+    def _refactor_as_item_list(self, header):
         """ Refactor the a section to sphinx friendly item list.
 
         Arguments

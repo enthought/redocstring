@@ -1,10 +1,10 @@
 Building your own suite
 #######################
 
-While the default refactoring suite is enough for most cases. The user might
-need to extent the section repertoire, process other object types, allow more
-freedom in defining the definition list or restrict the docstring style to
-improve consinstancy through his code.
+While the default refactoring suite is enough for most cases. The user
+might need to extent the section repertoire, process other object
+types, allow more freedom in defining the definition list or restrict
+the docstring style to improve consinstancy through his code.
 
 .. warning:: All the methods below require to change the refactordoc code and
     even thought the changes might be small it is not considered the best way
@@ -32,10 +32,11 @@ When such a method does not
 
 exist then the user has to augment the related class with that will
 parse and extract the section definition block(s) and return the
-refactored lines to replace the section in the docstring. The
-signature of the method should be ``_header_<name>(self, header)
+refactored lines as a list of strings to replace the section in the
+docstring. The signature of the method should be
+``_header_<name>(self, header)``
 
-Where ``<name> is the value in the ``headers`` that corresponds to the
+Where ``<name>`` is the value in the ``headers`` that corresponds to the
 ``header`` string that is found in the docstring.
 
 

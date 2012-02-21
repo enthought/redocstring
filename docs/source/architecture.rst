@@ -1,11 +1,6 @@
 Architecture
 ************
 
-.. warning:: Since and due to writing this part of the documentation a number
-    of improvements have become apparent and will be implemented in the next
-    version of refactordoc (i.e. 0.4). Please see the todo section for more
-    info.
-
 The are three different parts in the pipeline of **refactordoc**.
 
 (i) The autodoc event hook and object refactoring dispatch;

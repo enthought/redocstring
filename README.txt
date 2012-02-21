@@ -3,15 +3,16 @@ RefactorDoc: Docstring refactor shpinx extension
 
 The RefactorDoc extension parses the function and class docstrings as
 they are retrieved by the autodoc extension and refactors the section
-blocks into sphinx friendly rst. The extension shares similarities with
-alternatives (such as numpydoc) but aims at reflecting the original form
-of the docstring.
+blocks into sphinx friendly rst. The extension shares similarities
+with alternatives (such as numpydoc) but aims at reflecting the
+original form of the docstring.
 
 Key aims of RefactorDoc are:
 
     - Do not change the order of sections.
     - Allow sphinx directives between (and inside) section blocks.
-    - Easier to debug (native support for debugging) and extend (future versions).
+    - Easier to debug (native support for debugging) and extend
+      (future versions).
 
 Repository
 ----------

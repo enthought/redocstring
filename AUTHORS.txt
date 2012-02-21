@@ -1,5 +1,5 @@
 Ioannis Tziakos is the main developer and maintainer of the refactor_doc
-sphinx extention.
+sphinx extension.
 
 Historical notes:
 -----------------

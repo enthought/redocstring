@@ -1,4 +1,4 @@
-﻿# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 #------------------------------------------------------------------------------
 #  file: base_doc.py
 #  License: LICENSE.TXT
@@ -13,10 +13,10 @@ from line_functions import is_empty, get_indent, fix_backspace, NEW_LINE
 
 
 underline_regex = re.compile(r'\s*\S+\s*\Z')
+
 #------------------------------------------------------------------------------
 #  Classes
 #------------------------------------------------------------------------------
-
 
 class BaseDoc(object):
     """Base abstract docstring refactoring class.
@@ -110,7 +110,7 @@ class BaseDoc(object):
         refactor_postfix = self.headers.get(header, 'header')
         method_name = ''.join(('_refactor_', refactor_postfix))
         method = getattr(self, method_name)
-        method(header)
+        lines = method(header)
         self.insert_and_move(lines, self.index)
 
     def _refactor_header(self, header):
@@ -316,7 +316,7 @@ class BaseDoc(object):
             self.remove_lines(index)
 
     def bookmark(self):
-        """ Push the current index to the end of the list of bookmarks.
+        """ append the current index to the end of the list of bookmarks.
 
         """
         self.bookmarks.append(self.index)

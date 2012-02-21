@@ -87,8 +87,6 @@ class BaseDoc(object):
         while not self.eod:
             header = self.is_section()
             if header:
-                self.remove_lines(self.index, 2)  # Remove header
-                self.remove_if_empty(self.index)  # Remove space after header
                 self._refactor(header)
             else:
                 self.index += 1
@@ -97,6 +95,9 @@ class BaseDoc(object):
     def _refactor(self, header):
         """Call the heading refactor method.
 
+        The header is removed from the docstring and the docstring
+        refactoring is dispatched to the appropriate refactoring method.
+
         The name of the refctoring method is constructed using the form
         _refactor_<header>. Where <header> is the value corresponding to
         ``self.headers[header]``. If there is no custom method for the
@@ -104,10 +105,13 @@ class BaseDoc(object):
         found header name as input.
 
         """
+        self.remove_lines(self.index, 2)  # Remove header
+        self.remove_if_empty(self.index)  # Remove space after header
         refactor_postfix = self.headers.get(header, 'header')
         method_name = ''.join(('_refactor_', refactor_postfix))
         method = getattr(self, method_name)
         method(header)
+        self.insert_and_move(lines, self.index)
 
     def _refactor_header(self, header):
         """ Refactor the header section using the rubric directive.
@@ -126,7 +130,7 @@ class BaseDoc(object):
         directive = '.. rubric:: {0}'.format(header)
         lines = []
         lines += [directive, NEW_LINE]
-        self.insert_and_move(lines, self.index)
+        return lines
 
     def extract_items(self, item_class=None):
         """ Extract the definition items from a docstring.

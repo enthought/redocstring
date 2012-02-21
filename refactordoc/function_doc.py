@@ -55,8 +55,7 @@ class FunctionDoc(BaseDoc):
         prefix = None if len(items) == 1 else '-'
         for item in items:
             lines += add_indent(item.to_rst(prefix))
-        self.insert_and_move(lines, self.index)
-        return
+        return lines
 
     def _refactor_arguments(self, header):
         """ Refactor the argument section to sphinx friendly format.
@@ -71,8 +70,7 @@ class FunctionDoc(BaseDoc):
         lines = []
         for item in items:
             lines += item.to_rst()
-        self.insert_and_move(lines, self.index)
-        return
+        return lines
 
     def _refactor_notes(self, header):
         """ Refactor the notes section to sphinx friendly format.
@@ -86,5 +84,4 @@ class FunctionDoc(BaseDoc):
         paragraph = self.get_next_paragraph()
         lines = ['.. note::']
         lines += add_indent(paragraph)
-        self.insert_and_move(lines, self.index)
-
+        return lines

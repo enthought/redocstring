@@ -45,15 +45,13 @@ class ClassDoc(BaseDoc):
         lines = []
         for item in items:
             lines += item.to_rst()
-        self.insert_and_move(lines, self.index)
-        return
+        return lines
 
     def _refactor_methods(self, header):
         """Refactor the methods section to sphinx friendly format.
 
         """
         items = self.extract_items(MethodItem)
-
         lines = []
         if len(items) > 0 :
             columns = self._get_column_lengths(items)
@@ -68,8 +66,7 @@ class ClassDoc(BaseDoc):
             lines += [border]
             lines += ['']
         lines = [line.rstrip() for line in lines]
-        self.insert_and_move(lines, self.index)
-        return
+        return lines
 
     def _refactor_notes(self, header):
         """Refactor the note section to use the rst ``.. note`` directive.
@@ -78,7 +75,7 @@ class ClassDoc(BaseDoc):
         paragraph = self.get_next_paragraph()
         lines = ['.. note::']
         lines += add_indent(paragraph)
-        self.insert_and_move(lines, self.index)
+        return lines
 
     def _get_column_lengths(self, items):
         """ Helper function to estimate the column widths for the refactoring of

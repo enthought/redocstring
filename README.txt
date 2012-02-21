@@ -24,7 +24,7 @@ using::
 Installation
 ------------
 
-Please copy the ``refactordoc`` in the source directory
+Please copy the ``refactordoc`` folder in the source directory
 (or a sub_directory) of your documentation and update your ``conf.py``
 as follows:
 

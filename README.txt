@@ -24,7 +24,7 @@ using::
 Installation
 ------------
 
-Please copy the ``refactor_doc.py`` in the source directory
+Please copy the ``refactordoc`` in the source directory
 (or a sub_directory) of your documentation and update your ``conf.py``
 as follows:
 
@@ -35,6 +35,6 @@ as follows:
     - Add refactor-doc to the extensions variable::
 
         extensions = [...,
-              'refactor_doc',
+              'refactordoc',
               ...,
              ]

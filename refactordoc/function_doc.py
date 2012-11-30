@@ -8,7 +8,7 @@
 #  All rights reserved.
 #------------------------------------------------------------------------------
 from base_doc import BaseDoc
-from line_functions import get_indent, add_indent
+from line_functions import add_indent
 from definition_items import ArgumentItem, ListItem
 
 
@@ -20,7 +20,8 @@ class FunctionDoc(BaseDoc):
     Methods
     -------
     _refactor_arguments(self, header):
-        Refactor the Arguments and Parameters section to sphinx friendly format.
+        Refactor the Arguments and Parameters section to sphinx friendly
+        format.
 
     _refactor_as_items_list(self, header):
         Refactor the Returns, Raises and Yields sections to sphinx friendly
@@ -36,7 +37,7 @@ class FunctionDoc(BaseDoc):
         if headers is None:
             headers = {'Returns': 'as_item_list', 'Arguments': 'arguments',
                        'Parameters': 'arguments', 'Raises': 'as_item_list',
-                       'Yields': 'as_item_list', 'Notes':'notes'}
+                       'Yields': 'as_item_list', 'Notes': 'notes'}
 
         super(FunctionDoc, self).__init__(lines, headers)
         return

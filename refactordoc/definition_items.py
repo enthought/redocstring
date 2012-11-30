@@ -1,12 +1,11 @@
-﻿#  -*- coding: UTF-8 -*-
-#------------------------------------------------------------------------------
+﻿#-----------------------------------------------------------------------------
 #  file: fields.py
 #  License: LICENSE.TXT
 #  Author: Ioannis Tziakos
 #
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 import collections
 import re
 
@@ -20,10 +19,10 @@ definition_regex = re.compile(r"""
 (
         \s         # just a space
     |              # OR
-        \s[\w.]+   # dot sepearated words
-        (\(.*\))?  # woth maybe a signature
+        \s[\w.]+   # dot separated words
+        (\(.*\))?  # with maybe a signature
     |
-        \s[\w.]+   # dot sepearated words
+        \s[\w.]+   # dot separated words
         (\(.*\))?
         \sor       # with an or in between
         \s[\w.]+
@@ -36,8 +35,7 @@ signature_regex = re.compile('\((.*)\)')
 
 
 class DefinitionItem(collections.namedtuple(
-        'DefinitionItem',
-        ('term', 'classifier', 'definition'))):
+        'DefinitionItem', ('term', 'classifier', 'definition'))):
     """ A docstring definition item
 
     Syntax diagram::
@@ -51,12 +49,12 @@ class DefinitionItem(collections.namedtuple(
 
     The Definition class is based on the nametuple class and is responsible
     to check, parse and refactor a docstring definition item into sphinx
-    friently rst.
+    friendly rst.
 
     Attributes
     ----------
     term : str
-        The term ussualy reflects the name of a parameter or an attribute.
+        The term usually reflects the name of a parameter or an attribute.
 
     classifier: str
         The classifier of the definition. Commonly used to reflect the type
@@ -65,10 +63,10 @@ class DefinitionItem(collections.namedtuple(
         .. note:: Currently only one classifier is supported.
 
     definition : list
-        The list of strings that holdes the description the defintion item.
+        The list of strings that holds the description the definition item.
 
     .. note:: A Definition item is based on the item of a section definition
-        list as it defined in restructed text
+        list as it defined in restructured text
         (_http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#sections).
 
     """
@@ -95,12 +93,11 @@ class DefinitionItem(collections.namedtuple(
     def parse(cls, lines):
         """Parse a definition item from a set of lines.
 
-        The class method parses the defintion list item from the list of
+        The class method parses the definition list item from the list of
         docstring lines and produces a DefinitionItem with the term,
         classifier and the definition.
 
         .. note:: The global indention in the definition lines is striped
-
 
         The term definition is assumed to be in one of the following formats::
 
@@ -124,7 +121,6 @@ class DefinitionItem(collections.namedtuple(
         lines
             docstring lines of the definition without any empty lines before or
             after.
-
 
         Returns
         -------
@@ -150,9 +146,9 @@ class DefinitionItem(collections.namedtuple(
                (<classifier>) --
                <definition>
 
-        Subclasses will ussualy override the method to provide custom made
-        behaviour. However the singature of the method should hold only
-        kword arguments which have default values. The keyword arguments
+        Subclasses will usually override the method to provide custom made
+        behaviour. However the signature of the method should hold only
+        keyword arguments which have default values. The keyword arguments
         can be used to pass addition rendering information to subclasses.
 
         Returns
@@ -165,8 +161,8 @@ class DefinitionItem(collections.namedtuple(
 
         ::
 
-            >>> item = DefintionItem('lines', 'list',
-                                     ['A list of string lines rendered in rst.'])
+            >>> item = DefinitionItem('lines', 'list',
+                                ['A list of string lines rendered in rst.'])
             >>> item.to_rst()
             lines
 
@@ -175,7 +171,7 @@ class DefinitionItem(collections.namedtuple(
 
         .. note:: An empty line is added at the end of the list of strings so
             that the results can be concatenated directly and rendered properly
-            by shpinx.
+            by sphinx.
 
 
         """
@@ -191,8 +187,8 @@ class DefinitionItem(collections.namedtuple(
 
 class AttributeItem(DefinitionItem):
     """ Definition that renders the rst output using the attribute directive.
-    """
 
+    """
     _normal = (".. attribute:: {0}\n"
                "    :annotation: = {1}\n"
                "\n"
@@ -204,7 +200,7 @@ class AttributeItem(DefinitionItem):
     _only_term = ".. attribute:: {0}\n\n"
 
     def to_rst(self, ):
-        """ Return the attribute info ousing the attrbiute sphinx markup.
+        """ Return the attribute info using the attribute sphinx markup.
 
         Examples
         --------
@@ -212,7 +208,7 @@ class AttributeItem(DefinitionItem):
         ::
 
             >>> item = AttributeItem('indent', 'int',
-            ... ['The indent to use for the decription block.'])
+            ... ['The indent to use for the description block.'])
             >>> item.to_rst()
             .. attribute:: indent
                 :annotation: = int
@@ -223,7 +219,7 @@ class AttributeItem(DefinitionItem):
         ::
 
             >>> item = AttributeItem('indent', '',
-            ... ['The indent to use for the decription block.'])
+            ... ['The indent to use for the description block.'])
             >>> item.to_rst()
             .. attribute:: indent
 
@@ -232,7 +228,7 @@ class AttributeItem(DefinitionItem):
 
         .. note:: An empty line is added at the end of the list of strings so
             that the results can be concatenated directly and rendered properly
-            by shpinx.
+            by sphinx.
 
         """
         definition = '\n'.join(add_indent(self.definition))
@@ -351,7 +347,7 @@ class ListItem(DefinitionItem):
 
         .. note:: An empty line is added at the end of the list of strings so
             that the results can be concatenated directly and rendered properly
-            by shpinx.
+            by sphinx.
 
         """
         indent = 0 if (prefix is None) else len(prefix) + 1
@@ -390,7 +386,7 @@ class TableLineItem(DefinitionItem):
             is 0 then the field
 
         .. note::
-            - The strings attributes are cliped to the column width.
+            - The strings attributes are clipped to the column width.
 
         Example
         -------
@@ -477,7 +473,6 @@ class MethodItem(DefinitionItem):
 
         .. note:: The strings attributes are cliped to the column width.
 
-
         Example
         -------
 
@@ -490,7 +485,8 @@ class MethodItem(DefinitionItem):
 
         """
         definition = ' '.join([line.strip() for line in self.definition])
-        method_role = ':meth:`{0}({1}) <{0}>`'.format(self.term, self.classifier)
+        method_role = ':meth:`{0}({1}) <{0}>`'.format(self.term,
+                                                      self.classifier)
         table_line = '{0:<{first}} {1:<{second}}'
 
         lines = []
@@ -503,10 +499,10 @@ class MethodItem(DefinitionItem):
     def signature(self):
         return '{}({})'.format(self.term, self.classifier)
 
+
 #------------------------------------------------------------------------------
 #  Functions to work with Definition Items
 #------------------------------------------------------------------------------
-
 
 def max_attribute_length(items, attr):
     """ Find the max length of the attribute in a list of DefinitionItems.
@@ -514,7 +510,7 @@ def max_attribute_length(items, attr):
     Arguments
     ---------
     items : list
-        The list of the DefitionItems (or subclasses).
+        The list of the DefinitionItem instances (or subclasses).
 
     attr : str
         Attribute to look at.
@@ -534,7 +530,7 @@ def max_attribute_index(items, attr):
     Arguments
     ---------
     items : list
-        The list of the DefitionItems (or subclasses).
+        The list of the DefinitionItems (or subclasses).
 
     attr : str
         Attribute to look at.

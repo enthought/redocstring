@@ -7,9 +7,9 @@
 #  All rights reserved.
 #------------------------------------------------------------------------------
 from base_doc import BaseDoc
-from line_functions import get_indent, replace_at, add_indent
-from definition_items import (MethodItem, AttributeItem, TableLineItem,
-                              max_attribute_length, max_attribute_index)
+from line_functions import add_indent
+from definition_items import (MethodItem, AttributeItem, max_attribute_length,
+                              max_attribute_index)
 
 
 class ClassDoc(BaseDoc):
@@ -31,7 +31,6 @@ class ClassDoc(BaseDoc):
     """
 
     def __init__(self, lines, headers=None):
-
         if headers is None:
             headers = {'Attributes': 'attributes', 'Methods': 'methods',
                        'Notes':'notes'}
@@ -40,7 +39,9 @@ class ClassDoc(BaseDoc):
         return
 
     def _refactor_attributes(self, header):
-        """Refactor the attributes section to sphinx friendly format"""
+        """Refactor the attributes section to sphinx friendly format.
+
+        """
         items = self.extract_items(AttributeItem)
         lines = []
         for item in items:

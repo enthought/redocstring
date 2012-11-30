@@ -9,10 +9,12 @@
 import re
 
 from definition_items import DefinitionItem
-from line_functions import is_empty, get_indent, fix_backspace, NEW_LINE
+from line_functions import (is_empty, get_indent, fix_backspace, NEW_LINE,
+                            fix_trailing_underscore)
 
 
 underline_regex = re.compile(r'\s*\S+\s*\Z')
+
 
 #------------------------------------------------------------------------------
 #  Classes
@@ -21,7 +23,7 @@ underline_regex = re.compile(r'\s*\S+\s*\Z')
 class BaseDoc(object):
     """Base abstract docstring refactoring class.
 
-    The class' main purpose is to parse the dosctring and find the
+    The class' main purpose is to parse the docstring and find the
     sections that need to be refactored. Subclasses should provide
     the methods responsible for refactoring the sections.
 
@@ -32,17 +34,17 @@ class BaseDoc(object):
 
     index : int
         The current zero-based line number of the docstring that is currently
-        proccessed.
+        processed.
 
     headers : dict
-        The sections that the class refactors. Each entry in the
+        The sections that the class will refactor. Each entry in the
         dictionary should have as key the name of the section in the
         form that it appears in the docstrings. The value should be
         the postfix of the method, in the subclasses, that is
         responsible for refactoring (e.g. {'Methods': 'method'}).
 
     BaseDoc also provides a number of methods that operate on the docstring to
-    help with the refactoring. This is neccessary because the docstring has to
+    help with the refactoring. This is necessary because the docstring has to
     change inplace and thus it is better to live the docstring manipulation to
     the class methods instead of accessing the lines directly.
 
@@ -98,7 +100,7 @@ class BaseDoc(object):
         The header is removed from the docstring and the docstring
         refactoring is dispatched to the appropriate refactoring method.
 
-        The name of the refctoring method is constructed using the form
+        The name of the refactoring method is constructed using the form
         _refactor_<header>. Where <header> is the value corresponding to
         ``self.headers[header]``. If there is no custom method for the
         section then the self._refactor_header() is called with the
@@ -140,8 +142,8 @@ class BaseDoc(object):
         the ``item_class`` parameter. Staring from the current index position,
         the method checks if in the next two lines a valid  header exists.
         If successful, then the lines that belong to the item description
-        block (i.e. header + definition) are poped put from the docstring and
-        passed to the ``item_class`` parser and create an instance of
+        block (i.e. header + definition) are popped out from the docstring
+        and passed to the ``item_class`` parser and create an instance of
         ``item_class``.
 
         The process is repeated until there is no compatible ``item_class``
@@ -177,6 +179,9 @@ class BaseDoc(object):
             if a line in the docstring is a valid item and to parse the
             individual list items in the section. When ``None`` (default) the
             base DefinitionItem class is used.
+
+        from_ : int
+            Arguments with trailing underscore.
 
 
         Returns
@@ -240,7 +245,7 @@ class BaseDoc(object):
         underline = underline_regex.match(line2)
         if underline is None:
             return False
-        # is the nextline an rst underline?
+        # is the next line an rst section underline?
         striped_header = header.rstrip()
         expected_underline1 = re.sub(r'[A-Za-z\\]|\b\s', '-', striped_header)
         expected_underline2 = re.sub(r'[A-Za-z\\]|\b\s', '=', striped_header)
@@ -325,7 +330,7 @@ class BaseDoc(object):
         """ Move to bookmark.
 
         Move the current index to the  docstring line given my the
-        ``self.bookmarks[bookmark_index]`` and  remove it fromn the bookmark
+        ``self.bookmarks[bookmark_index]`` and  remove it from the bookmark
         list. Default value will pop the last entry.
 
         Returns

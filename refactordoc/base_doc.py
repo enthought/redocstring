@@ -216,7 +216,7 @@ class BaseDoc(object):
         while not self.eod:
             peek_0 = self.peek()
             peek_1 = self.peek(1)
-            if is_empty(peek_0 and not peek_1.startswith(sub_indent)) \
+            if is_empty(peek_0) and not peek_1.startswith(sub_indent) \
                     or not is_empty(peek_0) \
                     and not peek_0.startswith(sub_indent):
                 break

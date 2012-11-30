@@ -12,6 +12,7 @@ from refactordoc.line_functions import (add_indent, remove_indent, get_indent,
                                         fix_star, fix_backspace, is_empty,
                                         replace_at)
 
+
 class TestLineFunctions(unittest.TestCase):
 
     def test_add_indent(self):
@@ -31,7 +32,6 @@ class TestLineFunctions(unittest.TestCase):
                  "       This is the third line"]
         output = add_indent(input)
         self.assertEqual(output, expected)
-
 
     def test_remove_indent(self):
         input = ["   This is the first line", "",
@@ -65,19 +65,19 @@ class TestLineFunctions(unittest.TestCase):
         self.assertEqual(r'Input\\Output header', output)
 
     def test_replace_at(self):
-        input =    ' This is where the new starts'
+        input = ' This is where the new starts'
         expected = ' This is w   3 the new starts'
-        output = replace_at('   3',input,10)
+        output = replace_at('   3', input, 10)
         self.assertEqual(expected, output)
 
-        input =    ' This is where the new starts'
+        input = ' This is where the new starts'
         expected = ' This is where the new start '
-        output = replace_at('   3',input,28)
+        output = replace_at('   3', input, 28)
         self.assertEqual(expected, output)
 
-        input =    ' This is where the new starts'
+        input = ' This is where the new starts'
         expected = ' This is where the new starts'
-        output = replace_at('   3',input,30)
+        output = replace_at('   3', input, 30)
         self.assertEqual(expected, output)
 
 if __name__ == '__main__':

@@ -9,6 +9,7 @@
 import unittest
 from refactordoc.base_doc import BaseDoc
 
+
 class TestBaseDoc(unittest.TestCase):
 
     def setUp(self):

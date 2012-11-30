@@ -98,16 +98,19 @@ def is_empty(line):
 #------------------------------------------------------------------------------
 
 def fix_star(word):
-    """ Replace ``*`` with ``\*`` so that is will be parse properly by docutils.
+    """ Replace ``*`` with ``\*`` so that is will be parse properly by
+    docutils.
 
     """
-    return word.replace('*','\*')
+    return word.replace('*', '\*')
+
 
 def fix_backspace(word):
     """ Replace ``\\`` with ``\\\\`` so that it will printed properly in the
     documentation.
     """
     return word.replace('\\', '\\\\')
+
 
 def replace_at(word, line, index):
     """ Replace the text in-line.
@@ -136,5 +139,3 @@ def replace_at(word, line, index):
     word_length = len(word)
     result = line[:index] + word + line[(index + word_length):]
     return result[:len(line)]
-
-

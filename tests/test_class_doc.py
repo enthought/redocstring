@@ -96,7 +96,6 @@ Method                                                               Description
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
 
-
     def test_refactor_notes(self):
         docstring1 =\
 """ This is a sample class docstring

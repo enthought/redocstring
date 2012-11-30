@@ -9,7 +9,8 @@
 #------------------------------------------------------------------------------
 import unittest
 from refactordoc.definition_items import (DefinitionItem, AttributeItem,
-                                          ArgumentItem, ListItem, TableLineItem,
+                                          ArgumentItem, ListItem,
+                                          TableLineItem,
                                           MethodItem)
 
 
@@ -26,7 +27,6 @@ class TestDefinitionItem(unittest.TestCase):
         self.assertTrue(DefinitionItem.is_definition("term : classifier"))
         self.assertFalse(DefinitionItem.is_definition(":term : classifier"))
         self.assertFalse(DefinitionItem.is_definition("term : classifier:"))
-
 
         # special cases
         header_with_object = 'component : class.component.instance'
@@ -58,7 +58,6 @@ class TestDefinitionItem(unittest.TestCase):
         self.assertEqual(item, DefinitionItem('term', '',
                                               ['Definition.']))
 
-
         item = DefinitionItem.parse(['term : classifier',
                                      '    Definition.'])
         self.assertEqual(item, DefinitionItem('term', 'classifier',
@@ -71,11 +70,8 @@ class TestDefinitionItem(unittest.TestCase):
                                               ['Block.',
                                                '    Definition.']))
 
-#    def test_parse_errors(self):
-
-
     def test_to_rst(self):
-        rst ="""\
+        rst = """\
 lines
 
     *(list)* --
@@ -94,7 +90,7 @@ class TestAttributeItem(unittest.TestCase):
 
     def test_to_rst(self):
         # with annotation
-        rst ="""\
+        rst = """\
 .. attribute:: indent
     :annotation: = int
 
@@ -106,7 +102,7 @@ class TestAttributeItem(unittest.TestCase):
         self.assertMultiLineEqual(rst, rendered)
 
         # without annotation
-        rst ="""\
+        rst = """\
 .. attribute:: indent
 
     The indent to use for the description block.
@@ -123,7 +119,7 @@ class TestArgumentItem(unittest.TestCase):
         self.maxDiff = None
 
     def test_to_rst(self):
-        rst ="""\
+        rst = """\
 :param indent:
     The indent to use for the description block.
     This is the second paragraph of the argument definition.
@@ -143,7 +139,7 @@ class TestListItem(unittest.TestCase):
         self.maxDiff = None
 
     def test_to_rst_normal(self):
-        rst ="""\
+        rst = """\
 - **indent** (*int*) --
   The indent to use for the description block.
 
@@ -157,7 +153,7 @@ class TestListItem(unittest.TestCase):
         self.assertMultiLineEqual(rst, rendered)
 
     def test_to_rst_no_classifier(self):
-        rst ="""\
+        rst = """\
 - **indent** --
   The indent to use for the description block.
 """
@@ -167,7 +163,7 @@ class TestListItem(unittest.TestCase):
         self.assertMultiLineEqual(rst, rendered)
 
     def test_to_rst_only_term(self):
-        rst ="""\
+        rst = """\
 - **indent**
 """
         item = ListItem('indent', '', [''])
@@ -175,7 +171,7 @@ class TestListItem(unittest.TestCase):
         self.assertMultiLineEqual(rst, rendered)
 
     def test_to_rst_no_defintition(self):
-        rst ="""\
+        rst = """\
 - **indent** (*int*)
 """
         item = ListItem('indent', 'int', [''])
@@ -190,7 +186,7 @@ class TestTableLineItem(unittest.TestCase):
 
     def test_to_rst(self):
         # with annotation
-        rst ="""\
+        rst = """\
 function(arg1, arg2)   This is the best fun
 """
         item = TableLineItem('function(arg1, arg2)', 'and',
@@ -204,10 +200,10 @@ class TestMethodItem(unittest.TestCase):
     def setUp(self):
         self.maxDiff = None
 
-
     def test_is_definition(self):
         self.assertTrue(MethodItem.is_definition("term()"))
-        self.assertTrue(MethodItem.is_definition("term(*args, my_keyword=None)"))
+        self.assertTrue(MethodItem.is_definition(
+                                              "term(*args, my_keyword=None)"))
         self.assertFalse(MethodItem.is_definition("term"))
         self.assertFalse(MethodItem.is_definition("term : *args"))
 
@@ -219,11 +215,11 @@ class TestMethodItem(unittest.TestCase):
 
     def test_to_rst(self):
         # with annotation
-        rst ="""\
+        rst = """\
 :meth:`function(arg1, arg2) <function>` This is the best fun
 """
-        item = MethodItem('function','arg1, arg2',
-            ['This is the best function ever.'])
+        item = MethodItem('function', 'arg1, arg2',
+                          ['This is the best function ever.'])
         rendered = '\n'.join(item.to_rst(columns=(39, 20))) + '\n'
         self.assertMultiLineEqual(rst, rendered)
 

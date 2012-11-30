@@ -180,9 +180,6 @@ class BaseDoc(object):
             individual list items in the section. When ``None`` (default) the
             base DefinitionItem class is used.
 
-        from_ : int
-            Arguments with trailing underscore.
-
 
         Returns
         -------

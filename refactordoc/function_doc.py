@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 #------------------------------------------------------------------------------
 #  file: function_doc.py
 #  License: LICENSE.TXT
@@ -64,7 +64,7 @@ class FunctionDoc(BaseDoc):
         Arguments
         ---------
         header : unused
-            This parameter is ingnored in thi method.
+            This parameter is ignored in thi method.
 
         """
         items = self.extract_items(item_class=ArgumentItem)
@@ -79,7 +79,7 @@ class FunctionDoc(BaseDoc):
         Arguments
         ---------
         header : unused
-            This parameter is ingnored in this method.
+            This parameter is ignored in this method.
 
         """
         paragraph = self.get_next_paragraph()

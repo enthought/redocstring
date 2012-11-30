@@ -9,8 +9,7 @@
 import re
 
 from definition_items import DefinitionItem
-from line_functions import (is_empty, get_indent, fix_backspace, NEW_LINE,
-                            fix_trailing_underscore)
+from line_functions import is_empty, get_indent, fix_backspace, NEW_LINE
 
 
 underline_regex = re.compile(r'\s*\S+\s*\Z')
@@ -214,12 +213,12 @@ class BaseDoc(object):
         item_header = self.pop()
         sub_indent = get_indent(item_header) + ' '
         block = [item_header]
-        while (not self.eod):
+        while not self.eod:
             peek_0 = self.peek()
             peek_1 = self.peek(1)
-            if (is_empty(peek_0) and (not peek_1.startswith(sub_indent))) \
-                    or ((not is_empty(peek_0)) \
-                    and (not peek_0.startswith(sub_indent))):
+            if is_empty(peek_0 and not peek_1.startswith(sub_indent)) \
+                    or not is_empty(peek_0) \
+                    and not peek_0.startswith(sub_indent):
                 break
             else:
                 line = self.pop()

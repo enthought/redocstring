@@ -250,8 +250,9 @@ class AttributeItem(DefinitionItem):
 
 
 class ArgumentItem(DefinitionItem):
-    """ A definition item for function argument sections """
+    """ A definition item for function argument sections.
 
+    """
     _normal = (":param {0}:\n"
                "{2}\n"
                ":type {0}: {1}")
@@ -308,7 +309,7 @@ class ArgumentItem(DefinitionItem):
 
 
 class ListItem(DefinitionItem):
-    """ A defintion item that is rendered as an ordered/unordered list
+    """ A definition item that is rendered as an ordered/unordered list
 
     """
 
@@ -343,7 +344,7 @@ class ListItem(DefinitionItem):
         >>> item.to_rst(prefix='-')
         - **indent** (`int`) --
           The indent to use for
-          the descirption block.
+          the description block.
 
 
         .. note:: An empty line is added at the end of the list of strings so
@@ -423,7 +424,6 @@ class MethodItem(DefinitionItem):
     def is_definition(cls, line):
         """ Check if the definition header is a function signature.
 
-
         """
         match = function_regex.match(line)
         return match
@@ -432,7 +432,7 @@ class MethodItem(DefinitionItem):
     def parse(cls, lines):
         """Parse a method definition item from a set of lines.
 
-        The class method parses the method signature and defintion from the
+        The class method parses the method signature and definition from the
         list of docstring lines and produces a MethodItem where the term
         is the method name and the classifier is arguments
 
@@ -472,7 +472,7 @@ class MethodItem(DefinitionItem):
             The two item tuple of column widths for the :meth: role column
             and the definition (i.e. summary) of the MethodItem
 
-        .. note:: The strings attributes are cliped to the column width.
+        .. note:: The strings attributes are clipped to the column width.
 
         Example
         -------

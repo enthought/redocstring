@@ -18,7 +18,7 @@ def refactor_docstring(app, what, name, obj, options, lines):
     refactor = None
     if 'class' in what:
         refactor = ClassDoc(lines)
-    elif ('function' in what) or ('method' in what):
+    elif 'function' in what or 'method' in what:
         refactor = FunctionDoc(lines)
 
     if refactor is not None:

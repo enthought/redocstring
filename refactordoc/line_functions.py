@@ -1,25 +1,25 @@
-﻿# -*- coding: UTF-8 -*-
-#------------------------------------------------------------------------------
+﻿#-----------------------------------------------------------------------------
 #  file: line_functions.py
 #  License: LICENSE.TXT
 #  Author: Ioannis Tziakos
 #
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 import re
 
 
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #  Precompiled regexes
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 indent_regex = re.compile(r'\s+')
 
 
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #  Constants
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 NEW_LINE = ''
+
 
 #------------------------------------------------------------------------------
 #  Functions to manage indention
@@ -55,6 +55,7 @@ def add_indent(lines, indent=4):
             output.append(indent_str + line)
     return output
 
+
 def remove_indent(lines):
     """ Remove all indentation from the lines.
 
@@ -66,6 +67,7 @@ def remove_indent(lines):
     """
     return [line.lstrip() for line in lines]
 
+
 def trim_indent(lines):
     """ Trim global intention level from lines.
 
@@ -75,6 +77,7 @@ def trim_indent(lines):
     indent.discard(0)
     global_indent = min(indent)
     return [line[global_indent:] for line in lines]
+
 
 def get_indent(line):
     """ Return the indent portion of the line.
@@ -86,12 +89,14 @@ def get_indent(line):
     else:
         return indent.group()
 
+
 #------------------------------------------------------------------------------
 #  Functions to detect line type
 #------------------------------------------------------------------------------
 
 def is_empty(line):
     return not line.strip()
+
 
 #------------------------------------------------------------------------------
 #  Functions to adjust strings
@@ -108,8 +113,19 @@ def fix_star(word):
 def fix_backspace(word):
     """ Replace ``\\`` with ``\\\\`` so that it will printed properly in the
     documentation.
+
     """
     return word.replace('\\', '\\\\')
+
+
+def fix_trailing_underscore(word):
+    """ Replace the trailing ``_`` with ``\\_`` so that it will printed
+    properly in the documentation.
+
+    """
+    if word.endswith('_'):
+        word = word.replace('_', '\_')
+    return word
 
 
 def replace_at(word, line, index):

@@ -126,6 +126,9 @@ Parameters
 **kwards :
     Keyword arguments with which this constructor was called
     from the enaml source code.
+
+from_ :
+    Arguments with trailing underscore.
 """
 
         rst = \
@@ -137,6 +140,8 @@ Parameters
 :param \*\*kwards:
     Keyword arguments with which this constructor was called
     from the enaml source code.
+:param from\_:
+    Arguments with trailing underscore.
 """
 
         docstring_lines = docstring.splitlines()

@@ -10,7 +10,8 @@
 import collections
 import re
 
-from line_functions import add_indent, fix_star, trim_indent, NEW_LINE
+from line_functions import (add_indent, fix_star, trim_indent, NEW_LINE,
+                            fix_trailing_underscore)
 
 header_regex = re.compile(r'\s:\s?')
 definition_regex = re.compile(r"""
@@ -290,6 +291,7 @@ class ArgumentItem(DefinitionItem):
 
         """
         argument = fix_star(self.term)
+        argument = fix_trailing_underscore(argument)
         argument_type = self.classifier
         definition = '\n'.join(add_indent(self.definition))
         template = self.template.format(argument, argument_type, definition)

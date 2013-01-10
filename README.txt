@@ -1,4 +1,4 @@
-RefactorDoc: Docstring refactor shpinx extension
+RefactorDoc: Docstring refactor sphinx extension
 ================================================
 
 The RefactorDoc extension parses the function and class docstrings as

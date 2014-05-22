@@ -10,7 +10,11 @@ python:
 before_install:
   - pip install haas
   - pip install coverage
+  - pip install coveralls
 
 script:
   - coverage run -m haas -v
   - coverage report -m
+
+after_success:
+  - coveralls

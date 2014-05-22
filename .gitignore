@@ -4,3 +4,4 @@
 build
 dist
 ilan.sh
+/refactordoc/_version.py

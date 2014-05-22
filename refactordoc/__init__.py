@@ -8,6 +8,11 @@
 from .function_doc import FunctionDoc
 from .class_doc import ClassDoc
 
+try:  # pragma: no cover
+    from ._version import full_version as __version__
+except ImportError:  # pragma: no cover
+    __version__ = "not-built"
+
 
 #------------------------------------------------------------------------------
 # Extension definition

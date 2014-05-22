@@ -6,10 +6,10 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-from base_doc import BaseDoc
-from line_functions import add_indent
-from definition_items import (MethodItem, AttributeItem, max_attribute_length,
-                              max_attribute_index)
+from .base_doc import BaseDoc
+from .line_functions import add_indent
+from .definition_items import (MethodItem, AttributeItem, max_attribute_length,
+                               max_attribute_index)
 
 
 class ClassDoc(BaseDoc):

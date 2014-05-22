@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 #  file: fields.py
 #  License: LICENSE.TXT
@@ -10,8 +10,8 @@
 import collections
 import re
 
-from line_functions import (add_indent, fix_star, trim_indent, NEW_LINE,
-                            fix_trailing_underscore)
+from .line_functions import (add_indent, fix_star, trim_indent, NEW_LINE,
+                             fix_trailing_underscore)
 
 header_regex = re.compile(r'\s:\s?')
 definition_regex = re.compile(r"""

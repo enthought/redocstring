@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 #  file: line_functions.py
 #  License: LICENSE.TXT
@@ -74,7 +74,7 @@ def trim_indent(lines):
 
     """
     non_empty_lines = filter(lambda x: not is_empty(x), lines)
-    indent = {len(get_indent(line)) for line in non_empty_lines}
+    indent = set(len(get_indent(line)) for line in non_empty_lines)
     indent.discard(0)
     global_indent = min(indent)
     return [line[global_indent:] for line in lines]

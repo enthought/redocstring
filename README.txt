@@ -1,6 +1,10 @@
 RefactorDoc: Docstring refactor sphinx extension
 ================================================
 
+[![Build Status](https://travis-ci.org/enthought/refactordoc.svg?branch=master)](https://travis-ci.org/enthought/refactordoc)
+[![Coverage Status](https://img.shields.io/coveralls/enthought/refactordoc.svg)](https://coveralls.io/r/enthought/refactordoc?branch=master)
+
+
 The RefactorDoc extension parses the function and class docstrings as
 they are retrieved by the autodoc extension and refactors the section
 blocks into sphinx friendly rst. The extension shares similarities

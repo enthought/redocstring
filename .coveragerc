@@ -1,0 +1,7 @@
+[run]
+branch = True
+source = refactordoc
+
+[report]
+omit = *test*
+       refactordoc/_version.py

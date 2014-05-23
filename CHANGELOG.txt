@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+Version 0.3.1
+-------------
+
+23/05/2014
+
+- Fix support and tests on Python 2.6 (#8)
+
 Version 0.3.0
 -------------
 

@@ -12,7 +12,7 @@ import subprocess
 
 MAJOR = 0
 MINOR = 3
-MICRO = 0
+MICRO = 1
 
 VERSION = '{0:d}.{1:d}.{2:d}'.format(MAJOR, MINOR, MICRO)
 IS_RELEASED = True

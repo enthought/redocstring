@@ -10,9 +10,12 @@ from setuptools import setup
 import os
 import subprocess
 
+MAJOR = 0
+MINOR = 3
+MICRO = 0
 
-VERSION = '0.3'
-IS_RELEASED = False
+VERSION = '{0:d}.{1:d}.{2:d}'.format(MAJOR, MINOR, MICRO)
+IS_RELEASED = True
 
 
 # Return the git revision as a string

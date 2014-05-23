@@ -7,11 +7,11 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-import unittest
 from refactordoc.definition_items import (DefinitionItem, AttributeItem,
                                           ArgumentItem, ListItem,
                                           TableLineItem,
                                           MethodItem)
+from ._compat import unittest
 
 
 class TestDefinitionItem(unittest.TestCase):

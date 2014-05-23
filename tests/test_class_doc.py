@@ -6,8 +6,8 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-import unittest
 from refactordoc.class_doc import ClassDoc
+from ._compat import unittest
 
 
 class TestClassDoc(unittest.TestCase):

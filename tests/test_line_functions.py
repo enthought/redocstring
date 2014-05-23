@@ -7,10 +7,10 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-import unittest
 from refactordoc.line_functions import (add_indent, remove_indent, get_indent,
                                         fix_star, fix_backspace, is_empty,
                                         replace_at)
+from ._compat import unittest
 
 
 class TestLineFunctions(unittest.TestCase):

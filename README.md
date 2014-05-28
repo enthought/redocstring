@@ -22,7 +22,7 @@ Repository
 ----------
 
 The RefactorDoc extension lives at Github. You can clone the repository
-using::
+using
 
 
     $ git clone https://github.com/enthought/refactordoc.git
@@ -30,11 +30,11 @@ using::
 Installation
 ------------
 
-1. Install ``refactordoc`` from pypi using pip
+1. Install `refactordoc` from pypi using pip
 
         $ pip install reafactordoc
 
-2. Add refactor-doc to the extensions variable of your sphinx ``conf.py``::
+2. Add refactor-doc to the extensions variable of your sphinx `conf.py`
 
         extensions = [
             ...,

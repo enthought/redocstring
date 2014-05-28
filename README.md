@@ -13,10 +13,10 @@ original form of the docstring.
 
 Key aims of RefactorDoc are:
 
-    - Do not change the order of sections.
-    - Allow sphinx directives between (and inside) section blocks.
-    - Easier to debug (native support for debugging) and extend
-      (future versions).
+  - Do not change the order of sections.
+  - Allow sphinx directives between (and inside) section blocks.
+  - Easier to debug (native support for debugging) and extend
+    (future versions).
 
 Repository
 ----------
@@ -24,20 +24,20 @@ Repository
 The RefactorDoc extension lives at Github. You can clone the repository
 using::
 
-    $ git clone https://github.com/enthought/refactordoc.git
 
+    $ git clone https://github.com/enthought/refactordoc.git
 
 Installation
 ------------
 
-1. Install ``refactordoc`` from pypi using pip::
+1. Install ``refactordoc`` from pypi using pip
 
-    $ pip install reafactordoc
+        $ pip install reafactordoc
 
 2. Add refactor-doc to the extensions variable of your sphinx ``conf.py``::
 
-    extensions = [
-        ...,
-        'refactordoc',
-        ...,
-    ]
+        extensions = [
+            ...,
+            'refactordoc',
+            ...,
+        ]

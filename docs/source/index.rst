@@ -1,6 +1,6 @@
 .. RefactorDoc documentation master file
 
-.. include:: ../../README.txt
+.. include:: ../../README.rst
 
 Contents
 ========

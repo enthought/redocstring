@@ -1,8 +1,13 @@
 RefactorDoc: Docstring refactor sphinx extension
 ================================================
 
-[![Build Status](https://travis-ci.org/enthought/refactordoc.svg?branch=master)](https://travis-ci.org/enthought/refactordoc)
-[![Coverage Status](https://img.shields.io/coveralls/enthought/refactordoc.svg)](https://coveralls.io/r/enthought/refactordoc?branch=master)
+.. image:: https://travis-ci.org/enthought/refactordoc.svg?branch=master
+   :target: https://travis-ci.org/enthought/refactordoc
+   :alt: Build status
+
+.. image:: https://img.shields.io/coveralls/enthought/refactordoc.svg
+   :target: https://coveralls.io/r/enthought/refactordoc?branch=master
+   :alt: Coverage status
 
 
 The RefactorDoc extension parses the function and class docstrings as

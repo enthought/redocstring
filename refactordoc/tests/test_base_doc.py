@@ -7,7 +7,7 @@
 #  All rights reserved.
 #------------------------------------------------------------------------------
 from refactordoc.base_doc import BaseDoc
-from ._compat import unittest
+from refactordoc.tests._compat import unittest
 
 
 class TestBaseDoc(unittest.TestCase):

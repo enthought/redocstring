@@ -6,7 +6,7 @@
 #  Copyright (c) 2014, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-from setuptools import setup
+from setuptools import setup, find_packages
 import os
 import subprocess
 
@@ -90,7 +90,8 @@ if __name__ == "__main__":
     setup(
         name='refactordoc',
         version=__version__,
-        packages=['refactordoc'],
+        packages=find_packages(),
         author="Enthought Ltd",
         author_email="info@enthought.com",
+        test_suite='refactordoc.tests',
     )

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 #------------------------------------------------------------------------------
 #  file: test_line_functions.py
 #  License: LICENSE.TXT
@@ -7,11 +7,13 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-from refactordoc.definition_items import (DefinitionItem, AttributeItem,
-                                          ArgumentItem, ListItem,
-                                          TableLineItem,
-                                          MethodItem)
-from ._compat import unittest
+from refactordoc.items.definition_item import DefinitionItem
+from refactordoc.items.method_item import MethodItem
+from refactordoc.items.argument_item import ArgumentItem
+from refactordoc.items.attribute_item import AttributeItem
+from refactordoc.items.list_item import ListItem
+from refactordoc.items.table_row_item import TableRowItem
+from refactordoc.tests._compat import unittest
 
 
 class TestDefinitionItem(unittest.TestCase):
@@ -189,7 +191,7 @@ class TestTableLineItem(unittest.TestCase):
         rst = """\
 function(arg1, arg2)   This is the best fun
 """
-        item = TableLineItem('function(arg1, arg2)', 'and',
+        item = TableRowItem('function(arg1, arg2)', 'and',
             ['This is the best function ever.'])
         rendered = '\n'.join(item.to_rst(columns=(22, 0, 20)))
         self.assertMultiLineEqual(rst, rendered)

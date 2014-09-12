@@ -8,8 +8,9 @@
 #------------------------------------------------------------------------------
 import re
 
-from .definition_items import DefinitionItem
-from .line_functions import is_empty, get_indent, fix_backspace, NEW_LINE
+from refactordoc.items.definition_item import DefinitionItem
+from refactordoc.util import (
+    is_empty, get_indent, fix_backspace, NEW_LINE)
 
 
 underline_regex = re.compile(r'\s*\S+\s*\Z')

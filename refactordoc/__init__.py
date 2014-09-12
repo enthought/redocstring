@@ -5,8 +5,8 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-from .function_doc import FunctionDoc
-from .class_doc import ClassDoc
+from refactordoc.function_doc import FunctionDoc
+from refactordoc.class_doc import ClassDoc
 
 try:  # pragma: no cover
     from ._version import full_version as __version__

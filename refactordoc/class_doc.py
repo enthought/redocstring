@@ -6,10 +6,11 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-from .base_doc import BaseDoc
-from .line_functions import add_indent
-from .definition_items import (MethodItem, AttributeItem, max_attribute_length,
-                               max_attribute_index)
+from refactordoc.base_doc import BaseDoc
+from refactordoc.util import add_indent
+from refactordoc.items.attribute_item import AttributeItem
+from refactordoc.items.method_item import MethodItem
+from refactordoc.items.util import max_attribute_length, max_attribute_index
 
 
 class ClassDoc(BaseDoc):

@@ -7,9 +7,10 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-from .base_doc import BaseDoc
-from .line_functions import add_indent
-from .definition_items import ArgumentItem, ListItem
+from refactordoc.base_doc import BaseDoc
+from refactordoc.util import add_indent
+from refactordoc.items.argument_item import ArgumentItem
+from refactordoc.items.list_item import ListItem
 
 
 class FunctionDoc(BaseDoc):

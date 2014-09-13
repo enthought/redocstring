@@ -64,4 +64,3 @@ class ListItem(DefinitionItem):
         else:
             template = self._normal
         return template
-

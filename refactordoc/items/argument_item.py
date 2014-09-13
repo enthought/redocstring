@@ -59,4 +59,3 @@ class ArgumentItem(DefinitionItem):
         else:
             template = self._normal
         return template
-

@@ -246,8 +246,9 @@ class BaseDoc(object):
         striped_header = header.rstrip()
         expected_underline1 = re.sub(r'[A-Za-z\\]|\b\s', '-', striped_header)
         expected_underline2 = re.sub(r'[A-Za-z\\]|\b\s', '=', striped_header)
-        if ((underline.group().rstrip() == expected_underline1) or
-            (underline.group().rstrip() == expected_underline2)):
+        if (
+                (underline.group().rstrip() == expected_underline1) or
+                (underline.group().rstrip() == expected_underline2)):
             return header.strip()
         else:
             return False

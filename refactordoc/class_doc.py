@@ -33,8 +33,10 @@ class ClassDoc(BaseDoc):
 
     def __init__(self, lines, headers=None):
         if headers is None:
-            headers = {'Attributes': 'attributes', 'Methods': 'methods',
-                       'Notes':'notes'}
+            headers = {
+                'Attributes': 'attributes',
+                'Methods': 'methods',
+                'Notes': 'notes'}
 
         super(ClassDoc, self).__init__(lines, headers)
         return
@@ -55,7 +57,7 @@ class ClassDoc(BaseDoc):
         """
         items = self.extract_items(MethodItem)
         lines = []
-        if len(items) > 0 :
+        if len(items) > 0:
             columns = self._get_column_lengths(items)
             border = '{0:=^{1}} {0:=^{2}}'.format('', columns[0], columns[1])
             heading = '{0:<{2}} {1:<{3}}'.format('Method', 'Description',

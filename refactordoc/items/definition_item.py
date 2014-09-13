@@ -1,9 +1,8 @@
 ﻿import collections
 import re
 
-from refactordoc.util import (
-    add_indent, fix_star, trim_indent, NEW_LINE, fix_trailing_underscore)
 
+from refactordoc.util import add_indent, trim_indent, NEW_LINE
 
 
 #: Regex to use for matching the header for the d
@@ -123,8 +122,8 @@ class DefinitionItem(collections.namedtuple(
 
         """
         header = lines[0].strip()
-        term, classifier = header_regex.split(header, maxsplit=1) if \
-                           (' :' in header) else (header, '')
+        term, classifier = header_regex.split(
+            header, maxsplit=1) if (' :' in header) else (header, '')
         trimed_lines = trim_indent(lines[1:]) if (len(lines) > 1) else ['']
         definition = [line.rstrip() for line in trimed_lines]
         return cls(term.strip(), classifier.strip(), definition)

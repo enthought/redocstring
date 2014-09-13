@@ -91,4 +91,3 @@ class MethodItem(DefinitionItem):
     @property
     def signature(self):
         return '{0}({1})'.format(self.term, self.classifier)
-

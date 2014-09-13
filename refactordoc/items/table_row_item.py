@@ -43,4 +43,3 @@ class TableRowItem(DefinitionItem):
                   first=columns[0], second=columns[1], third=columns[2])]
         lines += ['']
         return lines
-

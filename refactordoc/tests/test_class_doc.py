@@ -17,7 +17,7 @@ class TestClassDoc(unittest.TestCase):
 
     def test_refactor_attributes(self):
         docstring =\
-"""Base abstract docstring refactoring class.
+            """Base abstract docstring refactoring class.
 
 The class' main purpose is to parse the dosctring and find the
 sections that need to be refactored. It also provides a number of
@@ -35,7 +35,7 @@ index : int
 """
 
         rst = \
-"""Base abstract docstring refactoring class.
+            """Base abstract docstring refactoring class.
 
 The class' main purpose is to parse the dosctring and find the
 sections that need to be refactored. It also provides a number of
@@ -62,7 +62,7 @@ the methods responsible for refactoring the sections.
 
     def test_refactor_methods(self):
         docstring =\
-""" This is a sample class docstring
+            """ This is a sample class docstring
 
 Methods
 -------
@@ -78,7 +78,7 @@ get_next_paragraph()
 """
 
         rst = \
-""" This is a sample class docstring
+            """ This is a sample class docstring
 
 ==================================================================== ===================================================
 Method                                                               Description
@@ -98,7 +98,7 @@ Method                                                               Description
 
     def test_refactor_notes(self):
         docstring1 =\
-""" This is a sample class docstring
+            """ This is a sample class docstring
 
 Notes
 -----
@@ -109,7 +109,7 @@ This is not a note.
 """
 
         docstring2 =\
-""" This is a sample class docstring
+            """ This is a sample class docstring
 
 Notes
 -----
@@ -121,7 +121,7 @@ This is not a note.
 """
 
         rst = \
-""" This is a sample class docstring
+            """ This is a sample class docstring
 
 .. note::
     This is the test.

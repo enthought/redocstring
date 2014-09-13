@@ -16,8 +16,8 @@ class TestFunctionDoc(unittest.TestCase):
         self.maxDiff = None
 
     def test_refactor_returns(self):
-        docstring =\
-""" This is a sample function docstring.
+        docstring = \
+            """ This is a sample function docstring.
 
 Returns
 -------
@@ -27,7 +27,7 @@ myvalue : list
 """
 
         rst = \
-""" This is a sample function docstring.
+            """ This is a sample function docstring.
 
 :returns:
     **myvalue** (*list*) --
@@ -42,8 +42,8 @@ myvalue : list
         self.assertMultiLineEqual(rst, output)
 
     def test_refactor_raises(self):
-        docstring =\
-""" This is a sample function docstring.
+        docstring = \
+            """ This is a sample function docstring.
 
 Raises
 ------
@@ -56,7 +56,7 @@ ValueError :
 """
 
         rst = \
-""" This is a sample function docstring.
+            """ This is a sample function docstring.
 
 :raises:
     - **TypeError** --
@@ -75,7 +75,7 @@ ValueError :
 
     def test_refactor_arguments(self):
         docstring =\
-""" This is a sample function docstring
+            """ This is a sample function docstring
 
 Arguments
 ---------
@@ -92,7 +92,7 @@ inputb : float
 """
 
         rst = \
-""" This is a sample function docstring
+            """ This is a sample function docstring
 
 :param inputa:
     The first argument holds the first input!.
@@ -114,8 +114,8 @@ inputb : float
         self.assertMultiLineEqual(rst, output)
 
     def test_refactor_strange_arguments(self):
-        docstring =\
-""" This is a sample function docstring
+        docstring = \
+            """ This is a sample function docstring
 
 Parameters
 ----------
@@ -132,7 +132,7 @@ from_ :
 """
 
         rst = \
-""" This is a sample function docstring
+            """ This is a sample function docstring
 
 :param \*args:
     Positional arguments with which this constructor was called
@@ -151,8 +151,8 @@ from_ :
         self.assertMultiLineEqual(rst, output)
 
     def test_refactor_notes(self):
-        docstring =\
-""" This is a sample function docstring.
+        docstring = \
+            """ This is a sample function docstring.
 
 Notes
 -----
@@ -163,7 +163,7 @@ This should not be included.
 """
 
         rst = \
-""" This is a sample function docstring.
+            """ This is a sample function docstring.
 
 .. note::
     This is the test.
@@ -179,8 +179,8 @@ This should not be included.
         self.assertMultiLineEqual(rst, output)
 
     def test_docstring_cases_1(self):
-        docstring1 =\
-""" Sets the selection to the bounds of start and end.
+        docstring1 = \
+            """ Sets the selection to the bounds of start and end.
 
 If the indices are invalid, no selection will be made,
 and any current selection will be cleared.
@@ -198,8 +198,8 @@ Returns
 result : None
 """
 
-        docstring2 =\
-""" Sets the selection to the bounds of start and end.
+        docstring2 = \
+            """ Sets the selection to the bounds of start and end.
 
 If the indices are invalid, no selection will be made,
 and any current selection will be cleared.
@@ -216,8 +216,8 @@ Returns
 result : None
 """
 
-        rst =\
-""" Sets the selection to the bounds of start and end.
+        rst = \
+            """ Sets the selection to the bounds of start and end.
 
 If the indices are invalid, no selection will be made,
 and any current selection will be cleared.
@@ -248,7 +248,7 @@ and any current selection will be cleared.
     def test_docstring_cases_2(self):
 
         docstring = \
-""" Verify that the requested attribute is properly set
+            """ Verify that the requested attribute is properly set
 
 The method compares the attribute value in the Enaml object and
 check if it is synchronized with the toolkit widget. The component
@@ -279,7 +279,7 @@ value :
 """
 
         rst = \
-""" Verify that the requested attribute is properly set
+            """ Verify that the requested attribute is properly set
 
 The method compares the attribute value in the Enaml object and
 check if it is synchronized with the toolkit widget. The component

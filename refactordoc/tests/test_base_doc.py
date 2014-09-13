@@ -17,7 +17,7 @@ class TestBaseDoc(unittest.TestCase):
 
     def test_refactor_header(self):
         docstring =\
-""" This is a sample docstring.
+            """ This is a sample docstring.
 
 My Header
 ---------
@@ -25,7 +25,7 @@ This is just some sample text.
 """
 
         rst =\
-""" This is a sample docstring.
+            """ This is a sample docstring.
 
 .. rubric:: My Header
 
@@ -39,7 +39,7 @@ This is just some sample text.
 
     def test_refactor_complex_header(self):
         docstring =\
-""" This is a sample docstring.
+            """ This is a sample docstring.
 
 Input\\Output header
 -------------------
@@ -48,7 +48,7 @@ This is just some sample text.
 """
 
         rst =\
-""" This is a sample docstring.
+            """ This is a sample docstring.
 
 .. rubric:: Input\\\\Output header
 

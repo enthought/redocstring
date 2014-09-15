@@ -1,0 +1,99 @@
+﻿import abc
+
+
+class Item(object):
+    """ A docstring item.
+
+    The Item class is responsible to check, parse and refactor a docstring
+    item into sphinx friendly rst.
+
+    Syntax diagram:
+
+        +-------------------------------------------------+
+        | header                                          |
+        +--+----------------------------------------------+---+
+           | definition                                       |
+           | (body elements)+                                 |
+           +--------------------------------------------------+
+
+
+    Depending only the type of the list item the header is split into a
+    term and one or more classifiers.
+
+    Attributes
+    ----------
+    term : str
+        The term usually reflects the name of a parameter or an attribute.
+
+    classifiers: list
+        The classifier(s) of the term. Commonly used to reflect the type
+        of an argument or the signature of a function.
+
+    definition : list
+        The list of strings that holds the description the definition item.
+
+    """
+
+    __metaclass__ = abc.ABCMeta
+
+    def __init__(self, term, classifiers, definition):
+        self.term = term
+        self.classifiers = classifiers
+        self.definition = definition
+
+    @classmethod
+    def is_item(cls, line):
+        """ Check if the line is describing an item.
+
+        The method is used to check that a line is following the expected
+        format for the term and classifiers attributes.
+
+        """
+        raise NotImplementedError()
+
+    @classmethod
+    def header_split(cls, line):
+        """ Splits the header line into term and one or more classifiers.
+
+        """
+        raise NotImplementedError()
+
+    @classmethod
+    def parse(cls, lines):
+        """Parse a definition item from a set of lines.
+
+        The class method parses the item from the list of docstring lines and
+        produces a DefinitionItem with the term, classifier and the definition.
+
+        .. note:: The global indention in the definition lines is striped
+
+        Arguments
+        ---------
+        lines :
+            docstring lines of the definition without any empty lines before or
+            after.
+
+        Returns
+        -------
+        item : Item
+
+        """
+        raise NotImplementedError()
+
+    @abc.abstractmethod
+    def to_rst(self, **kwards):
+        """ Outputs the Definition in sphinx friendly rst.
+
+        The method renders the definition into a list of lines that follow
+        the rst markup.
+
+        Subclasses need to override the method to provide their custom made
+        behaviour. However the signature of the method should hold only
+        keyword arguments which always have default values.
+
+        Returns
+        -------
+        lines : list
+            A list of string lines rendered in rst.
+
+        """

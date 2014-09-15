@@ -42,29 +42,39 @@ class TestDefinitionItem(unittest.TestCase):
 
     def test_parse(self):
         item = DefinitionItem.parse(['term', '    Definition.'])
-        self.assertEqual(item, DefinitionItem('term', '', ['Definition.']))
+        self.assertEqual(item, DefinitionItem('term', [''], ['Definition.']))
 
         item = DefinitionItem.parse([
             'term', '    Definition, paragraph 1.',
             '', '    Definition, paragraph 2.'])
         self.assertEqual(
-            item, DefinitionItem(
-                'term', '',
-                ['Definition, paragraph 1.', '', 'Definition, paragraph 2.']))
+            item,
+            DefinitionItem(
+                'term', [''], [
+                    'Definition, paragraph 1.',
+                    '',
+                    'Definition, paragraph 2.']))
 
-        item = DefinitionItem.parse(
-            ['term :', '    Definition.'])
-        self.assertEqual(item, DefinitionItem('term', '', ['Definition.']))
+        item = DefinitionItem.parse(['term :', '    Definition.'])
+        self.assertEqual(item, DefinitionItem('term', [''], ['Definition.']))
 
         item = DefinitionItem.parse(['term : classifier', '    Definition.'])
         self.assertEqual(
-            item, DefinitionItem('term', 'classifier', ['Definition.']))
+            item, DefinitionItem('term', ['classifier'], ['Definition.']))
+
+
+        item = DefinitionItem.parse(
+            ['term : classifier or classifier', '    Definition.'])
+        self.assertEqual(
+            item,
+            DefinitionItem('term',
+                ['classifier','classifier'], ['Definition.']))
 
         item = DefinitionItem.parse(
             ['term : classifier', '    Block.', '        Definition.'])
         self.assertEqual(
             item, DefinitionItem(
-                'term', 'classifier', ['Block.', '    Definition.']))
+                'term', ['classifier'], ['Block.', '    Definition.']))
 
     def test_to_rst(self):
         rst = """\
@@ -74,7 +84,7 @@ lines
     A list of string lines rendered in rst.
 """
         item = DefinitionItem(
-            'lines', 'list', ['A list of string lines rendered in rst.'])
+            'lines', ['list'], ['A list of string lines rendered in rst.'])
         rendered = '\n'.join(item.to_rst())
         self.assertMultiLineEqual(rst, rendered)
 
@@ -92,7 +102,7 @@ class TestAttributeItem(unittest.TestCase):
 
     The indent to use for the description block.
 """
-        item = AttributeItem('indent', 'int',
+        item = AttributeItem('indent', ['int'],
                              ['The indent to use for the description block.'])
         rendered = '\n'.join(item.to_rst())
         self.assertMultiLineEqual(rst, rendered)
@@ -103,7 +113,7 @@ class TestAttributeItem(unittest.TestCase):
 
     The indent to use for the description block.
 """
-        item = AttributeItem('indent', '',
+        item = AttributeItem('indent', [],
                              ['The indent to use for the description block.'])
         rendered = '\n'.join(item.to_rst())
         self.assertMultiLineEqual(rst, rendered)
@@ -114,7 +124,7 @@ class TestArgumentItem(unittest.TestCase):
     def setUp(self):
         self.maxDiff = None
 
-    def test_to_rst(self):
+    def test_to_rst_with_one_classifier(self):
         rst = """\
 :param indent:
     The indent to use for the description block.
@@ -122,7 +132,21 @@ class TestArgumentItem(unittest.TestCase):
 :type indent: int"""
 
         item = ArgumentItem(
-            'indent', 'int', [
+            'indent', ['int'], [
+                'The indent to use for the description block.',
+                'This is the second paragraph of the argument definition.'])
+        rendered = '\n'.join(item.to_rst())
+        self.assertMultiLineEqual(rst, rendered)
+
+    def test_to_with_two_classifiers(self):
+        rst = """\
+:param indent:
+    The indent to use for the description block.
+    This is the second paragraph of the argument definition.
+:type indent: int or float"""
+
+        item = ArgumentItem(
+            'indent', ['int', 'float'], [
                 'The indent to use for the description block.',
                 'This is the second paragraph of the argument definition.'])
         rendered = '\n'.join(item.to_rst())
@@ -142,7 +166,7 @@ class TestListItem(unittest.TestCase):
   This is the second paragraph of the argument definition.
 """
         item = ListItem(
-            'indent', 'int', [
+            'indent', ['int'], [
                 'The indent to use for the description block.', '',
                 'This is the second paragraph of the argument definition.'])
         rendered = '\n'.join(item.to_rst(prefix='-'))
@@ -154,7 +178,7 @@ class TestListItem(unittest.TestCase):
   The indent to use for the description block.
 """
         item = ListItem(
-            'indent', '', ['The indent to use for the description block.'])
+            'indent', [], ['The indent to use for the description block.'])
         rendered = '\n'.join(item.to_rst(prefix='-'))
         self.assertMultiLineEqual(rst, rendered)
 
@@ -162,7 +186,7 @@ class TestListItem(unittest.TestCase):
         rst = """\
 - **indent**
 """
-        item = ListItem('indent', '', [''])
+        item = ListItem('indent', [], [''])
         rendered = '\n'.join(item.to_rst(prefix='-'))
         self.assertMultiLineEqual(rst, rendered)
 
@@ -170,7 +194,7 @@ class TestListItem(unittest.TestCase):
         rst = """\
 - **indent** (*int*)
 """
-        item = ListItem('indent', 'int', [''])
+        item = ListItem('indent', ['int'], [''])
         rendered = '\n'.join(item.to_rst(prefix='-'))
         self.assertMultiLineEqual(rst, rendered)
 
@@ -207,14 +231,14 @@ class TestMethodItem(unittest.TestCase):
         item = MethodItem.parse(
             ['method(arguments)', '    Definition in a single line'])
         self.assertEqual(item, MethodItem(
-            'method', 'arguments', ['Definition in a single line']))
+            'method', ['arguments'], ['Definition in a single line']))
 
     def test_to_rst(self):
         # with annotation
         rst = """\
 :meth:`function(arg1, arg2) <function>` This is the best fun
 """
-        item = MethodItem('function', 'arg1, arg2',
+        item = MethodItem('function', ['arg1', 'arg2'],
                           ['This is the best function ever.'])
         rendered = '\n'.join(item.to_rst(columns=(39, 20))) + '\n'
         self.assertMultiLineEqual(rst, rendered)

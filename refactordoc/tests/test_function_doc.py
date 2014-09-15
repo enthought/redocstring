@@ -7,7 +7,7 @@
 #  All rights reserved.
 #------------------------------------------------------------------------------
 from refactordoc.function_doc import FunctionDoc
-from ._compat import unittest
+from refactordoc.tests._compat import unittest
 
 
 class TestFunctionDoc(unittest.TestCase):
@@ -130,7 +130,6 @@ Parameters
 from_ :
     Arguments with trailing underscore.
 """
-
         rst = \
             """ This is a sample function docstring
 

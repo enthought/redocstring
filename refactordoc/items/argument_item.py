@@ -11,7 +11,7 @@ class ArgumentItem(DefinitionItem):
                ":type {0}: {1}")
     _no_definition = (":param {0}:\n"
                       ":type {0}: {1}")
-    _no_classifier = (":param {0}:\n"
+    _no_classifiers = (":param {0}:\n"
                       "{2}")
     _only_term = ":param {0}:"
 
@@ -43,17 +43,17 @@ class ArgumentItem(DefinitionItem):
         """
         argument = fix_star(self.term)
         argument = fix_trailing_underscore(argument)
-        argument_type = self.classifier
+        argument_types = ' or '.join(self.classifiers)
         definition = '\n'.join(add_indent(self.definition))
-        template = self.template.format(argument, argument_type, definition)
+        template = self.template.format(argument, argument_types, definition)
         return template.splitlines()
 
     @property
     def template(self):
-        if self.classifier == '' and self.definition == ['']:
+        if self.classifiers == [] and self.definition == ['']:
             template = self._only_term
-        elif self.classifier == '':
-            template = self._no_classifier
+        elif self.classifiers == []:
+            template = self._no_classifiers
         elif self.definition == ['']:
             template = self._no_definition
         else:

@@ -1,7 +1,7 @@
 ﻿import collections
 import re
 
-
+from refactordoc.items.item import Item
 from refactordoc.util import add_indent, trim_indent, NEW_LINE
 
 
@@ -28,8 +28,7 @@ $                  # match at the end of the line
 """, re.VERBOSE)
 
 
-class DefinitionItem(collections.namedtuple(
-        'DefinitionItem', ('term', 'classifier', 'definition'))):
+class DefinitionItem(Item):
     """ A docstring definition item
 
     Syntax diagram::
@@ -50,8 +49,8 @@ class DefinitionItem(collections.namedtuple(
     term : str
         The term usually reflects the name of a parameter or an attribute.
 
-    classifier: str
-        The classifier of the definition. Commonly used to reflect the type
+    classifiers: list
+        The classifiers of the definition. Commonly used to reflect the type
         of an argument or the signature of a function.
 
         .. note:: Currently only one classifier is supported.
@@ -110,6 +109,11 @@ class DefinitionItem(collections.namedtuple(
             term : classifier
                 Definition.
 
+        ::
+
+            term : classifier or classifier
+                Definition.
+
         Arguments
         ---------
         lines
@@ -122,11 +126,15 @@ class DefinitionItem(collections.namedtuple(
 
         """
         header = lines[0].strip()
-        term, classifier = header_regex.split(
+        term, classifiers = header_regex.split(
             header, maxsplit=1) if (' :' in header) else (header, '')
+        classifiers = [
+            classifier.strip() for classifier in classifiers.split('or')]
+        if classifiers == ['']:
+            classifiers = []
         trimed_lines = trim_indent(lines[1:]) if (len(lines) > 1) else ['']
         definition = [line.rstrip() for line in trimed_lines]
-        return cls(term.strip(), classifier.strip(), definition)
+        return cls(term.strip(), classifiers, definition)
 
     def to_rst(self, **kwards):
         """ Outputs the Definition in sphinx friendly rst.
@@ -137,7 +145,7 @@ class DefinitionItem(collections.namedtuple(
 
             <term>
 
-               (<classifier>) --
+               (<classifier(s)>) --
                <definition>
 
         Subclasses will usually override the method to provide custom made
@@ -173,7 +181,13 @@ class DefinitionItem(collections.namedtuple(
         lines = []
         lines += [self.term]
         lines += [NEW_LINE]
-        lines += ['    *({0})*{1}'.format(self.classifier, postfix)]
+        number_of_classifiers = len(self.classifiers)
+        if number_of_classifiers == 1:
+            lines += ['    *({0[0]})*{1}'.format(self.classifiers, postfix)]
+        elif number_of_classifiers == 2:
+            lines += [
+                '    *({0[0]} or {0[1]})*{2}'.format(
+                    self.classifiers, postfix)]
         lines += add_indent(self.definition)  # definition is all ready a list
         lines += [NEW_LINE]
         return lines

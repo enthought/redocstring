@@ -48,16 +48,17 @@ class ListItem(DefinitionItem):
         """
         indent = 0 if (prefix is None) else len(prefix) + 1
         definition = '\n'.join(add_indent(self.definition, indent))
-        template = self.template.format(self.term, self.classifier, definition)
+        template = self.template.format(
+            self.term, ' or '.join(self.classifiers), definition)
         if prefix is not None:
             template = prefix + ' ' + template
         return template.splitlines()
 
     @property
     def template(self):
-        if self.classifier == '' and self.definition == ['']:
+        if self.classifiers == [] and self.definition == ['']:
             template = self._only_term
-        elif self.classifier == '':
+        elif self.classifiers == []:
             template = self._no_classifier
         elif self.definition == ['']:
             template = self._no_definition

@@ -51,9 +51,11 @@ class MethodItem(DefinitionItem):
 
         """
         header = lines[0].strip()
-        term, classifier, _ = signature_regex.split(header)
+        term, classifiers, _ = signature_regex.split(header)
+        classifiers = [
+            classifiers.strip() for classifier in classifiers.split()]
         definition = trim_indent(lines[1:]) if (len(lines) > 1) else ['']
-        return cls(term, classifier, definition)
+        return cls(term, classifiers, definition)
 
     def to_rst(self, columns=(0, 0)):
         """ Outputs definition in rst as a line in a table.
@@ -78,8 +80,8 @@ class MethodItem(DefinitionItem):
 
         """
         definition = ' '.join([line.strip() for line in self.definition])
-        method_role = ':meth:`{0}({1}) <{0}>`'.format(self.term,
-                                                      self.classifier)
+        method_role = ':meth:`{0}({1}) <{0}>`'.format(
+            self.term, ', '.join(self.classifiers))
         table_line = '{0:<{first}} {1:<{second}}'
 
         lines = []
@@ -90,4 +92,4 @@ class MethodItem(DefinitionItem):
 
     @property
     def signature(self):
-        return '{0}({1})'.format(self.term, self.classifier)
+        return '{0}({1})'.format(self.term, ', '.join(self.classifiers))

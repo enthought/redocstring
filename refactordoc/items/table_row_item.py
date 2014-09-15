@@ -12,9 +12,9 @@ class TableRowItem(DefinitionItem):
         Arguments
         ---------
         columns : tuple
-            The three item tuple of column widths for the term, classifier
+            The three item tuple of column widths for the term, classifiers
             and definition fields of the TableLineItem. When the column width
-            is 0 then the field
+            is 0 then the field is empty.
 
         .. note::
             - The strings attributes are clipped to the column width.
@@ -30,7 +30,7 @@ class TableRowItem(DefinitionItem):
         """
         definition = ' '.join([line.strip() for line in self.definition])
         term = self.term[:columns[0]]
-        classifier = self.classifier[:columns[1]]
+        classifiers = ', '.join(self.classifiers)[:columns[1]]
         definition = definition[:columns[2]]
 
         first_column = '' if columns[0] == 0 else '{0:<{first}} '
@@ -39,7 +39,7 @@ class TableRowItem(DefinitionItem):
         table_line = ''.join((first_column, second_column, third_column))
 
         lines = []
-        lines += [table_line.format(term, classifier, definition,
+        lines += [table_line.format(term, classifiers, definition,
                   first=columns[0], second=columns[1], third=columns[2])]
         lines += ['']
         return lines

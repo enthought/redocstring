@@ -1,7 +1,8 @@
 ﻿import abc
+from collections import namedtuple
 
 
-class Item(object):
+class Item(namedtuple('Item', ['term', 'classifiers', 'definition'])):
     """ A docstring item.
 
     The Item class is responsible to check, parse and refactor a docstring
@@ -35,11 +36,6 @@ class Item(object):
     """
 
     __metaclass__ = abc.ABCMeta
-
-    def __init__(self, term, classifiers, definition):
-        self.term = term
-        self.classifiers = classifiers
-        self.definition = definition
 
     @classmethod
     def is_item(cls, line):

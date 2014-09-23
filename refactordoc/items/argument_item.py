@@ -1,18 +1,20 @@
-from refactordoc.items.definition_item import DefinitionItem
 from refactordoc.util import add_indent, fix_star, fix_trailing_underscore
+from .definition_item import DefinitionItem
 
 
 class ArgumentItem(DefinitionItem):
     """ A definition item for function argument sections.
 
     """
-    _normal = (":param {0}:\n"
-               "{2}\n"
-               ":type {0}: {1}")
+    _normal = (
+        ":param {0}:\n"
+        "{2}\n"
+        ":type {0}: {1}")
     _no_definition = (":param {0}:\n"
                       ":type {0}: {1}")
-    _no_classifiers = (":param {0}:\n"
-                      "{2}")
+    _no_classifiers = (
+        ":param {0}:\n"
+        "{2}")
     _only_term = ":param {0}:"
 
     def to_rst(self):

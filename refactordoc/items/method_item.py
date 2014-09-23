@@ -52,8 +52,7 @@ class MethodItem(DefinitionItem):
         """
         header = lines[0].strip()
         term, classifiers, _ = signature_regex.split(header)
-        classifiers = [
-            classifiers.strip() for classifier in classifiers.split()]
+        classifiers = [classifiers.strip()]
         definition = trim_indent(lines[1:]) if (len(lines) > 1) else ['']
         return cls(term, classifiers, definition)
 
@@ -83,7 +82,6 @@ class MethodItem(DefinitionItem):
         method_role = ':meth:`{0}({1}) <{0}>`'.format(
             self.term, ', '.join(self.classifiers))
         table_line = '{0:<{first}} {1:<{second}}'
-
         lines = []
         lines += [table_line.format(method_role[:columns[0]],
                                     definition[:columns[1]], first=columns[0],

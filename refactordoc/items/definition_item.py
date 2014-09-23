@@ -1,8 +1,7 @@
-﻿import collections
-import re
+﻿import re
 
 from refactordoc.items.item import Item
-from refactordoc.util import add_indent, trim_indent, NEW_LINE
+from refactordoc.util import add_indent, trim_indent, EMPTY_LINE
 
 
 #: Regex to use for matching the header for the d
@@ -180,7 +179,7 @@ class DefinitionItem(Item):
         postfix = ' --' if (len(self.definition) > 0) else ''
         lines = []
         lines += [self.term]
-        lines += [NEW_LINE]
+        lines += [EMPTY_LINE]
         number_of_classifiers = len(self.classifiers)
         if number_of_classifiers == 1:
             lines += ['    *({0[0]})*{1}'.format(self.classifiers, postfix)]
@@ -189,5 +188,5 @@ class DefinitionItem(Item):
                 '    *({0[0]} or {0[1]})*{2}'.format(
                     self.classifiers, postfix)]
         lines += add_indent(self.definition)  # definition is all ready a list
-        lines += [NEW_LINE]
+        lines += [EMPTY_LINE]
         return lines

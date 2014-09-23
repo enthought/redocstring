@@ -1,4 +1,4 @@
-from refactordoc.items.definition_item import DefinitionItem
+﻿from refactordoc.items.definition_item import DefinitionItem
 from refactordoc.items.method_item import MethodItem
 from refactordoc.items.argument_item import ArgumentItem
 from refactordoc.items.attribute_item import AttributeItem
@@ -33,7 +33,7 @@ class TestDefinitionItem(unittest.TestCase):
 
     def test_parse(self):
         item = DefinitionItem.parse(['term', '    Definition.'])
-        self.assertEqual(item, DefinitionItem('term', [''], ['Definition.']))
+        self.assertEqual(item, DefinitionItem('term', [], ['Definition.']))
 
         item = DefinitionItem.parse([
             'term', '    Definition, paragraph 1.',
@@ -41,25 +41,25 @@ class TestDefinitionItem(unittest.TestCase):
         self.assertEqual(
             item,
             DefinitionItem(
-                'term', [''], [
+                'term', [], [
                     'Definition, paragraph 1.',
                     '',
                     'Definition, paragraph 2.']))
 
         item = DefinitionItem.parse(['term :', '    Definition.'])
-        self.assertEqual(item, DefinitionItem('term', [''], ['Definition.']))
+        self.assertEqual(item, DefinitionItem('term', [], ['Definition.']))
 
         item = DefinitionItem.parse(['term : classifier', '    Definition.'])
         self.assertEqual(
             item, DefinitionItem('term', ['classifier'], ['Definition.']))
 
-
         item = DefinitionItem.parse(
             ['term : classifier or classifier', '    Definition.'])
         self.assertEqual(
             item,
-            DefinitionItem('term',
-                ['classifier','classifier'], ['Definition.']))
+            DefinitionItem(
+                'term',
+                ['classifier', 'classifier'], ['Definition.']))
 
         item = DefinitionItem.parse(
             ['term : classifier', '    Block.', '        Definition.'])

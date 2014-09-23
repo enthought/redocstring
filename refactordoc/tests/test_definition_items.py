@@ -1,12 +1,3 @@
-﻿# -*- coding: utf-8 -*-
-#------------------------------------------------------------------------------
-#  file: test_line_functions.py
-#  License: LICENSE.TXT
-#  Author: Ioannis Tziakos
-#
-#  Copyright (c) 2011, Enthought, Inc.
-#  All rights reserved.
-#------------------------------------------------------------------------------
 from refactordoc.items.definition_item import DefinitionItem
 from refactordoc.items.method_item import MethodItem
 from refactordoc.items.argument_item import ArgumentItem

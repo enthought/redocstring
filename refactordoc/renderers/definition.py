@@ -1,0 +1,61 @@
+from refactordoc.renderers.renderer import Renderer
+from refactordoc.util import add_indent, EMPTY_LINE
+
+
+class DefinitionRenderer(Renderer):
+
+    def to_rst(self, **kwards):
+        """ Outputs the DefinitionItem in sphinx friendly rst.
+
+        The method renders the definition into a list of lines that follow
+        the rst markup of a sphinx definition item::
+
+            <term>
+
+               (<classifier(s)>) --
+               <definition>
+
+        Subclasses will usually override the method to provide custom made
+        behaviour. However the signature of the method should hold only
+        keyword arguments which have default values. The keyword arguments
+        can be used to pass addition rendering information to subclasses.
+
+        Returns
+        -------
+        lines : list
+            A list of string lines rendered in rst.
+
+        Example
+        -------
+
+        ::
+
+            >>> item = DefinitionItem('lines', 'list',
+                                ['A list of string lines rendered in rst.'])
+            >>> renderer = DefinitionRenderer(item)
+            >>> renderer.to_rst
+            lines
+
+                *(list)* --
+                A list of string lines rendered in rst.
+
+        .. note:: An empty line is added at the end of the list of strings so
+            that the results can be concatenated directly and rendered properly
+            by sphinx.
+
+
+        """
+        postfix = ' --' if (len(self.definition) > 0) else ''
+        lines = []
+        lines += [self.term]
+        lines += [EMPTY_LINE]
+        number_of_classifiers = len(self.classifiers)
+        if number_of_classifiers == 1:
+            lines += ['    *({0[0]})*{1}'.format(self.classifiers, postfix)]
+        elif number_of_classifiers == 2:
+            lines += [
+                '    *({0[0]} or {0[1]})*{2}'.format(
+                    self.classifiers, postfix)]
+        lines += add_indent(self.definition)  # definition is all ready a list
+        lines += [EMPTY_LINE]
+        return lines

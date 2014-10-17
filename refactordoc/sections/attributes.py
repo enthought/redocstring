@@ -6,15 +6,17 @@
 #  Copyright (c) 2011-14, Enthought, Inc.
 #  All rights reserved.
 # -----------------------------------------------------------------------------
-from refactordoc.items import AttributeItem
+from refactordoc.items import DefinitionItem
+from refctordoc.renderers import Attribute
 
 
-def attributes(doc, header):
+def attributes(doc, header, renderer=None, item_class=DefinitionItem):
     """Refactor the attributes section to sphinx friendly format.
 
     """
-    items = doc.extract_items(AttributeItem)
+
+    items = doc.extract_items(item_class=DefinitionItem)
     lines = []
     for item in items:
-        lines += item.to_rst()
+        lines += renderer(item).to_rst()
     return lines

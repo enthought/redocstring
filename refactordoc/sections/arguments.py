@@ -7,10 +7,11 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 # -----------------------------------------------------------------------------
-from refactordoc.items.argument_item import ArgumentItem
+from refactordoc.items import DefinitionItem
+from refactordoc.renderers.argument import Argument
 
 
-def arguments(doc, header):
+def arguments(doc, header, renderer=None, item_class=DefinitionItem):
     """ Refactor the argument section to sphinx friendly format.
 
     Arguments
@@ -20,9 +21,17 @@ def arguments(doc, header):
     header : string
         This parameter is ignored in this method.
 
+    renderer : Renderer
+        A renderer instance to render the items.
+
+    item_class : type
+        The item parser class to use. Default is :class:`~.DefinitionItem`.
+
     """
-    items = doc.extract_items(item_class=ArgumentItem)
+    items = doc.extract_items(item_class=item_class)
     lines = []
+    renderer = Argument if renderer is None else renderer
     for item in items:
-        lines += item.to_rst()
+        renderer.item = item
+        lines += renderer.to_rst()
     return lines

@@ -8,6 +8,7 @@
 # -----------------------------------------------------------------------------
 from refactordoc.items import MethodItem
 from refactordoc.sections.util import get_column_lengths
+from refactordoc.renderers import Method
 
 
 def methods_table(doc, header):
@@ -24,8 +25,9 @@ def methods_table(doc, header):
         lines += [border]
         lines += [heading]
         lines += [border]
+        renderer = Method()
         for items in items:
-            lines += items.to_rst(columns)
+            lines += renderer.to_rst(columns)
         lines += [border]
         lines += ['']
     lines = [line.rstrip() for line in lines]

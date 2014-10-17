@@ -3,21 +3,16 @@ from refactordoc.util import add_indent, fix_star, fix_trailing_underscore
 
 
 class Argument(Renderer):
-    """ A definition item for function argument sections.
+    """ Render an item as a sphinx parameter role.
 
     """
-    _normal = (
-        ":param {0}:\n"
-        "{2}\n"
-        ":type {0}: {1}")
-    _no_definition = (":param {0}:\n"
-                      ":type {0}: {1}")
-    _no_classifiers = (
-        ":param {0}:\n"
-        "{2}")
-    _only_term = ":param {0}:"
+    templates = {
+        "normal": ":param {0}:\n{2}\n:type {0}: {1}",
+        "no_definition": ":param {0}:\n:type {0}: {1}",
+        "no_classifiers": ":param {0}:\n{2}",
+        "only_term": ":param {0}:"}
 
-    def to_rst(self):
+    def to_rst(self, item):
         """ Render an item as an argument using the ``:param:``
         role.
 
@@ -26,11 +21,11 @@ class Argument(Renderer):
 
         ::
 
-            >>> item = DefinitionItem('indent', 'int',
+            >>> item = Item('indent', 'int',
             ... ['The indent to use for the description block.',
                  ''
                  'This is the second paragraph of the argument definition.'])
-            >>> renderer = ArgumentRenderer(item)
+            >>> renderer = Argument(item)
             >>> renderer.to_rst()
             :param indent:
                 The indent to use for the description block.
@@ -43,21 +38,11 @@ class Argument(Renderer):
             method.
 
         """
-        argument = fix_star(self.term)
+        item = self.item
+        argument = fix_star(item.term)
         argument = fix_trailing_underscore(argument)
-        argument_types = ' or '.join(self.classifiers)
-        definition = '\n'.join(add_indent(self.definition))
-        template = self.template.format(argument, argument_types, definition)
+        argument_types = ' or '.join(item.classifiers)
+        definition = '\n'.join(add_indent(item.definition))
+        template = self.templates[item.mode].format(
+            argument, argument_types, definition)
         return template.splitlines()
-
-    @property
-    def template(self):
-        if self.classifiers == [] and self.definition == ['']:
-            template = self._only_term
-        elif self.classifiers == []:
-            template = self._no_classifiers
-        elif self.definition == ['']:
-            template = self._no_definition
-        else:
-            template = self._normal
-        return template

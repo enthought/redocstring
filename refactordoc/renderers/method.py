@@ -11,10 +11,10 @@ class Method(Renderer):
         Arguments
         ---------
         columns : tuple
-            The two item tuple of column widths for the :meth: role column
+            The two item tuple of column widths for the `:meth:` role column
             and the definition (i.e. summary) of the MethodItem
 
-        .. note:: The strings attributes are clipped to the column width.
+        .. note:: The string attributes are clipped to the column width.
 
         Example
         -------
@@ -28,16 +28,13 @@ class Method(Renderer):
             :meth:`function <function(arg1, arg2)>` This is the best fun
 
         """
-        definition = ' '.join([line.strip() for line in self.definition])
+        item = self.item
+        definition = ' '.join([line.strip() for line in item.definition])
         method_role = ':meth:`{0}({1}) <{0}>`'.format(
-            self.term, ', '.join(self.classifiers))
+            self.term, ', '.join(item.classifiers))
         table_line = '{0:<{first}} {1:<{second}}'
         lines = []
         lines += [table_line.format(method_role[:columns[0]],
                                     definition[:columns[1]], first=columns[0],
                                     second=columns[1])]
         return lines
-
-    @property
-    def signature(self):
-        return '{0}({1})'.format(self.term, ', '.join(self.classifiers))

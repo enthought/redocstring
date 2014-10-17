@@ -35,7 +35,19 @@ class Item(namedtuple('Item', ['term', 'classifiers', 'definition'])):
 
     """
 
-    __metaclass__ = abc.ABCMeta
+    @property
+    def mode(self):
+        """ The operational mode of the item based on the available info.
+        """
+        if self.classifiers == [] and self.definition == ['']:
+            mode = 'only_term'
+        elif self.classifiers == []:
+            mode = 'no_classifiers'
+        elif self.definition == ['']:
+            mode = 'no_definition'
+        else:
+            mode = 'full'
+        return mode
 
     @classmethod
     def is_item(cls, line):
@@ -43,13 +55,6 @@ class Item(namedtuple('Item', ['term', 'classifiers', 'definition'])):
 
         The method is used to check that a line is following the expected
         format for the term and classifiers attributes.
-
-        """
-        raise NotImplementedError()
-
-    @classmethod
-    def header_split(cls, line):
-        """ Splits the header line into term and one or more classifiers.
 
         """
         raise NotImplementedError()
@@ -75,21 +80,3 @@ class Item(namedtuple('Item', ['term', 'classifiers', 'definition'])):
 
         """
         raise NotImplementedError()
-
-    @abc.abstractmethod
-    def to_rst(self, **kwards):
-        """ Outputs the Definition in sphinx friendly rst.
-
-        The method renders the definition into a list of lines that follow
-        the rst markup.
-
-        Subclasses need to override the method to provide their custom made
-        behaviour. However the signature of the method should hold only
-        keyword arguments which always have default values.
-
-        Returns
-        -------
-        lines : list
-            A list of string lines rendered in rst.
-
-        """

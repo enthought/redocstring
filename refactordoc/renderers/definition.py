@@ -2,7 +2,7 @@ from refactordoc.renderers.renderer import Renderer
 from refactordoc.util import add_indent, EMPTY_LINE
 
 
-class DefinitionRenderer(Renderer):
+class Definition(Renderer):
 
     def to_rst(self, **kwards):
         """ Outputs the DefinitionItem in sphinx friendly rst.
@@ -32,7 +32,7 @@ class DefinitionRenderer(Renderer):
 
             >>> item = DefinitionItem('lines', 'list',
                                 ['A list of string lines rendered in rst.'])
-            >>> renderer = DefinitionRenderer(item)
+            >>> renderer = Definition(item)
             >>> renderer.to_rst
             lines
 
@@ -45,17 +45,18 @@ class DefinitionRenderer(Renderer):
 
 
         """
-        postfix = ' --' if (len(self.definition) > 0) else ''
+        item = self.item
+        postfix = ' --' if (len(item.definition) > 0) else ''
         lines = []
-        lines += [self.term]
+        lines += [item.term]
         lines += [EMPTY_LINE]
-        number_of_classifiers = len(self.classifiers)
+        number_of_classifiers = len(item.classifiers)
         if number_of_classifiers == 1:
-            lines += ['    *({0[0]})*{1}'.format(self.classifiers, postfix)]
+            lines += ['    *({0[0]})*{1}'.format(item.classifiers, postfix)]
         elif number_of_classifiers == 2:
             lines += [
                 '    *({0[0]} or {0[1]})*{2}'.format(
-                    self.classifiers, postfix)]
-        lines += add_indent(self.definition)  # definition is all ready a list
+                    item.classifiers, postfix)]
+        lines += add_indent(item.definition)  # definition is already a list
         lines += [EMPTY_LINE]
         return lines

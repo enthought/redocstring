@@ -6,17 +6,14 @@ class Attribute(Renderer):
     """ Definition that renders the rst output using the attribute directive.
 
     """
-    _normal = (".. attribute:: {0}\n"
-               "    :annotation: = {1}\n"
-               "\n"
-               "{2}\n\n")
-    _no_definition = (".. attribute:: {0}\n"
-                      "    :annotation: = {1}\n\n")
-    _no_classifier = (".. attribute:: {0}\n\n"
-                      "{2}\n\n")
-    _only_term = ".. attribute:: {0}\n\n"
 
-    def to_rst(self, ):
+    templates = {
+        "normal": ".. attribute:: {0}\n    :annotation: = {1}\n\n{2}\n\n",
+        "no_definition": ".. attribute:: {0}\n    :annotation: = {1}\n\n",
+        "no_classifier": ".. attribute:: {0}\n\n{2}\n\n",
+        "only_term": ".. attribute:: {0}\n\n"}
+
+    def to_rst(self):
         """ Return the attribute info using the attribute sphinx markup.
 
         Examples
@@ -24,9 +21,9 @@ class Attribute(Renderer):
 
         ::
 
-            >>> item = AttributeItem('indent', 'int',
+            >>> item = Item('indent', 'int',
             ... ['The indent to use for the description block.'])
-            >>> item.to_rst()
+            >>> Attribute(item).to_rst()
             .. attribute:: indent
                 :annotation: = int
 
@@ -35,9 +32,9 @@ class Attribute(Renderer):
 
         ::
 
-            >>> item = AttributeItem('indent', '',
+            >>> item = Item('indent', '',
             ... ['The indent to use for the description block.'])
-            >>> item.to_rst()
+            >>> Attribute(item).to_rst()
             .. attribute:: indent
 
                 The indent to use for the description block
@@ -48,19 +45,8 @@ class Attribute(Renderer):
             by sphinx.
 
         """
-        definition = '\n'.join(add_indent(self.definition))
-        template = self.template.format(
-            self.term, ' or '.join(self.classifiers), definition)
+        item = self.item
+        definition = '\n'.join(add_indent(item.definition))
+        template = self.templates[item.mode].format(
+            item.term, ' or '.join(item.classifiers), definition)
         return template.splitlines()
-
-    @property
-    def template(self):
-        if self.classifiers == [] and self.definition == ['']:
-            template = self._only_term
-        elif self.classifiers == []:
-            template = self._no_classifier
-        elif self.definition == ['']:
-            template = self._no_definition
-        else:
-            template = self._normal
-        return template

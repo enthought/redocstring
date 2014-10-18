@@ -10,13 +10,15 @@ from refactordoc.items import DefinitionItem
 from refctordoc.renderers import Attribute
 
 
-def attributes(doc, header, renderer=None, item_class=DefinitionItem):
+def attributes(doc, header, renderer=Attribute, item_class=DefinitionItem):
     """Refactor the attributes section to sphinx friendly format.
 
     """
 
-    items = doc.extract_items(item_class=DefinitionItem)
+    items = doc.extract_items(item_class)
     lines = []
+    renderer = renderer()
     for item in items:
-        lines += renderer(item).to_rst()
+        renderer.item = item
+        lines += renderer.to_rst()
     return lines

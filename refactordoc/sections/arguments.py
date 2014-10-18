@@ -11,7 +11,7 @@ from refactordoc.items import DefinitionItem
 from refactordoc.renderers.argument import Argument
 
 
-def arguments(doc, header, renderer=None, item_class=DefinitionItem):
+def arguments(doc, header, renderer=Argument, item_class=DefinitionItem):
     """ Refactor the argument section to sphinx friendly format.
 
     Arguments
@@ -28,9 +28,9 @@ def arguments(doc, header, renderer=None, item_class=DefinitionItem):
         The item parser class to use. Default is :class:`~.DefinitionItem`.
 
     """
-    items = doc.extract_items(item_class=item_class)
+    items = doc.extract_items(item_class)
     lines = []
-    renderer = Argument if renderer is None else renderer
+    renderer = renderer()
     for item in items:
         renderer.item = item
         lines += renderer.to_rst()

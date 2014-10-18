@@ -9,7 +9,7 @@
 from refactordoc.util import fix_backspace, EMPTY_LINE
 
 
-def rubric(doc, header):
+def rubric(doc, header, renderer=None, item_class=None):
     """ Refactor a header section using the rubric directive.
 
     The method supports refactoring of single word headers, two word headers

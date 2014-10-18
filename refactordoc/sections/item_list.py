@@ -12,7 +12,7 @@ from refactordoc.items import DefinitionItem
 from refactordoc.renderers import ListItem
 
 
-def item_list(doc, header, renderer=None, item_class=DefinitionItem):
+def item_list(doc, header, renderer=ListItem, item_class=DefinitionItem):
     """ Refactor the section to sphinx friendly item list.
 
     Arguments
@@ -30,10 +30,10 @@ def item_list(doc, header, renderer=None, item_class=DefinitionItem):
         The item parser class to use. Default is :class:`~.DefinitionItem`.
 
     """
-    items = doc.extract_items(item_class=item_class)
+    items = doc.extract_items(item_class)
     lines = [':{0}:'.format(header.lower())]
     prefix = None if len(items) == 1 else '-'
-    renderer = ListItem if renderer is None else renderer
+    renderer = renderer()
     for item in items:
         renderer.item = item
         lines += add_indent(renderer.to_rst(prefix))

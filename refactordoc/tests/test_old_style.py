@@ -1,16 +1,9 @@
 # -*- coding: utf-8 -*-
-#------------------------------------------------------------------------------
-#  file: test_class_doc.py
-#  License: LICENSE.TXT
-#
-#  Copyright (c) 2011, Enthought, Inc.
-#  All rights reserved.
-#------------------------------------------------------------------------------
-from refactordoc.class_doc import ClassDoc
-from ._compat import unittest
+from refactordoc.styles.old_style import refactor_class
+from refactordoc.tests._compat import unittest
 
 
-class TestClassDoc(unittest.TestCase):
+class TestOldStyleClass(unittest.TestCase):
 
     def setUp(self):
         self.maxDiff = None
@@ -55,13 +48,13 @@ the methods responsible for refactoring the sections.
 """
 
         docstring_lines = docstring.splitlines()
-        class_doc = ClassDoc(docstring_lines)
+        class_doc = refactor_class(docstring_lines)
         class_doc.parse()
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
 
     def test_refactor_methods(self):
-        docstring =\
+        docstring = \
             """ This is a sample class docstring
 
 Methods
@@ -91,7 +84,7 @@ Method                                                               Description
 """
 
         docstring_lines = docstring.splitlines()
-        class_doc = ClassDoc(docstring_lines)
+        class_doc = refactor_class(docstring_lines)
         class_doc.parse()
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
@@ -131,13 +124,13 @@ This is not a note.
 """
 
         docstring_lines = docstring1.splitlines()
-        class_doc = ClassDoc(docstring_lines)
+        class_doc = refactor_class(docstring_lines)
         class_doc.parse()
         output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)
 
         docstring_lines = docstring2.splitlines()
-        class_doc = ClassDoc(docstring_lines)
+        class_doc = refactor_class(docstring_lines)
         class_doc.parse()
         output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)

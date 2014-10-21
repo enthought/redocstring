@@ -1,8 +1,8 @@
-from refactordoc.items.definition_item import DefinitionItem
+from refactordoc.renderers.renderer import Renderer
 
 
-class TableRowItem(DefinitionItem):
-    """ A Definition Item that represents a table line.
+class TableRow(Renderer):
+    """ Render an Item that represents a table line.
 
     """
 
@@ -12,9 +12,9 @@ class TableRowItem(DefinitionItem):
         Arguments
         ---------
         columns : tuple
-            The three item tuple of column widths for the term, classifier
+            The three item tuple of column widths for the term, classifiers
             and definition fields of the TableLineItem. When the column width
-            is 0 then the field
+            is 0 then the field is ignored.
 
         .. note::
             - The strings attributes are clipped to the column width.
@@ -22,15 +22,16 @@ class TableRowItem(DefinitionItem):
         Example
         -------
 
-        >>> item = TableRowItem('function(arg1, arg2)', '',
+        >>> item = Item('function(arg1, arg2)', '',
         ... ['This is the best function ever.'])
-        >>> item.to_rst(columns=(22, 0, 20))
+        >>> TableRow(item).to_rst(columns=(22, 0, 20))
         function(arg1, arg2)   This is the best fun
 
         """
-        definition = ' '.join([line.strip() for line in self.definition])
-        term = self.term[:columns[0]]
-        classifier = self.classifier[:columns[1]]
+        item = self.item
+        definition = ' '.join([line.strip() for line in item.definition])
+        term = item.term[:columns[0]]
+        classifiers = ', '.join(item.classifiers)[:columns[1]]
         definition = definition[:columns[2]]
 
         first_column = '' if columns[0] == 0 else '{0:<{first}} '
@@ -39,7 +40,7 @@ class TableRowItem(DefinitionItem):
         table_line = ''.join((first_column, second_column, third_column))
 
         lines = []
-        lines += [table_line.format(term, classifier, definition,
+        lines += [table_line.format(term, classifiers, definition,
                   first=columns[0], second=columns[1], third=columns[2])]
         lines += ['']
         return lines

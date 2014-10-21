@@ -1,35 +1,9 @@
-﻿import collections
-import re
+﻿from refactordoc.items.regex import definition_regex, header_regex
+from refactordoc.items.item import Item
+from refactordoc.util import trim_indent
 
 
-from refactordoc.util import add_indent, trim_indent, NEW_LINE
-
-
-#: Regex to use for matching the header for the d
-header_regex = re.compile(r'\s:\s?')
-
-#:
-definition_regex = re.compile(r"""
-\*{0,2}            #  no, one or two stars
-\w+\s:             #  a word followed by a semicolumn and optionally a space
-(
-        \s         # just a space
-    |              # OR
-        \s[\w.]+   # dot separated words
-        (\(.*\))?  # with maybe a signature
-    |
-        \s[\w.]+   # dot separated words
-        (\(.*\))?
-        \sor       # with an or in between
-        \s[\w.]+
-        (\(.*\))?
-)?
-$                  # match at the end of the line
-""", re.VERBOSE)
-
-
-class DefinitionItem(collections.namedtuple(
-        'DefinitionItem', ('term', 'classifier', 'definition'))):
+class DefinitionItem(Item):
     """ A docstring definition item
 
     Syntax diagram::
@@ -50,8 +24,8 @@ class DefinitionItem(collections.namedtuple(
     term : str
         The term usually reflects the name of a parameter or an attribute.
 
-    classifier: str
-        The classifier of the definition. Commonly used to reflect the type
+    classifiers: list
+        The classifiers of the definition. Commonly used to reflect the type
         of an argument or the signature of a function.
 
         .. note:: Currently only one classifier is supported.
@@ -66,7 +40,7 @@ class DefinitionItem(collections.namedtuple(
     """
 
     @classmethod
-    def is_definition(cls, line):
+    def is_item(cls, line):
         """ Check if the line is describing a definition item.
 
         The method is used to check that a line is following the expected
@@ -110,6 +84,11 @@ class DefinitionItem(collections.namedtuple(
             term : classifier
                 Definition.
 
+        ::
+
+            term : classifier or classifier
+                Definition.
+
         Arguments
         ---------
         lines
@@ -122,58 +101,12 @@ class DefinitionItem(collections.namedtuple(
 
         """
         header = lines[0].strip()
-        term, classifier = header_regex.split(
+        term, classifiers = header_regex.split(
             header, maxsplit=1) if (' :' in header) else (header, '')
+        classifiers = [
+            classifier.strip() for classifier in classifiers.split('or')]
+        if classifiers == ['']:
+            classifiers = []
         trimed_lines = trim_indent(lines[1:]) if (len(lines) > 1) else ['']
         definition = [line.rstrip() for line in trimed_lines]
-        return cls(term.strip(), classifier.strip(), definition)
-
-    def to_rst(self, **kwards):
-        """ Outputs the Definition in sphinx friendly rst.
-
-        The method renders the definition into a list of lines that follow
-        the rst markup. The default behaviour is to render the definition
-        as an sphinx definition item::
-
-            <term>
-
-               (<classifier>) --
-               <definition>
-
-        Subclasses will usually override the method to provide custom made
-        behaviour. However the signature of the method should hold only
-        keyword arguments which have default values. The keyword arguments
-        can be used to pass addition rendering information to subclasses.
-
-        Returns
-        -------
-        lines : list
-            A list of string lines rendered in rst.
-
-        Example
-        -------
-
-        ::
-
-            >>> item = DefinitionItem('lines', 'list',
-                                ['A list of string lines rendered in rst.'])
-            >>> item.to_rst()
-            lines
-
-                *(list)* --
-                A list of string lines rendered in rst.
-
-        .. note:: An empty line is added at the end of the list of strings so
-            that the results can be concatenated directly and rendered properly
-            by sphinx.
-
-
-        """
-        postfix = ' --' if (len(self.definition) > 0) else ''
-        lines = []
-        lines += [self.term]
-        lines += [NEW_LINE]
-        lines += ['    *({0})*{1}'.format(self.classifier, postfix)]
-        lines += add_indent(self.definition)  # definition is all ready a list
-        lines += [NEW_LINE]
-        return lines
+        return Item(term.strip(), classifiers, definition)

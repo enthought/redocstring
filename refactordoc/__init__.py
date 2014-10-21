@@ -1,35 +1,15 @@
-#------------------------------------------------------------------------------
-#  file: refactor_doc.py
+# -----------------------------------------------------------------------------
+#  file: __init__.py
 #  License: LICENSE.TXT
 #
-#  Copyright (c) 2011, Enthought, Inc.
+#  Copyright (c) 2011-2014, Enthought, Inc.
 #  All rights reserved.
-#------------------------------------------------------------------------------
-from refactordoc.function_doc import FunctionDoc
-from refactordoc.class_doc import ClassDoc
+# -----------------------------------------------------------------------------
+__all__ = ['__version__', 'setup']
 
 try:  # pragma: no cover
-    from ._version import full_version as __version__
+    from refactordoc._version import full_version as __version__
 except ImportError:  # pragma: no cover
     __version__ = "not-built"
 
-
-#------------------------------------------------------------------------------
-# Extension definition
-#------------------------------------------------------------------------------
-
-def refactor_docstring(app, what, name, obj, options, lines):
-
-    refactor = None
-    if 'class' in what:
-        refactor = ClassDoc(lines)
-    elif 'function' in what or 'method' in what:
-        refactor = FunctionDoc(lines)
-
-    if refactor is not None:
-        refactor.parse()
-
-
-def setup(app):
-    app.setup_extension('sphinx.ext.autodoc')
-    app.connect('autodoc-process-docstring', refactor_docstring)
+from refactordoc.styles.old_style import setup

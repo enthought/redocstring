@@ -1,24 +1,20 @@
 # -*- coding: utf-8 -*-
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #  file: base_doc.py
 #  License: LICENSE.TXT
 #
-#  Copyright (c) 2011, Enthought, Inc.
+#  Copyright (c) 2011-14, Enthought, Inc.
 #  All rights reserved.
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 import re
 
 from refactordoc.items.definition_item import DefinitionItem
-from refactordoc.util import (
-    is_empty, get_indent, fix_backspace, NEW_LINE)
+from refactordoc.util import is_empty, get_indent
+from refactordoc.sections import rubric
 
 
 underline_regex = re.compile(r'\s*\S+\s*\Z')
 
-
-#------------------------------------------------------------------------------
-#  Classes
-#------------------------------------------------------------------------------
 
 class BaseDoc(object):
     """Base abstract docstring refactoring class.
@@ -50,7 +46,7 @@ class BaseDoc(object):
 
     """
 
-    def __init__(self, lines, headers=None):
+    def __init__(self, lines, sections=None):
         """ Initialize the class
 
         The method setups the class attributes and starts parsing the
@@ -65,16 +61,15 @@ class BaseDoc(object):
             The sections for which the class has custom refactor methods.
             Each entry in the dictionary should have as key the name of
             the section in the form that it appears in the docstrings.
-            The value should be the postfix of the method, in the
-            subclasses, that is responsible for refactoring (e.g.
-            {'Methods': 'method'}).
+            The value should be a callable, which be responsible for rendering
+            the header (e.g. {'Methods': method}).
 
         """
         try:
             self._docstring = lines.splitlines()
         except AttributeError:
             self._docstring = lines
-        self.headers = {} if headers is None else headers
+        self.sections = {} if sections is None else sections
         self.bookmarks = []
 
     def parse(self):
@@ -87,68 +82,42 @@ class BaseDoc(object):
         self.index = 0
         self.seek_to_next_non_empty_line()
         while not self.eod:
-            header = self.is_section()
-            if header:
-                self._refactor(header)
+            section = self.is_section()
+            if len(section) > 0:
+                self._refactor(section)
             else:
                 self.index += 1
                 self.seek_to_next_non_empty_line()
 
-    def _refactor(self, header):
+    def _refactor(self, section):
         """Call the heading refactor method.
 
         The header is removed from the docstring and the docstring
         refactoring is dispatched to the appropriate refactoring method.
 
-        The name of the refactoring method is constructed using the form
-        _refactor_<header>. Where <header> is the value corresponding to
-        ``self.headers[header]``. If there is no custom method for the
-        section then the self._refactor_header() is called with the
-        found header name as input.
-
         """
         self.remove_lines(self.index, 2)  # Remove header
         self.remove_if_empty(self.index)  # Remove space after header
-        refactor_postfix = self.headers.get(header, 'header')
-        method_name = ''.join(('_refactor_', refactor_postfix))
-        method = getattr(self, method_name)
-        lines = method(header)
+        method, renderer, item_class = self.sections.get(
+            section, (rubric, None, None))
+        lines = method(self, section, renderer, item_class)
         self.insert_and_move(lines, self.index)
 
-    def _refactor_header(self, header):
-        """ Refactor the header section using the rubric directive.
-
-        The method has been tested and supports refactoring single word
-        headers, two word headers and headers that include a backslash
-        ''\''.
-
-        Arguments
-        ---------
-        header : string
-            The header string to use with the rubric directive.
-
-        """
-        header = fix_backspace(header)
-        directive = '.. rubric:: {0}'.format(header)
-        lines = []
-        lines += [directive, NEW_LINE]
-        return lines
-
-    def extract_items(self, item_class=None):
+    def extract_items(self, item_class):
         """ Extract the definition items from a docstring.
 
         Parse the items in the description of a section into items of the
-        provided class time. Given a DefinitionItem or a subclass defined by
-        the ``item_class`` parameter. Staring from the current index position,
-        the method checks if in the next two lines a valid  header exists.
-        If successful, then the lines that belong to the item description
-        block (i.e. header + definition) are popped out from the docstring
-        and passed to the ``item_class`` parser and create an instance of
+        provided class time. Given an Item or a subclass defined by
+        the ``item_class`` parameter. The method starts at the current index
+        position and checks if in the next two lines a valid  header exists.
+        If successful, the lines that belong to the item description
+        block (i.e. item header + item body) are popped out from the docstring
+        and passed to the ``item_class`` parser to get an instance of
         ``item_class``.
 
         The process is repeated until there is no compatible ``item_class``
-        found or we run out of docstring. Then the method returns a list of
-        item_class instances.
+        found or we run out of docstring lines, The collected item class
+        instances are return.
 
         The exit conditions allow for two valid section item layouts:
 
@@ -174,21 +143,20 @@ class BaseDoc(object):
 
         Arguments
         ---------
-        item_class : DefinitionItem
-            A DefinitionItem or a subclass. This argument is used to check
+        item_class : Item
+            An Item or a subclass. This argument is used to check
             if a line in the docstring is a valid item and to parse the
-            individual list items in the section. When ``None`` (default) the
-            base DefinitionItem class is used.
+            individual list items in the section.
 
 
         Returns
         -------
         parameters : list
-            List of the parsed item instances of ``item_class`` type.
+            List of the collected item instances of :class:`~.Item` type.
 
         """
         item_type = DefinitionItem if (item_class is None) else item_class
-        is_item = item_type.is_definition
+        is_item = item_type.is_item
         item_blocks = []
         while (not self.eod) and \
                 (is_item(self.peek()) or is_item(self.peek(1))):
@@ -201,8 +169,8 @@ class BaseDoc(object):
         """ Get the next item block from the docstring.
 
         The method reads the next item block in the docstring. The first line
-        is assumed to be the DefinitionItem header and the following lines to
-        belong to the definition::
+        is assumed to be the Item header and the following lines to
+        belong to the definition body::
 
             <header line>
                 <definition>
@@ -217,9 +185,9 @@ class BaseDoc(object):
         while not self.eod:
             peek_0 = self.peek()
             peek_1 = self.peek(1)
-            if is_empty(peek_0) and not peek_1.startswith(sub_indent) \
-                    or not is_empty(peek_0) \
-                    and not peek_0.startswith(sub_indent):
+            if is_empty(peek_0) and not peek_1.startswith(sub_indent):
+                break
+            elif not is_empty(peek_0) and not peek_0.startswith(sub_indent):
                 break
             else:
                 line = self.pop()
@@ -241,7 +209,7 @@ class BaseDoc(object):
         # check for underline type format
         underline = underline_regex.match(line2)
         if underline is None:
-            return False
+            return ''
         # is the next line an rst section underline?
         striped_header = header.rstrip()
         expected_underline1 = re.sub(r'[A-Za-z\\]|\b\s', '-', striped_header)
@@ -251,7 +219,7 @@ class BaseDoc(object):
                 (underline.group().rstrip() == expected_underline2)):
             return header.strip()
         else:
-            return False
+            return ''
 
     def insert_lines(self, lines, index):
         """ Insert refactored lines
@@ -364,7 +332,7 @@ class BaseDoc(object):
         """ Pop a line from the dostrings.
 
         """
-        index = self.index if (index is None) else index
+        index = self.index if index is None else index
         return self._docstring.pop(index)
 
     @property

@@ -2,9 +2,9 @@ language: python
 matrix:
   include:
     - python: "2.6"
-      env: REQUIREMENTS=test_requirements.txt
+      env: REQUIREMENTS=python2_test_requirements.txt
     - python: "2.7"
-      env: REQUIREMENTS=test_requirements.txt
+      env: REQUIREMENTS=python2_test_requirements.txt
     - python: "3.2"
       env: REQUIREMENTS=python3_test_requirements.txt
     - python: "3.3"
@@ -12,7 +12,7 @@ matrix:
     - python: "3.4"
       env: REQUIREMENTS=python3_test_requirements.txt
 
-before_install:
+install:
   - pip install -r $REQUIREMENTS
   - python setup.py develop
 script:

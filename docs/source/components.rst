@@ -27,8 +27,7 @@ parsed.
 Definition list
 ^^^^^^^^^^^^^^^
 
- Two of the most common formats are described
-bellow:
+Two of the most common formats are described bellow:
 
 The *standard definition item* format is based on the item of a variation
 of the definition list item as it defined in `restructured text

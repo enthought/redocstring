@@ -1,40 +1,29 @@
 Library Reference
 =================
 
-The extension is separated into three main parts.
-
-Sphinx extension
-----------------
-
-.. automodule:: refactordoc
-    :members:
+The extension is separated into four main parts.
 
 
-Refactor classes
-----------------
+.. default-role:: autolink
 
-.. automodule:: refactordoc.base_doc
-    :members:
-
-.. automodule:: refactordoc.function_doc
-    :members:
-    :private-members:
-
-.. automodule:: refactordoc.class_doc
-    :members:
-    :private-members:
-
-Definition items
-----------------
-
-.. automodule:: refactordoc.definition_items
-    :members:
+.. currentmodule:: refactordoc
 
 
-Line functions
---------------
+Sections
+--------
 
-.. automodule:: refactordoc.line_functions
-    :members:
+.. automodule:: refactordoc.sections
+   :members:
 
 
+Items
+-----
+
+.. automodule:: refactordoc.items
+   :members:
+
+Renderers
+---------
+
+.. automodule:: refactordoc.renderers
+   :members:

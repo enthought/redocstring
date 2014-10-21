@@ -8,9 +8,9 @@ class Attribute(Renderer):
     """
 
     templates = {
-        "normal": ".. attribute:: {0}\n    :annotation: = {1}\n\n{2}\n\n",
+        "full": ".. attribute:: {0}\n    :annotation: = {1}\n\n{2}\n\n",
         "no_definition": ".. attribute:: {0}\n    :annotation: = {1}\n\n",
-        "no_classifier": ".. attribute:: {0}\n\n{2}\n\n",
+        "no_classifiers": ".. attribute:: {0}\n\n{2}\n\n",
         "only_term": ".. attribute:: {0}\n\n"}
 
     def to_rst(self):

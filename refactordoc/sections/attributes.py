@@ -7,7 +7,7 @@
 #  All rights reserved.
 # -----------------------------------------------------------------------------
 from refactordoc.items import DefinitionItem
-from refctordoc.renderers import Attribute
+from refactordoc.renderers import Attribute
 
 
 def attributes(doc, header, renderer=Attribute, item_class=DefinitionItem):

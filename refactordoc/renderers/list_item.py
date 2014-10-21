@@ -11,7 +11,7 @@ class ListItem(Renderer):
         "full": "**{0}** (*{1}*) --\n{2}\n\n",
         "only_term": "**{0}**\n\n",
         "no_definition": "**{0}** (*{1}*)\n\n",
-        "no_classifier": "**{0}** --\n{2}\n\n"}
+        "no_classifiers": "**{0}** --\n{2}\n\n"}
 
     def to_rst(self, prefix=None):
         """ Renders an item as items in an rst list.

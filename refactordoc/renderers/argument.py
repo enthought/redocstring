@@ -1,4 +1,4 @@
-from refactordoc.renderer.renderer import Renderer
+from refactordoc.renderers.renderer import Renderer
 from refactordoc.util import add_indent, fix_star, fix_trailing_underscore
 
 
@@ -7,12 +7,12 @@ class Argument(Renderer):
 
     """
     templates = {
-        "normal": ":param {0}:\n{2}\n:type {0}: {1}",
+        "full": ":param {0}:\n{2}\n:type {0}: {1}",
         "no_definition": ":param {0}:\n:type {0}: {1}",
         "no_classifiers": ":param {0}:\n{2}",
         "only_term": ":param {0}:"}
 
-    def to_rst(self, item):
+    def to_rst(self):
         """ Render an item as an argument using the ``:param:``
         role.
 

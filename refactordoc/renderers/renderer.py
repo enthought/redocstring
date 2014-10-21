@@ -5,7 +5,7 @@ class Renderer(object):
     """ An item renderer.
     """
 
-    def __init__(self, item):
+    def __init__(self, item=None):
         self.item = item
 
     @abc.abstractmethod

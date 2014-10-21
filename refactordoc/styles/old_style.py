@@ -1,31 +1,29 @@
 from refactordoc.base_doc import BaseDoc
 from refactordoc.sections import (
     attributes, methods_table, notes_paragraph, item_list, arguments)
-
-# -----------------------------------------------------------------------------
-# Extension definition
-# -----------------------------------------------------------------------------
+from refactordoc.renderers import Attribute, Method, Argument, ListItem
+from refactordoc.items import DefinitionItem, MethodItem
 
 
 def refactor_class(lines):
     return BaseDoc(
         lines,
         sections={
-            'Attributes': attributes,
-            'Methods': methods_table,
-            'Notes': notes_paragraph})
+            'Attributes': (attributes, Attribute, DefinitionItem),
+            'Methods': (methods_table, Method, MethodItem),
+            'Notes': (notes_paragraph, None, None)})
 
 
 def refactor_function(lines):
     return BaseDoc(
         lines,
         sections={
-            'Returns': item_list,
-            'Arguments': arguments,
-            'Parameters': arguments,
-            'Raises': item_list,
-            'Yields': item_list,
-            'Notes': notes_paragraph})
+            'Returns': (item_list, ListItem, DefinitionItem),
+            'Arguments': (arguments, Argument, DefinitionItem),
+            'Parameters': (arguments, Argument, DefinitionItem),
+            'Raises': (item_list, ListItem, DefinitionItem),
+            'Yields': (item_list, ListItem, DefinitionItem),
+            'Notes': (notes_paragraph, None, None)})
 
 
 def refactor_docstring(app, what, name, obj, options, lines):

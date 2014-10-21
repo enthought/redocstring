@@ -11,11 +11,11 @@ from refactordoc.sections.util import get_column_lengths
 from refactordoc.renderers import Method
 
 
-def methods_table(doc, header):
+def methods_table(doc, header, renderer=Method, item_class=MethodItem):
     """Refactor the methods section to sphinx friendly table format.
 
     """
-    items = doc.extract_items(MethodItem)
+    items = doc.extract_items(item_class)
     lines = []
     if len(items) > 0:
         columns = get_column_lengths(items)
@@ -26,7 +26,8 @@ def methods_table(doc, header):
         lines += [heading]
         lines += [border]
         renderer = Method()
-        for items in items:
+        for item in items:
+            renderer.item = item
             lines += renderer.to_rst(columns)
         lines += [border]
         lines += ['']

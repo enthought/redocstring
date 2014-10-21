@@ -1,4 +1,4 @@
-from refactordoc.rendirexderers.renderer import Renderer
+from refactordoc.renderers.renderer import Renderer
 
 
 class TableRow(Renderer):

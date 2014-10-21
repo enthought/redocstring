@@ -98,8 +98,9 @@ class BaseDoc(object):
         """
         self.remove_lines(self.index, 2)  # Remove header
         self.remove_if_empty(self.index)  # Remove space after header
-        method = self.sections.get(section, rubric)
-        lines = method(self, section)
+        method, renderer, item_class = self.sections.get(
+            section, (rubric, None, None))
+        lines = method(self, section, renderer, item_class)
         self.insert_and_move(lines, self.index)
 
     def extract_items(self, item_class):
@@ -155,7 +156,7 @@ class BaseDoc(object):
 
         """
         item_type = DefinitionItem if (item_class is None) else item_class
-        is_item = item_type.is_definition
+        is_item = item_type.is_item
         item_blocks = []
         while (not self.eod) and \
                 (is_item(self.peek()) or is_item(self.peek(1))):

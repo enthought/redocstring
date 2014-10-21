@@ -31,7 +31,7 @@ class Method(Renderer):
         item = self.item
         definition = ' '.join([line.strip() for line in item.definition])
         method_role = ':meth:`{0}({1}) <{0}>`'.format(
-            self.term, ', '.join(item.classifiers))
+            item.term, ', '.join(item.classifiers))
         table_line = '{0:<{first}} {1:<{second}}'
         lines = []
         lines += [table_line.format(method_role[:columns[0]],

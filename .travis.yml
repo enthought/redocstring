@@ -14,7 +14,7 @@ matrix:
 
 before_install:
   - pip install -r $REQUIREMENTS
-  - pip python setup.py develop
+  - python setup.py develop
 script:
   - coverage run -m haas -v
   - coverage report -m

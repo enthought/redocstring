@@ -12,4 +12,12 @@ try:  # pragma: no cover
 except ImportError:  # pragma: no cover
     __version__ = "not-built"
 
-from refactordoc.styles.old_style import setup
+
+def setup(app):
+    import warnings
+    from refactordoc.styles.old_style import setup
+    warnings.warn(
+        "This entry-point will be removed in the next release"
+        "Please use 'reafactordoc.styles.old_style' in conf.py",
+        DeprecationWarning)
+    setup(app)

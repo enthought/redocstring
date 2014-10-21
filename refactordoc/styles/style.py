@@ -4,7 +4,7 @@ class Style(object):
         self.refactoring_map = refactoring_map
 
     def refactor_docstring(self, app, what, name, obj, options, lines):
-        docstring_renderer = self.refactoring_map.get(what, None)
-        if docstring_renderer is not None:
-            docstring_renderer(lines)
+        renderer_factory = self.refactoring_map.get(what, None)
+        if renderer_factory is not None:
+            docstring_renderer = renderer_factory(lines)
             docstring_renderer.parse()

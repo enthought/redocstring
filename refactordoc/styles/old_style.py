@@ -28,6 +28,9 @@ def refactor_function(lines):
 
 
 def setup(app):
-    style = Style({'class': refactor_class, 'function': refactor_function})
+    style = Style({
+        'class': refactor_class,
+        'function': refactor_function,
+        'method': refactor_function})
     app.setup_extension('sphinx.ext.autodoc')
     app.connect('autodoc-process-docstring', style.refactor_docstring)

@@ -222,15 +222,16 @@ class BaseDoc(object):
             return ''
 
     def insert_lines(self, lines, index):
-        """ Insert refactored lines
+        """ Insert refactored lines.
 
         Arguments
         ---------
-        new_lines : list
+        lines : list
             The list of lines to insert
 
         index : int
             Index to start the insertion
+
         """
         docstring = self.docstring
         for line in reversed(lines):
@@ -318,7 +319,6 @@ class BaseDoc(object):
         ---------
         ahead : int
             The number of lines to look ahead.
-
 
         """
         position = self.index + ahead

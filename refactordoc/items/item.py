@@ -8,7 +8,7 @@ class Item(namedtuple('Item', ['term', 'classifiers', 'definition'])):
     The Item class is responsible to check, parse and refactor a docstring
     item into sphinx friendly rst.
 
-    Syntax diagram:
+    Format diagram::
 
         +-------------------------------------------------+
         | header                                          |
@@ -26,7 +26,7 @@ class Item(namedtuple('Item', ['term', 'classifiers', 'definition'])):
     term : str
         The term usually reflects the name of a parameter or an attribute.
 
-    classifiers: list
+    classifiers : list
         The classifier(s) of the term. Commonly used to reflect the type
         of an argument or the signature of a function.
 
@@ -37,7 +37,11 @@ class Item(namedtuple('Item', ['term', 'classifiers', 'definition'])):
 
     @property
     def mode(self):
-        """ The operational mode of the item based on the available info.
+        """ Property (`string`), the operational mode of the item based on the
+        available info. Possible values are ``{'only_term', 'no_classifiers',
+        'no_definition', 'full'}``.
+
+
         """
         if self.classifiers == [] and self.definition == ['']:
             mode = 'only_term'

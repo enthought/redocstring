@@ -25,7 +25,7 @@ class Attribute(Renderer):
             ... ['The indent to use for the description block.'])
             >>> Attribute(item).to_rst()
             .. attribute:: indent
-                :annotation: = int
+                :annotation: = `int`
 
                 The indent to use for the description block
             >>>

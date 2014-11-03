@@ -6,7 +6,7 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-from refactordoc.function_doc import FunctionDoc
+from redocstring.function_doc import FunctionDoc
 from ._compat import unittest
 
 

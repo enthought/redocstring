@@ -1,12 +1,12 @@
-Ioannis Tziakos is the main developer and maintainer of the refactor_doc
+Ioannis Tziakos is the main developer and maintainer of the redocstring.
 sphinx extension.
 
 Historical notes:
 -----------------
 
-The refactor_doc extention started while working on the Enaml project
-with Chris Colbert, Robert Kern, Corran Webster, Tim Diller, and David Wyde at
-Enthought.
+The refactor_doc (original name of redocstring) extention started while working
+on the Enaml project with Chris Colbert, Robert Kern, Corran Webster, Tim Diller,
+and David Wyde at Enthought.
 
 Many people at Enthought have provided feedback, given suggestions and
 fixes.

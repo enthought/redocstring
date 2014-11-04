@@ -1,5 +1,5 @@
-Redocstring: Docstring rendering sphinx extension
-=================================================
+Sectiondoc: Docstring section rendering sphinx extension
+========================================================
 
 .. image:: https://travis-ci.org/enthought/sectiondoc.svg?branch=master
    :target: https://travis-ci.org/enthought/sectiondoc

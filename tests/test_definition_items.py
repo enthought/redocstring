@@ -7,7 +7,7 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-from redocstring.definition_items import (DefinitionItem, AttributeItem,
+from sectiondoc.definition_items import (DefinitionItem, AttributeItem,
                                           ArgumentItem, ListItem,
                                           TableLineItem,
                                           MethodItem)

@@ -1,7 +1,7 @@
 [run]
 branch = True
-source = refactordoc
+source = sectiondoc
 
 [report]
 omit = *test*
-       refactordoc/_version.py
+       sectiondoc/_version.py

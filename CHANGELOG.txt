@@ -6,6 +6,7 @@ Version 0.3.1
 
 23/05/2014
 
+- Rename package to sectiondoc.
 - Fix support and tests on Python 2.6 (#8)
 
 Version 0.3.0
@@ -23,7 +24,7 @@ Version 0.2
 
 31/01/2012
 
-- First of the documentation and rename to refactordoc
+- First draft of the documentation and rename to refactordoc
 - Removed depedancy to docscrape.py
 - Refactordoc is now a valid sphinx extention
 - Factor out boilerplate code from refactoring methods to class methods.

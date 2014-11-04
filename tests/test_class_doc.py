@@ -6,7 +6,7 @@
 #  Copyright (c) 2011, Enthought, Inc.
 #  All rights reserved.
 #------------------------------------------------------------------------------
-from refactordoc.class_doc import ClassDoc
+from sectiondoc.class_doc import ClassDoc
 from ._compat import unittest
 
 

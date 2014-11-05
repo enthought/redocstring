@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 #------------------------------------------------------------------------------
-#  file: base_doc.py
 #  License: LICENSE.TXT
 #
 #  Copyright (c) 2014, Enthought, Inc.
@@ -45,9 +44,9 @@ def git_version():
     return git_revision
 
 
-def write_version_py(filename='refactordoc/_version.py'):
+def write_version_py(filename='sectiondoc/_version.py'):
     template = """\
-# THIS FILE IS GENERATED FROM REFACTORDOC SETUP.PY
+# THIS FILE IS GENERATED FROM SECTIONDOC SETUP.PY
 version = '{version}'
 full_version = '{full_version}'
 git_revision = '{git_revision}'
@@ -57,18 +56,18 @@ if not is_released:
     version = full_version
 """
     # Adding the git rev number needs to be done inside
-    # write_version_py(), otherwise the import of refactordoc._version
+    # write_version_py(), otherwise the import of sectiondoc._version
     # messes up the build under Python 3.
     fullversion = VERSION
     if os.path.exists('.git'):
         git_rev = git_version()
-    elif os.path.exists('refactordoc/_version.py'):
+    elif os.path.exists('sectiondoc/_version.py'):
         # must be a source distribution, use existing version file
         try:
-            from refactordoc._version import git_revision as git_rev
+            from sectiondoc._version import git_revision as git_rev
         except ImportError:
             raise ImportError("Unable to import git_revision. Try removing "
-                              "refactordoc/_version.py and the build "
+                              "sectiondoc/_version.py and the build "
                               "directory before building.")
     else:
         git_rev = "Unknown"
@@ -85,10 +84,10 @@ if not is_released:
 
 if __name__ == "__main__":
     write_version_py()
-    from refactordoc import __version__
+    from sectiondoc import __version__
 
     setup(
-        name='refactordoc',
+        name='sectiondoc',
         version=__version__,
         packages=find_packages(),
         author="Enthought Ltd",

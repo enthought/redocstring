@@ -7,7 +7,7 @@
 #  Copyright (c) 2011-14, Enthought, Inc.
 #  All rights reserved.
 # -----------------------------------------------------------------------------
-from refactordoc.items.util import max_attribute_length, max_attribute_index
+from sectiondoc.items.util import max_attribute_length, max_attribute_index
 
 
 def get_column_lengths(items):

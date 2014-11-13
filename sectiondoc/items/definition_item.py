@@ -1,6 +1,6 @@
-﻿from refactordoc.items.regex import definition_regex, header_regex
-from refactordoc.items.item import Item
-from refactordoc.util import trim_indent
+﻿from sectiondoc.items.regex import definition_regex, header_regex
+from sectiondoc.items.item import Item
+from sectiondoc.util import trim_indent
 
 
 class DefinitionItem(Item):
@@ -16,7 +16,7 @@ class DefinitionItem(Item):
            +--------------------------------------------------+
 
     The Definition class is based on the nametuple class and is responsible
-    to check, parse and refactor a docstring definition item into sphinx
+    to check, parse a docstring definition item into sphinx
     friendly rst.
 
     Attributes

@@ -1,5 +1,5 @@
-from refactordoc.renderers.renderer import Renderer
-from refactordoc.util import add_indent, EMPTY_LINE
+from sectiondoc.renderers.renderer import Renderer
+from sectiondoc.util import add_indent, NEW_LINE
 
 
 class Definition(Renderer):
@@ -49,7 +49,7 @@ class Definition(Renderer):
         postfix = ' --' if (len(item.definition) > 0) else ''
         lines = []
         lines += [item.term]
-        lines += [EMPTY_LINE]
+        lines += [NEW_LINE]
         number_of_classifiers = len(item.classifiers)
         if number_of_classifiers == 1:
             lines += ['    *({0[0]})*{1}'.format(item.classifiers, postfix)]
@@ -58,5 +58,5 @@ class Definition(Renderer):
                 '    *({0[0]} or {0[1]})*{2}'.format(
                     item.classifiers, postfix)]
         lines += add_indent(item.definition)  # definition is already a list
-        lines += [EMPTY_LINE]
+        lines += [NEW_LINE]
         return lines

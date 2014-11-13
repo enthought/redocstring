@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
-# -----------------------------------------------------------------------------
-#  file: sections/attributes.py
+#-----------------------------------------------------------------------------
 #  License: LICENSE.TXT
+#  Author: Ioannis Tziakos
 #
-#  Copyright (c) 2011-14, Enthought, Inc.
+#  Copyright (c) 2011-2014, Enthought, Inc.
 #  All rights reserved.
-# -----------------------------------------------------------------------------
-from refactordoc.items import DefinitionItem
-from refactordoc.renderers import Attribute
+#-----------------------------------------------------------------------------
+from sectiondoc.items import DefinitionItem
+from sectiondoc.renderers import Attribute
 
 
 def attributes(doc, header, renderer=Attribute, item_class=DefinitionItem):
-    """Refactor the attributes section to sphinx friendly format.
+    """Render the attributes section to sphinx friendly format.
 
     """
-
     items = doc.extract_items(item_class)
     lines = []
     renderer = renderer()

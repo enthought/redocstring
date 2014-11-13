@@ -1,18 +1,5 @@
-# -*- coding: utf-8 -*-
-<<<<<<< HEAD:refactordoc/tests/test_old_style.py
-from refactordoc.styles.old_style import refactor_class, refactor_function
-from refactordoc.tests._compat import unittest
-=======
-#------------------------------------------------------------------------------
-#  file: test_function_doc.py
-#  License: LICENSE.TXT
-#
-#  Copyright (c) 2011, Enthought, Inc.
-#  All rights reserved.
-#------------------------------------------------------------------------------
-from sectiondoc.function_doc import FunctionDoc
-from ._compat import unittest
->>>>>>> master:tests/test_function_doc.py
+from sectiondoc.styles.old_style import class_section, function_section
+from sectiondoc.tests._compat import unittest
 
 
 class TestOldStyleClass(unittest.TestCase):
@@ -60,7 +47,7 @@ the methods responsible for refactoring the sections.
 """
 
         docstring_lines = docstring.splitlines()
-        class_doc = refactor_class(docstring_lines)
+        class_doc = class_section(docstring_lines)
         class_doc.parse()
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
@@ -93,10 +80,10 @@ Method                                                               Description
 :meth:`get_next_paragraph() <get_next_paragraph>`                    Get the next paragraph designated by an empty line.
 ==================================================================== ===================================================
 
-"""
+"""  # noqa
 
         docstring_lines = docstring.splitlines()
-        class_doc = refactor_class(docstring_lines)
+        class_doc = class_section(docstring_lines)
         class_doc.parse()
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
@@ -136,13 +123,13 @@ This is not a note.
 """
 
         docstring_lines = docstring1.splitlines()
-        class_doc = refactor_class(docstring_lines)
+        class_doc = class_section(docstring_lines)
         class_doc.parse()
         output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)
 
         docstring_lines = docstring2.splitlines()
-        class_doc = refactor_class(docstring_lines)
+        class_doc = class_section(docstring_lines)
         class_doc.parse()
         output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)
@@ -174,7 +161,7 @@ myvalue : list
 """
 
         docstring_lines = docstring.splitlines()
-        function_doc = refactor_function(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
@@ -206,7 +193,7 @@ ValueError :
 """
 
         docstring_lines = docstring.splitlines()
-        function_doc = refactor_function(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
@@ -246,7 +233,7 @@ inputb : float
 """
 
         docstring_lines = docstring.splitlines()
-        function_doc = refactor_function(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)
@@ -282,7 +269,7 @@ from_ :
 """
 
         docstring_lines = docstring.splitlines()
-        function_doc = refactor_function(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)
@@ -310,7 +297,7 @@ This should not be included.
 """
 
         docstring_lines = docstring.splitlines()
-        function_doc = refactor_function(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)
@@ -371,13 +358,13 @@ and any current selection will be cleared.
 """
 
         docstring_lines = docstring1.splitlines()
-        function_doc = refactor_function(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
 
         docstring_lines = docstring2.splitlines()
-        function_doc = refactor_function(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
@@ -445,7 +432,7 @@ through a call to a method function in the test case.
 """
 
         docstring_lines = docstring.splitlines()
-        function_doc = refactor_function(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)

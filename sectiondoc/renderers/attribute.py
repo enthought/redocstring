@@ -1,5 +1,5 @@
-from refactordoc.renderers.renderer import Renderer
-from refactordoc.util import add_indent
+from sectiondoc.renderers.renderer import Renderer
+from sectiondoc.util import add_indent
 
 
 class Attribute(Renderer):

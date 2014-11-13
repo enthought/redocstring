@@ -1,18 +1,5 @@
-<<<<<<< HEAD:refactordoc/tests/test_base_doc.py
-from refactordoc.base_doc import BaseDoc
-from refactordoc.tests._compat import unittest
-=======
-# -*- coding: utf-8 -*-
-#------------------------------------------------------------------------------
-#  file: test_base_doc.py
-#  License: LICENSE.TXT
-#
-#  Copyright (c) 2011, Enthought, Inc.
-#  All rights reserved.
-#------------------------------------------------------------------------------
-from sectiondoc.base_doc import BaseDoc
-from ._compat import unittest
->>>>>>> master:tests/test_base_doc.py
+from sectiondoc.styles import BaseDoc
+from sectiondoc.tests._compat import unittest
 
 
 class TestBaseDoc(unittest.TestCase):

@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 # -----------------------------------------------------------------------------
-#  file: function_doc.py
 #  License: LICENSE.TXT
 #  Author: Ioannis Tziakos
 #
-#  Copyright (c) 2011, Enthought, Inc.
+#  Copyright (c) 2011-14, Enthought, Inc.
 #  All rights reserved.
 # -----------------------------------------------------------------------------
-from refactordoc.items import DefinitionItem
-from refactordoc.renderers.argument import Argument
+from sectiondoc.items import DefinitionItem
+from sectiondoc.renderers.argument import Argument
 
 
 def arguments(doc, header, renderer=Argument, item_class=DefinitionItem):
-    """ Refactor the argument section to sphinx friendly format.
+    """ Render the argument section to sphinx friendly format.
 
     Arguments
     ---------

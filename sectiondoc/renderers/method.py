@@ -1,4 +1,4 @@
-from refactordoc.renderers.renderer import Renderer
+from sectiondoc.renderers.renderer import Renderer
 
 
 class Method(Renderer):

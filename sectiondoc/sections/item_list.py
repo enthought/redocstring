@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 # -----------------------------------------------------------------------------
-#  file: sections/item_list.py
 #  License: LICENSE.TXT
 #  Author: Ioannis Tziakos
 #
 #  Copyright (c) 2011-14, Enthought, Inc.
 #  All rights reserved.
 # -----------------------------------------------------------------------------
-from refactordoc.util import add_indent
-from refactordoc.items import DefinitionItem
-from refactordoc.renderers import ListItem
+from sectiondoc.util import add_indent
+from sectiondoc.items import DefinitionItem
+from sectiondoc.renderers import ListItem
 
 
 def item_list(doc, header, renderer=ListItem, item_class=DefinitionItem):
-    """ Refactor the section to sphinx friendly item list.
+    """ Render the section to sphinx friendly item list.
 
     Arguments
     ---------

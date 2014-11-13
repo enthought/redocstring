@@ -1,12 +1,12 @@
-from refactordoc.base_doc import BaseDoc
-from refactordoc.sections import (
+from sectiondoc.sections import (
     attributes, methods_table, notes_paragraph, item_list, arguments)
-from refactordoc.renderers import Attribute, Method, Argument, ListItem
-from refactordoc.items import DefinitionItem, MethodItem
-from refactordoc.styles.style import Style
+from sectiondoc.renderers import Attribute, Method, Argument, ListItem
+from sectiondoc.items import DefinitionItem, MethodItem
+from sectiondoc.styles.base_doc import BaseDoc
+from sectiondoc.styles.style import Style
 
 
-def refactor_class(lines):
+def class_section(lines):
     return BaseDoc(
         lines,
         sections={
@@ -15,7 +15,7 @@ def refactor_class(lines):
             'Notes': (notes_paragraph, None, None)})
 
 
-def refactor_function(lines):
+def function_section(lines):
     return BaseDoc(
         lines,
         sections={
@@ -29,8 +29,8 @@ def refactor_function(lines):
 
 def setup(app):
     style = Style({
-        'class': refactor_class,
-        'function': refactor_function,
-        'method': refactor_function})
+        'class': class_section,
+        'function': function_section,
+        'method': function_section})
     app.setup_extension('sphinx.ext.autodoc')
-    app.connect('autodoc-process-docstring', style.refactor_docstring)
+    app.connect('autodoc-process-docstring', style.section_docstring)

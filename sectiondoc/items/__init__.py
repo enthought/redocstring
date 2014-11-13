@@ -3,6 +3,6 @@ __all__ = [
     'MethodItem',
     'Item']
 
-from refactordoc.items.item import Item
-from refactordoc.items.definition_item import DefinitionItem
-from refactordoc.items.method_item import MethodItem
+from sectiondoc.items.item import Item
+from sectiondoc.items.definition_item import DefinitionItem
+from sectiondoc.items.method_item import MethodItem

@@ -92,5 +92,5 @@ if __name__ == "__main__":
         packages=find_packages(),
         author="Enthought Ltd",
         author_email="info@enthought.com",
-        test_suite='refactordoc.tests',
+        test_suite='sectiondoc.tests',
     )

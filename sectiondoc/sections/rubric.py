@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 # -----------------------------------------------------------------------------
-#  file: sections/rubric.py
 #  License: LICENSE.TXT
 #
 #  Copyright (c) 2011-14, Enthought, Inc.
 #  All rights reserved.
 # -----------------------------------------------------------------------------
-from refactordoc.util import fix_backspace, EMPTY_LINE
+from sectiondoc.util import fix_backspace, NEW_LINE
 
 
 def rubric(doc, header, renderer=None, item_class=None):
@@ -23,4 +22,4 @@ def rubric(doc, header, renderer=None, item_class=None):
     """
     header = fix_backspace(header)
     directive = '.. rubric:: {0}'.format(header)
-    return [directive, EMPTY_LINE]
+    return [directive, NEW_LINE]

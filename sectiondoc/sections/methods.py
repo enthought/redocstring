@@ -6,13 +6,13 @@
 #  Copyright (c) 2011-14, Enthought, Inc.
 #  All rights reserved.
 # -----------------------------------------------------------------------------
-from refactordoc.items import MethodItem
-from refactordoc.sections.util import get_column_lengths
-from refactordoc.renderers import Method
+from sectiondoc.items import MethodItem
+from sectiondoc.sections.util import get_column_lengths
+from sectiondoc.renderers import Method
 
 
 def methods_table(doc, header, renderer=Method, item_class=MethodItem):
-    """Refactor the methods section to sphinx friendly table format.
+    """ Render the methods section to sphinx friendly table format.
 
     """
     items = doc.extract_items(item_class)

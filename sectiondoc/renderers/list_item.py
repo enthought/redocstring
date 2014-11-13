@@ -1,5 +1,5 @@
-from refactordoc.renderers import Renderer
-from refactordoc.util import add_indent
+from sectiondoc.renderers import Renderer
+from sectiondoc.util import add_indent
 
 
 class ListItem(Renderer):

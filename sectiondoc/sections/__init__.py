@@ -6,9 +6,9 @@ __all__ = [
     'arguments',
     'item_list']
 
-from refactordoc.sections.attributes import attributes
-from refactordoc.sections.notes import notes_paragraph
-from refactordoc.sections.methods import methods_table
-from refactordoc.sections.rubric import rubric
-from refactordoc.sections.arguments import arguments
-from refactordoc.sections.item_list import item_list
+from sectiondoc.sections.attributes import attributes
+from sectiondoc.sections.notes import notes_paragraph
+from sectiondoc.sections.methods import methods_table
+from sectiondoc.sections.rubric import rubric
+from sectiondoc.sections.arguments import arguments
+from sectiondoc.sections.item_list import item_list

@@ -1,7 +1,7 @@
-﻿from refactordoc.items import DefinitionItem, MethodItem, Item
-from refactordoc.renderers import (
+﻿from sectiondoc.items import DefinitionItem, MethodItem, Item
+from sectiondoc.renderers import (
     Argument, Attribute, Definition, ListItem, Method, TableRow)
-from refactordoc.tests._compat import unittest
+from sectiondoc.tests._compat import unittest
 
 
 class TestDefinitionItem(unittest.TestCase):

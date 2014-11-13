@@ -1,6 +1,6 @@
-from refactordoc.items.item import Item
-from refactordoc.items.regex import function_regex, signature_regex
-from refactordoc.util import trim_indent
+from sectiondoc.items.item import Item
+from sectiondoc.items.regex import function_regex, signature_regex
+from sectiondoc.util import trim_indent
 
 
 class MethodItem(Item):

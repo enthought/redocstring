@@ -33,4 +33,4 @@ def setup(app):
         'function': function_section,
         'method': function_section})
     app.setup_extension('sphinx.ext.autodoc')
-    app.connect('autodoc-process-docstring', style.section_docstring)
+    app.connect('autodoc-process-docstring', style.render_docstring)

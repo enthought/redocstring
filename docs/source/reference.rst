@@ -1,10 +1,11 @@
 Library Reference
 =================
 
-The extension is separated into four main parts.
+The extension is separated into three main parts.
 
 
 .. default-role:: autolink
+
 
 .. currentmodule:: refactordoc
 

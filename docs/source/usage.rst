@@ -1,7 +1,7 @@
 Default refactoring
 *******************
 
-The base implementation of RefactorDoc provides refactoring for class and
+The base implementation of Sectiondoc provides refactoring for class and
 function doc-strings. A number of known (i.e. predefined) sections are processed
 by the ClassDoc and FunctionDoc classes and all unknown sections are re-factored
 using the ``.. rubric::`` directive by default.
@@ -66,7 +66,7 @@ Argument sections
         Index to start the insertion
     """
 
-.. automethod:: refactordoc.base_doc.BaseDoc.insert_lines
+.. automethod:: sectiondoc.base_doc.BaseDoc.insert_lines
     :noindex:
 
 
@@ -90,7 +90,7 @@ Attribute sections
         the postfix of the method, in the subclasses, that is
         responsible for refactoring (e.g. {'Methods': 'method'}).
 
-.. autoclass:: refactordoc.base_doc.BaseDoc
+.. autoclass:: sectiondoc.base_doc.BaseDoc
     :noindex:
     :no-members:
 
@@ -103,7 +103,7 @@ Returns sections
     result : list
         A new list of left striped strings.
 
-.. autofunction:: refactordoc.util.remove_indent
+.. autofunction:: sectiondoc.util.remove_indent
     :noindex:
 
 Raises section
@@ -120,5 +120,5 @@ Notes
     -----
     Empty strings are not changed.
 
-.. autofunction:: refactordoc.util.add_indent
+.. autofunction:: sectiondoc.util.add_indent
     :noindex:

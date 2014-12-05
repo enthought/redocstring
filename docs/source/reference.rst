@@ -7,24 +7,24 @@ The extension is separated into three main parts.
 .. default-role:: autolink
 
 
-.. currentmodule:: refactordoc
+.. currentmodule:: sectiondoc
 
 
 Sections
 --------
 
-.. automodule:: refactordoc.sections
+.. automodule:: sectiondoc.sections
    :members:
 
 
 Items
 -----
 
-.. automodule:: refactordoc.items
+.. automodule:: sectiondoc.items
    :members:
 
 Renderers
 ---------
 
-.. automodule:: refactordoc.renderers
+.. automodule:: sectiondoc.renderers
    :members:

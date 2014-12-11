@@ -17,7 +17,7 @@ def setup(app):
     import warnings
     from sectiondoc.styles.old_style import setup
     warnings.warn(
-        "This entry-point will be removed in the next release"
-        "Please use 'reafactordoc.styles.old_style' in conf.py",
+        "This entry-point will be removed in the next release. "
+        "Please use 'sectiondoc.styles.old_style' in conf.py",
         DeprecationWarning)
     setup(app)

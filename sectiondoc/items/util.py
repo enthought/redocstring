@@ -1,10 +1,10 @@
 def max_attribute_length(items, attr):
-    """ Find the max length of the attribute in a list of DefinitionItems.
+    """ Find the max length of the attribute in a list of Items.
 
     Arguments
     ---------
     items : list
-        The list of the DefinitionItem instances (or subclasses).
+        The list of the Item instances (or subclasses).
 
     attr : str
         Attribute to look at.
@@ -18,13 +18,12 @@ def max_attribute_length(items, attr):
 
 
 def max_attribute_index(items, attr):
-    """ Find the index of the attribute with the maximum length in a list of
-    DefinitionItems.
+    """ Find the index of the field with the maximum length in a list of Items.
 
     Arguments
     ---------
     items : list
-        The list of the DefinitionItems (or subclasses).
+        The list of the Items (or subclasses).
 
     attr : str
         Attribute to look at.

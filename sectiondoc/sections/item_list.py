@@ -7,11 +7,11 @@
 #  All rights reserved.
 # -----------------------------------------------------------------------------
 from sectiondoc.util import add_indent
-from sectiondoc.items import DefinitionItem
+from sectiondoc.items import OrDefinitionItem
 from sectiondoc.renderers import ListItem
 
 
-def item_list(doc, header, renderer=ListItem, item_class=DefinitionItem):
+def item_list(doc, header, renderer=ListItem, item_class=OrDefinitionItem):
     """ Render the section to sphinx friendly item list.
 
     Arguments
@@ -26,7 +26,7 @@ def item_list(doc, header, renderer=ListItem, item_class=DefinitionItem):
         A renderer instance to render the items.
 
     item_class : type
-        The item parser class to use. Default is :class:`~.DefinitionItem`.
+        The item parser class to use. Default is :class:`~.OrDefinitionItem`.
 
     """
     items = doc.extract_items(item_class)

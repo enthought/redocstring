@@ -1,67 +1,67 @@
-﻿from sectiondoc.items import DefinitionItem, MethodItem, Item
+﻿from sectiondoc.items import OrDefinitionItem, MethodItem, Item
 from sectiondoc.renderers import (
     Argument, Attribute, Definition, ListItem, Method, TableRow)
 from sectiondoc.tests._compat import unittest
 
 
-class TestDefinitionItem(unittest.TestCase):
+class TestOrDefinitionItem(unittest.TestCase):
 
     def setUp(self):
         self.maxDiff = None
 
     def test_is_item(self):
-        self.assertFalse(DefinitionItem.is_item("term"))
-        self.assertFalse(DefinitionItem.is_item("term "))
-        self.assertTrue(DefinitionItem.is_item("term :"))
-        self.assertTrue(DefinitionItem.is_item("term : "))
-        self.assertTrue(DefinitionItem.is_item("term : classifier"))
-        self.assertFalse(DefinitionItem.is_item(":term : classifier"))
-        self.assertFalse(DefinitionItem.is_item("term : classifier:"))
+        self.assertFalse(OrDefinitionItem.is_item("term"))
+        self.assertFalse(OrDefinitionItem.is_item("term "))
+        self.assertTrue(OrDefinitionItem.is_item("term :"))
+        self.assertTrue(OrDefinitionItem.is_item("term : "))
+        self.assertTrue(OrDefinitionItem.is_item("term : classifier"))
+        self.assertFalse(OrDefinitionItem.is_item(":term : classifier"))
+        self.assertFalse(OrDefinitionItem.is_item("term : classifier:"))
 
         # special cases
         header_with_object = 'component : class.component.instance'
-        self.assertTrue(DefinitionItem.is_item(header_with_object))
+        self.assertTrue(OrDefinitionItem.is_item(header_with_object))
 
         header_with_trait = 'properies : Dict(Str, Any)'
-        self.assertTrue(DefinitionItem.is_item(header_with_trait))
+        self.assertTrue(OrDefinitionItem.is_item(header_with_trait))
 
         header_with_or = 'item : ModelIndex or None'
-        self.assertTrue(DefinitionItem.is_item(header_with_or))
+        self.assertTrue(OrDefinitionItem.is_item(header_with_or))
 
     def test_parse(self):
-        item = DefinitionItem.parse(['term', '    Definition.'])
-        self.assertEqual(item, DefinitionItem('term', [], ['Definition.']))
+        item = OrDefinitionItem.parse(['term', '    Definition.'])
+        self.assertEqual(item, OrDefinitionItem('term', [], ['Definition.']))
 
-        item = DefinitionItem.parse([
+        item = OrDefinitionItem.parse([
             'term', '    Definition, paragraph 1.',
             '', '    Definition, paragraph 2.'])
         self.assertEqual(
             item,
-            DefinitionItem(
+            OrDefinitionItem(
                 'term', [], [
                     'Definition, paragraph 1.',
                     '',
                     'Definition, paragraph 2.']))
 
-        item = DefinitionItem.parse(['term :', '    Definition.'])
-        self.assertEqual(item, DefinitionItem('term', [], ['Definition.']))
+        item = OrDefinitionItem.parse(['term :', '    Definition.'])
+        self.assertEqual(item, OrDefinitionItem('term', [], ['Definition.']))
 
-        item = DefinitionItem.parse(['term : classifier', '    Definition.'])
+        item = OrDefinitionItem.parse(['term : classifier', '    Definition.'])
         self.assertEqual(
-            item, DefinitionItem('term', ['classifier'], ['Definition.']))
+            item, OrDefinitionItem('term', ['classifier'], ['Definition.']))
 
-        item = DefinitionItem.parse(
+        item = OrDefinitionItem.parse(
             ['term : classifier or classifier', '    Definition.'])
         self.assertEqual(
             item,
-            DefinitionItem(
+            OrDefinitionItem(
                 'term',
                 ['classifier', 'classifier'], ['Definition.']))
 
-        item = DefinitionItem.parse(
+        item = OrDefinitionItem.parse(
             ['term : classifier', '    Block.', '        Definition.'])
         self.assertEqual(
-            item, DefinitionItem(
+            item, OrDefinitionItem(
                 'term', ['classifier'], ['Block.', '    Definition.']))
 
 

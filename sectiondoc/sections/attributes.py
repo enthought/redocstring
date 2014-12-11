@@ -6,11 +6,11 @@
 #  Copyright (c) 2011-2014, Enthought, Inc.
 #  All rights reserved.
 #-----------------------------------------------------------------------------
-from sectiondoc.items import DefinitionItem
+from sectiondoc.items import OrDefinitionItem
 from sectiondoc.renderers import Attribute
 
 
-def attributes(doc, header, renderer=Attribute, item_class=DefinitionItem):
+def attributes(doc, header, renderer=Attribute, item_class=OrDefinitionItem):
     """Render the attributes section to sphinx friendly format.
 
     """

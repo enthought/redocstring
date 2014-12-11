@@ -5,7 +5,7 @@ from sectiondoc.util import add_indent, NEW_LINE
 class Definition(Renderer):
 
     def to_rst(self, **kwards):
-        """ Outputs the DefinitionItem in sphinx friendly rst.
+        """ Outputs the Item in sphinx friendly rst.
 
         The method renders the definition into a list of lines that follow
         the rst markup of a sphinx definition item::
@@ -30,8 +30,9 @@ class Definition(Renderer):
 
         ::
 
-            >>> item = DefinitionItem('lines', 'list',
-                                ['A list of string lines rendered in rst.'])
+            >>> item = Item(
+                    'lines', 'list',
+                    ['A list of string lines rendered in rst.'])
             >>> renderer = Definition(item)
             >>> renderer.to_rst
             lines

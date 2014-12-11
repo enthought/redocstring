@@ -8,7 +8,7 @@
 # -----------------------------------------------------------------------------
 import re
 
-from sectiondoc.items import DefinitionItem
+from sectiondoc.items import OrDefinitionItem
 from sectiondoc.util import is_empty, get_indent
 from sectiondoc.sections import rubric
 
@@ -155,7 +155,7 @@ class BaseDoc(object):
             List of the collected item instances of :class:`~.Item` type.
 
         """
-        item_type = DefinitionItem if (item_class is None) else item_class
+        item_type = OrDefinitionItem if (item_class is None) else item_class
         is_item = item_type.is_item
         item_blocks = []
         while (not self.eod) and \

@@ -6,11 +6,11 @@
 #  Copyright (c) 2011-14, Enthought, Inc.
 #  All rights reserved.
 # -----------------------------------------------------------------------------
-from sectiondoc.items import DefinitionItem
+from sectiondoc.items import OrDefinitionItem
 from sectiondoc.renderers.argument import Argument
 
 
-def arguments(doc, header, renderer=Argument, item_class=DefinitionItem):
+def arguments(doc, header, renderer=Argument, item_class=OrDefinitionItem):
     """ Render the argument section to sphinx friendly format.
 
     Arguments
@@ -24,7 +24,7 @@ def arguments(doc, header, renderer=Argument, item_class=DefinitionItem):
         A renderer instance to render the items.
 
     item_class : type
-        The item parser class to use. Default is :class:`~.DefinitionItem`.
+        The item parser class to use. Default is :class:`~.orDefinitionItem`.
 
     """
     items = doc.extract_items(item_class)

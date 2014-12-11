@@ -1,7 +1,7 @@
 from sectiondoc.sections import (
     attributes, methods_table, notes_paragraph, item_list, arguments)
 from sectiondoc.renderers import Attribute, Method, Argument, ListItem
-from sectiondoc.items import DefinitionItem, MethodItem
+from sectiondoc.items import OrDefinitionItem, MethodItem
 from sectiondoc.styles.base_doc import BaseDoc
 from sectiondoc.styles.style import Style
 
@@ -10,7 +10,7 @@ def class_section(lines):
     return BaseDoc(
         lines,
         sections={
-            'Attributes': (attributes, Attribute, DefinitionItem),
+            'Attributes': (attributes, Attribute, OrDefinitionItem),
             'Methods': (methods_table, Method, MethodItem),
             'Notes': (notes_paragraph, None, None)})
 
@@ -19,11 +19,11 @@ def function_section(lines):
     return BaseDoc(
         lines,
         sections={
-            'Returns': (item_list, ListItem, DefinitionItem),
-            'Arguments': (arguments, Argument, DefinitionItem),
-            'Parameters': (arguments, Argument, DefinitionItem),
-            'Raises': (item_list, ListItem, DefinitionItem),
-            'Yields': (item_list, ListItem, DefinitionItem),
+            'Returns': (item_list, ListItem, OrDefinitionItem),
+            'Arguments': (arguments, Argument, OrDefinitionItem),
+            'Parameters': (arguments, Argument, OrDefinitionItem),
+            'Raises': (item_list, ListItem, OrDefinitionItem),
+            'Yields': (item_list, ListItem, OrDefinitionItem),
             'Notes': (notes_paragraph, None, None)})
 
 

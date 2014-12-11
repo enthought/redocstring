@@ -68,7 +68,7 @@ class Item(namedtuple('Item', ['term', 'classifiers', 'definition'])):
         """Parse a definition item from a set of lines.
 
         The class method parses the item from the list of docstring lines and
-        produces a DefinitionItem with the term, classifier and the definition.
+        produces a Item with the term, classifier and the definition.
 
         .. note:: The global indention in the definition lines is striped
 

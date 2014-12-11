@@ -3,8 +3,11 @@ from sectiondoc.items.item import Item
 from sectiondoc.util import trim_indent
 
 
-class DefinitionItem(Item):
-    """ A docstring definition item
+class OrDefinitionItem(Item):
+    """ A docstring definition section item.
+
+    In this section definition item there are two classifiers that are
+    separated by ``or``.
 
     Syntax diagram::
 
@@ -15,10 +18,6 @@ class DefinitionItem(Item):
            | (body elements)+                                 |
            +--------------------------------------------------+
 
-    The Definition class is based on the nametuple class and is responsible
-    to check, parse a docstring definition item into sphinx
-    friendly rst.
-
     Attributes
     ----------
     term : str
@@ -26,14 +25,13 @@ class DefinitionItem(Item):
 
     classifiers: list
         The classifiers of the definition. Commonly used to reflect the type
-        of an argument or the signature of a function.
-
-        .. note:: Currently only one classifier is supported.
+        of an argument or the signature of a function. Only two classifiers
+        are accepted.
 
     definition : list
         The list of strings that holds the description the definition item.
 
-    .. note:: A Definition item is based on the item of a section definition
+    .. note:: An Or Definition item is based on the item of a section definition
         list as it defined in restructured text
         (_http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#sections).
 
@@ -95,9 +93,9 @@ class DefinitionItem(Item):
             docstring lines of the definition without any empty lines before or
             after.
 
-        Returns
+        Return
         -------
-        definition : DefinitionItem
+        definition : OrDefinitionItem
 
         """
         header = lines[0].strip()

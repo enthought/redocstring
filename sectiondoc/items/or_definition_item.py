@@ -93,7 +93,7 @@ class OrDefinitionItem(Item):
             docstring lines of the definition without any empty lines before or
             after.
 
-        Return
+        Returns
         -------
         definition : OrDefinitionItem
 

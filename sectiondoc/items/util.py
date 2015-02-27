@@ -4,7 +4,7 @@ def max_attribute_length(items, attr):
     Arguments
     ---------
     items : list
-        The list of the Item instances (or subclasses).
+        The list of Item instances.
 
     attr : str
         Attribute to look at.
@@ -23,7 +23,7 @@ def max_attribute_index(items, attr):
     Arguments
     ---------
     items : list
-        The list of the Items (or subclasses).
+        The list of Item instances.
 
     attr : str
         Attribute to look at.

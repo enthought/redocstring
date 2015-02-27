@@ -3,7 +3,7 @@ from sectiondoc.util import add_indent
 
 
 class Attribute(Renderer):
-    """ Definition that renders the rst output using the attribute directive.
+    """ Render an Item instance using the sphinx attribute directive.
 
     """
 

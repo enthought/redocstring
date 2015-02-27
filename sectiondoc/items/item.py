@@ -3,9 +3,9 @@ from collections import namedtuple
 
 
 class Item(namedtuple('Item', ['term', 'classifiers', 'definition'])):
-    """ A docstring item.
+    """ A section item.
 
-    The Item class is responsible to check, parse and refactor a docstring
+    The Item class is responsible to check, parse and render a docstring
     item into sphinx friendly rst.
 
     Format diagram::
@@ -18,7 +18,7 @@ class Item(namedtuple('Item', ['term', 'classifiers', 'definition'])):
            +--------------------------------------------------+
 
 
-    Depending only the type of the list item the header is split into a
+    Depending only in the type of the list item the header is split into a
     term and one or more classifiers.
 
     Attributes
@@ -31,7 +31,7 @@ class Item(namedtuple('Item', ['term', 'classifiers', 'definition'])):
         of an argument or the signature of a function.
 
     definition : list
-        The list of strings that holds the description the definition item.
+        The list of strings that holds the description of the definition item.
 
     """
 
@@ -58,14 +58,14 @@ class Item(namedtuple('Item', ['term', 'classifiers', 'definition'])):
         """ Check if the line is describing an item.
 
         The method is used to check that a line is following the expected
-        format for the term and classifiers attributes.
+        format for the `term` and `classifiers` attributes.
 
         """
         raise NotImplementedError()
 
     @classmethod
     def parse(cls, lines):
-        """Parse a definition item from a set of lines.
+        """ Parse a definition item from a set of lines.
 
         The class method parses the item from the list of docstring lines and
         produces a Item with the term, classifier and the definition.

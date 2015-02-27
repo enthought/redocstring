@@ -4,7 +4,7 @@ from sectiondoc.util import trim_indent
 
 
 class MethodItem(Item):
-    """ A MethodItem that knows how to parse methods
+    """ A MethodItem for method descriptions.
 
     """
 
@@ -16,27 +16,33 @@ class MethodItem(Item):
     def is_item(cls, line):
         """ Check if the definition header is a function signature.
 
+        The expected header has the following format::
+
+          +------------------------------+
+          | term "(" [  classifier ] ")" |
+          +------------------------------+
+
         """
         return function_regex.match(line)
 
     @classmethod
     def parse(cls, lines):
-        """Parse a method definition item from a set of lines.
+        """ Parse a method definition item from a set of lines.
 
-        The class method parses the method signature and definition from the
-        list of docstring lines and produces a MethodItem where the term
-        is the method name and the classifier is arguments
+        Parse the method signature and definition from the list of docstring
+        lines and produce a MethodItem where the `term` is the method name and
+        the classifier is arguments.
 
         .. note:: The global indention in the definition lines is striped
 
-        The method definition item is assumed to be as follows::
+        The format of the method definition item is expected to be as follows::
 
-            +------------------------------+
-            | term "(" [  classifier ] ")" |
-            +--+---------------------------+---+
-               | definition                    |
-               | (body elements)+              |
-               +--------------------- ---------+
+          +------------------------------+
+          | term "(" [  classifier ] ")" |
+          +--+---------------------------+---+
+             | definition                    |
+             | (body elements)+              |
+             +-------------------------------+
 
         Arguments
         ---------

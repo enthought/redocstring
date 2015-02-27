@@ -3,7 +3,7 @@ from sectiondoc.util import add_indent
 
 
 class ListItem(Renderer):
-    """ A definition item that is rendered as an ordered/unordered list
+    """ Rendered an item instance as an ordered/unordered list item.
 
     """
 

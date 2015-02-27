@@ -10,7 +10,7 @@ class Renderer(object):
 
     @abc.abstractmethod
     def to_rst(self, **kwards):
-        """ Outputs the definition item in sphinx friendly rst.
+        """ Outputs the `item` in sphinx friendly rst.
 
         The method renders the passed into a list of lines that follow
         the rst markup.

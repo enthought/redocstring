@@ -3,22 +3,20 @@ from sectiondoc.util import add_indent, NEW_LINE
 
 
 class Definition(Renderer):
+    """ Render an Item instance as a sphinx definition term
+
+    """
 
     def to_rst(self, **kwards):
         """ Outputs the Item in sphinx friendly rst.
 
-        The method renders the ``definition`` into a list of lines that 
+        The method renders the `definition` into a list of lines that
         follow the rst markup of a sphinx definition item::
 
             <term>
 
                (<classifier(s)>) --
                <definition>
-
-        Subclasses will usually override the method to provide custom
-        behaviour. However, the signature of the method should hold only
-        keyword arguments which have default values. The keyword arguments
-        can be used to pass additional rendering information to subclasses.
 
         Returns
         -------

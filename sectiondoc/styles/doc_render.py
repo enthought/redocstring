@@ -16,13 +16,13 @@ from sectiondoc.sections import rubric
 underline_regex = re.compile(r'\s*\S+\s*\Z')
 
 
-class BaseDoc(object):
-    """ Base docstring rendering class.
+class DocRender(object):
+    """ Docstring rendering class.
 
     The class' main purpose is to parse the docstring and find the
     sections that need to be refactored. The operation take place in
     two stages:
-    
+
     - The class is instanciated with the appropriate section renderers
     - The ``parse`` method is called to parse and render the sections
       inplace.
@@ -57,7 +57,7 @@ class BaseDoc(object):
             The sections that will be detected and rendered. The dictionary
             maps the section headers for detection to a tuple containing
             the section rendering function and optional values for the item
-            renderer and parser. If on section rendering information is 
+            renderer and parser. If on section rendering information is
             provided the default behaviour of the class is to render
             every section using the rubric rendering function.
 
@@ -105,14 +105,14 @@ class BaseDoc(object):
 
         Parse the items in the description of a section into items of the
         provided itme type. The method starts at the current line index
-        position and checks if in the next two lines contain a valid item of 
-        the desired type. If successful, the lines that belong to the item 
-        description block (i.e. item header + item body) are popped out from 
-        the docstring and passed to the ``item_type.parser`` class method to 
+        position and checks if in the next two lines contain a valid item of
+        the desired type. If successful, the lines that belong to the item
+        description block (i.e. item header + item body) are popped out from
+        the docstring and passed to the ``item_type.parser`` class method to
         get a new instance of ``item_type``.
 
         The process is repeated until there are no compatible ``item_type``
-        items found in the section or we run out of docstring lines, 
+        items found in the section or we run out of docstring lines,
         The collected item instances are returned
 
         The exit conditions allow for two valid section item layouts:
@@ -150,7 +150,7 @@ class BaseDoc(object):
             List of the collected item instances of :class:`~.Item` type.
 
         """
-        item_type = OrDefinitionItem if (item_class is None) else item_class
+        item_type = OrDefinitionItem if (item_type is None) else item_type
         is_item = item_type.is_item
         item_blocks = []
         while (not self.eod) and \
@@ -292,7 +292,7 @@ class BaseDoc(object):
         """ Move to bookmark.
 
         Move the current index to the  docstring line given by the
-        ``self.bookmarks[bookmark_index]`` and remove it from the 
+        ``self.bookmarks[bookmark_index]`` and remove it from the
         bookmark list. Default value will pop the last entry.
 
         Returns

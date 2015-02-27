@@ -2,12 +2,12 @@ from sectiondoc.sections import (
     attributes, methods_table, notes_paragraph, item_list, arguments)
 from sectiondoc.renderers import Attribute, Method, Argument, ListItem
 from sectiondoc.items import OrDefinitionItem, MethodItem
-from sectiondoc.styles.base_doc import BaseDoc
+from sectiondoc.styles.doc_render import DocRender
 from sectiondoc.styles.style import Style
 
 
 def class_section(lines):
-    return BaseDoc(
+    return DocRender(
         lines,
         sections={
             'Attributes': (attributes, Attribute, OrDefinitionItem),
@@ -16,7 +16,7 @@ def class_section(lines):
 
 
 def function_section(lines):
-    return BaseDoc(
+    return DocRender(
         lines,
         sections={
             'Returns': (item_list, ListItem, OrDefinitionItem),

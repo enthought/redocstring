@@ -1,6 +1,6 @@
 __all__ = [
     'Style',
-    'BaseDoc']
+    'DocRender']
 
 from sectiondoc.styles.style import Style
-from sectiondoc.styles.base_doc import BaseDoc
+from sectiondoc.styles.doc_render import DocRender

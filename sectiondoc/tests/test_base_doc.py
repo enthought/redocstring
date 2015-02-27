@@ -1,8 +1,8 @@
-from sectiondoc.styles import BaseDoc
+from sectiondoc.styles import DocRender
 from sectiondoc.tests._compat import unittest
 
 
-class TestBaseDoc(unittest.TestCase):
+class TestDocRender(unittest.TestCase):
 
     def setUp(self):
         self.maxDiff = None
@@ -24,7 +24,7 @@ This is just some sample text.
 This is just some sample text.
 """
         docstring_lines = docstring.splitlines()
-        base_doc = BaseDoc(docstring_lines)
+        base_doc = DocRender(docstring_lines)
         base_doc.parse()
         output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)
@@ -47,7 +47,7 @@ This is just some sample text.
 This is just some sample text.
 """
         docstring_lines = docstring.splitlines()
-        base_doc = BaseDoc(docstring_lines)
+        base_doc = DocRender(docstring_lines)
         base_doc.parse()
         output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)

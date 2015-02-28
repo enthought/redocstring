@@ -20,8 +20,10 @@ Key aims of **sectiondoc** are:
 
     - Do not change the order of sections.
     - Allow sphinx directives between (and inside) section blocks.
+    - Custom rendering styles
     - Easier to debug (native support for debugging) and extend
       (future versions).
+
 
 Repository
 ----------
@@ -35,14 +37,26 @@ using::
 Installation
 ------------
 
-1. Install ``sectiondoc`` from pypi using pip::
+Install ``sectiondoc`` from pypi using pip::
 
     $ pip install sectiondoc
 
-2. Add sectiondoc to the extensions variable of your sphinx ``conf.py``::
+Usage
+-----
+
+Add sectiondoc to the extensions variable of your sphinx ``conf.py``::
 
     extensions = [
         ...,
         'sectiondoc',
+        ...,
+    ]
+
+
+Styles can be selected by referencing the module they are defined at::
+
+    extensions = [
+        ...,
+        'sectiondoc.styles.old_style',
         ...,
     ]

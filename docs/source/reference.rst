@@ -7,7 +7,11 @@ The extension is separated into three main parts.
 .. default-role:: autolink
 
 
-.. currentmodule:: sectiondoc
+Styles
+------
+
+.. automodule:: sectiondoc.styles
+   :members:
 
 
 Sections

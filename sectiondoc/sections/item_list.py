@@ -16,7 +16,7 @@ def item_list(doc, header, renderer=ListItem, item_class=OrDefinitionItem):
 
     Arguments
     ---------
-    doc : BaseDoc
+    doc : DocRender
         The docstring container.
 
     header : str

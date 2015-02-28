@@ -15,7 +15,7 @@ def arguments(doc, header, renderer=Argument, item_class=OrDefinitionItem):
 
     Arguments
     ---------
-    doc : BaseDoc
+    doc : DocRender
         The docstring container.
     header : string
         This parameter is ignored in this method.

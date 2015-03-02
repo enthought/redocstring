@@ -50,8 +50,8 @@ class DocRender(object):
 
         Arguments
         ---------
-        lines : list of strings
-            The docstring to refactor
+        lines : list
+            The docstring as a list of strings where to render the sections
 
         sections : dict
             The sections that will be detected and rendered. The dictionary

@@ -23,7 +23,7 @@ class OrDefinitionItem(Item):
     term : str
         The term usually reflects the name of a parameter or an attribute.
 
-    classifiers: list
+    classifiers : list
         The classifiers of the definition. Commonly used to reflect the type
         of an argument or the signature of a function. Only two classifiers
         are accepted.

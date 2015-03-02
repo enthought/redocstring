@@ -9,26 +9,29 @@ default.
 
 For class objects the **old style** renders three types of sections:
 
-========== ================================ ========== === ====================
-Heading    Description                      Item       Max Rendered as
-========== ================================ ========== === ====================
-Methods    Class methods with summary       MethodItem --  Table with links to
-                                                           the method
-Attributes Class attributes and their usage Attribute  --  Sphinx attributes
-Notes      Useful notes                     paragraph  1   Note admonition
-========== ================================ ========== === ====================
+========== ================================ ============ === =====================
+Heading    Description                      Item         Max Rendered as
+========== ================================ ============ === =====================
+Methods    Class methods with summary       MethodItem   --  Table with links to
+                                                             the method
+Attributes Class attributes and their usage Attribute    --  Sphinx attributes
+Arguments  function arguments and type      ArgumentItem --  Parameters field list
+Parameters function arguments and type      ArgumentItem --  Parameters field list
+Notes      Useful notes                     paragraph    1   Note admonition
+========== ================================ ============ === =====================
 
 For functions the **default style** re-factors four types of sections:
 
-========= =========================== ============ === =====================
-Heading   Description                 Item         Max Rendered as
-========= =========================== ============ === =====================
-Arguments function arguments and type ArgumentItem --  Parameters field list
-Returns   Return value                ListItem     --  Unordered list
-Raises    Raised exceptions           ListItem     --  Unordered list
-Yileds    Yield values                ListItem     --  Unordered list
-Notes     Useful notes                paragraph    1   Note admonition
-========= =========================== ============ === =====================
+========== =========================== ============ === =====================
+Heading    Description                 Item         Max Rendered as
+========== =========================== ============ === =====================
+Arguments  function arguments and type ArgumentItem --  Parameters field list
+Parameters function arguments and type ArgumentItem --  Parameters field list
+Returns    Return value                ListItem     --  Unordered list
+Raises     Raised exceptions           ListItem     --  Unordered list
+Yileds     Yield values                ListItem     --  Unordered list
+Notes      Useful notes                paragraph    1   Note admonition
+========== =========================== ============ === =====================
 
 
 layout rules

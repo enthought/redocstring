@@ -11,6 +11,8 @@ def class_section(lines):
         lines,
         sections={
             'Attributes': (attributes, Attribute, OrDefinitionItem),
+            'Arguments': (arguments, Argument, OrDefinitionItem),
+            'Parameters': (arguments, Argument, OrDefinitionItem),
             'Methods': (methods_table, Method, MethodItem),
             'Notes': (notes_paragraph, None, None)})
 

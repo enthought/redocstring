@@ -46,7 +46,7 @@ class DocRender(object):
     """
 
     def __init__(self, lines, sections=None):
-        """ Initialize the class
+        """
 
         Arguments
         ---------

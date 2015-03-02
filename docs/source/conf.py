@@ -62,6 +62,7 @@ exclude_patterns = []
 pygments_style = 'sphinx'
 
 autodoc_member_order = 'groupwise'
+autoclass_content = 'both'
 
 # -- Options for HTML output --------------------------------------------------
 

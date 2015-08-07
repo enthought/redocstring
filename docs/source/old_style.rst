@@ -20,7 +20,7 @@ Parameters function arguments and type      ArgumentItem --  Parameters field li
 Notes      Useful notes                     paragraph    1   Note admonition
 ========== ================================ ============ === =====================
 
-For functions the **default style** re-factors four types of sections:
+For functions the **old style** renders four types of sections:
 
 ========== =========================== ============ === =====================
 Heading    Description                 Item         Max Rendered as

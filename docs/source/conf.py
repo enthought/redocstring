@@ -29,10 +29,11 @@ sys.path.insert(0, os.path.abspath('../..'))
 extensions = ['sectiondoc',
               'sphinx.ext.intersphinx',
               'sphinx.ext.todo',
-              'sphinx.ext.viewcode']
+              'sphinx.ext.viewcode',
+              'sphinx.ext.autosummary']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = []
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -60,11 +61,14 @@ exclude_patterns = []
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
+autodoc_member_order = 'groupwise'
+autoclass_content = 'both'
+
 # -- Options for HTML output --------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+html_theme = 'alabaster'
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'SectionDocdoc'

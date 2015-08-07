@@ -6,12 +6,10 @@ Contents
 ========
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
 
-    usage
-    architecture
-    components
-    extending
+    rendering
+    styles
     reference
     authors
     todo
@@ -25,4 +23,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

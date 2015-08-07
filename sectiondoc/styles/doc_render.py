@@ -1,153 +1,119 @@
 # -*- coding: utf-8 -*-
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 #  file: base_doc.py
 #  License: LICENSE.TXT
 #
-#  Copyright (c) 2011, Enthought, Inc.
+#  Copyright (c) 2011-14, Enthought, Inc.
 #  All rights reserved.
-#------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 import re
 
-from .definition_items import DefinitionItem
-from .line_functions import is_empty, get_indent, fix_backspace, NEW_LINE
+from sectiondoc.items import OrDefinitionItem
+from sectiondoc.util import is_empty, get_indent
+from sectiondoc.sections import rubric
 
 
 underline_regex = re.compile(r'\s*\S+\s*\Z')
 
 
-#------------------------------------------------------------------------------
-#  Classes
-#------------------------------------------------------------------------------
-
-class BaseDoc(object):
-    """Base abstract docstring refactoring class.
+class DocRender(object):
+    """ Docstring rendering class.
 
     The class' main purpose is to parse the docstring and find the
-    sections that need to be refactored. Subclasses should provide
-    the methods responsible for refactoring the sections.
+    sections that need to be refactored. The operation take place in
+    two stages:
+
+    - The class is instanciated with the appropriate section renderers
+    - The ``parse`` method is called to parse and render the sections
+      inplace.
 
     Attributes
     ----------
     docstring : list
-        A list of strings (lines) that holds docstrings
+        A list of strings (lines) that holds docstrings. The lines are changed
+        inplace.
 
     index : int
-        The current zero-based line number of the docstring that is currently
+        The zero-based line number of the docstring that is currently
         processed.
 
-    headers : dict
-        The sections that the class will refactor. Each entry in the
-        dictionary should have as key the name of the section in the
-        form that it appears in the docstrings. The value should be
-        the postfix of the method, in the subclasses, that is
-        responsible for refactoring (e.g. {'Methods': 'method'}).
-
-    BaseDoc also provides a number of methods that operate on the docstring to
-    help with the refactoring. This is necessary because the docstring has to
-    change inplace and thus it is better to live the docstring manipulation to
-    the class methods instead of accessing the lines directly.
+    sections : dict
+        The sections that will be detected and rendered. The dictionary
+        maps the section headers for detection to a tuple containing
+        the section rendering function and optional values for the item
+        renderer and parser.
 
     """
 
-    def __init__(self, lines, headers=None):
-        """ Initialize the class
-
-        The method setups the class attributes and starts parsing the
-        docstring to find and refactor the sections.
+    def __init__(self, lines, sections=None):
+        """
 
         Arguments
         ---------
-        lines : list of strings
-            The docstring to refactor
+        lines : list
+            The docstring as a list of strings where to render the sections
 
-        headers : dict
-            The sections for which the class has custom refactor methods.
-            Each entry in the dictionary should have as key the name of
-            the section in the form that it appears in the docstrings.
-            The value should be the postfix of the method, in the
-            subclasses, that is responsible for refactoring (e.g.
-            {'Methods': 'method'}).
+        sections : dict
+            The sections that will be detected and rendered. The dictionary
+            maps the section headers for detection to a tuple containing
+            the section rendering function and optional values for the item
+            renderer and parser. If on section rendering information is
+            provided the default behaviour of the class is to render
+            every section using the rubric rendering function.
 
         """
         try:
             self._docstring = lines.splitlines()
         except AttributeError:
             self._docstring = lines
-        self.headers = {} if headers is None else headers
+        self.sections = {} if sections is None else sections
         self.bookmarks = []
 
     def parse(self):
         """ Parse the docstring.
 
         The docstring is parsed for sections. If a section is found then
-        the corresponding refactoring method is called.
+        the corresponding section rendering method is called.
 
         """
         self.index = 0
         self.seek_to_next_non_empty_line()
         while not self.eod:
-            header = self.is_section()
-            if header:
-                self._refactor(header)
+            section = self.is_section()
+            if len(section) > 0:
+                self._render(section)
             else:
                 self.index += 1
                 self.seek_to_next_non_empty_line()
 
-    def _refactor(self, header):
-        """Call the heading refactor method.
+    def _render(self, section):
+        """ Call the section rendering function.
 
-        The header is removed from the docstring and the docstring
-        refactoring is dispatched to the appropriate refactoring method.
-
-        The name of the refactoring method is constructed using the form
-        _refactor_<header>. Where <header> is the value corresponding to
-        ``self.headers[header]``. If there is no custom method for the
-        section then the self._refactor_header() is called with the
-        found header name as input.
+        The header is removed from the docstring and the appropriate
+        rendering function is executed.
 
         """
         self.remove_lines(self.index, 2)  # Remove header
         self.remove_if_empty(self.index)  # Remove space after header
-        refactor_postfix = self.headers.get(header, 'header')
-        method_name = ''.join(('_refactor_', refactor_postfix))
-        method = getattr(self, method_name)
-        lines = method(header)
+        method, renderer, item_class = self.sections.get(
+            section, (rubric, None, None))
+        lines = method(self, section, renderer, item_class)
         self.insert_and_move(lines, self.index)
 
-    def _refactor_header(self, header):
-        """ Refactor the header section using the rubric directive.
-
-        The method has been tested and supports refactoring single word
-        headers, two word headers and headers that include a backslash
-        ''\''.
-
-        Arguments
-        ---------
-        header : string
-            The header string to use with the rubric directive.
-
-        """
-        header = fix_backspace(header)
-        directive = '.. rubric:: {0}'.format(header)
-        lines = []
-        lines += [directive, NEW_LINE]
-        return lines
-
-    def extract_items(self, item_class=None):
-        """ Extract the definition items from a docstring.
+    def extract_items(self, item_type):
+        """ Extract the section items from a docstring.
 
         Parse the items in the description of a section into items of the
-        provided class time. Given a DefinitionItem or a subclass defined by
-        the ``item_class`` parameter. Staring from the current index position,
-        the method checks if in the next two lines a valid  header exists.
-        If successful, then the lines that belong to the item description
-        block (i.e. header + definition) are popped out from the docstring
-        and passed to the ``item_class`` parser and create an instance of
-        ``item_class``.
+        provided itme type. The method starts at the current line index
+        position and checks if in the next two lines contain a valid item of
+        the desired type. If successful, the lines that belong to the item
+        description block (i.e. item header + item body) are popped out from
+        the docstring and passed to the ``item_type.parser`` class method to
+        get a new instance of ``item_type``.
 
-        The process is repeated until there is no compatible ``item_class``
-        found or we run out of docstring. Then the method returns a list of
-        item_class instances.
+        The process is repeated until there are no compatible ``item_type``
+        items found in the section or we run out of docstring lines,
+        The collected item instances are returned
 
         The exit conditions allow for two valid section item layouts:
 
@@ -173,21 +139,19 @@ class BaseDoc(object):
 
         Arguments
         ---------
-        item_class : DefinitionItem
-            A DefinitionItem or a subclass. This argument is used to check
+        item_type : Item
+            An Item type or a subclass. This argument is used to check
             if a line in the docstring is a valid item and to parse the
-            individual list items in the section. When ``None`` (default) the
-            base DefinitionItem class is used.
-
+            individual list items in the section.
 
         Returns
         -------
-        parameters : list
-            List of the parsed item instances of ``item_class`` type.
+        items : list
+            List of the collected item instances of :class:`~.Item` type.
 
         """
-        item_type = DefinitionItem if (item_class is None) else item_class
-        is_item = item_type.is_definition
+        item_type = OrDefinitionItem if (item_type is None) else item_type
+        is_item = item_type.is_item
         item_blocks = []
         while (not self.eod) and \
                 (is_item(self.peek()) or is_item(self.peek(1))):
@@ -200,8 +164,8 @@ class BaseDoc(object):
         """ Get the next item block from the docstring.
 
         The method reads the next item block in the docstring. The first line
-        is assumed to be the DefinitionItem header and the following lines to
-        belong to the definition::
+        is assumed to be the Item header and the following lines to
+        belong to the definition body::
 
             <header line>
                 <definition>
@@ -216,9 +180,9 @@ class BaseDoc(object):
         while not self.eod:
             peek_0 = self.peek()
             peek_1 = self.peek(1)
-            if is_empty(peek_0) and not peek_1.startswith(sub_indent) \
-                    or not is_empty(peek_0) \
-                    and not peek_0.startswith(sub_indent):
+            if is_empty(peek_0) and not peek_1.startswith(sub_indent):
+                break
+            elif not is_empty(peek_0) and not peek_0.startswith(sub_indent):
                 break
             else:
                 line = self.pop()
@@ -240,34 +204,36 @@ class BaseDoc(object):
         # check for underline type format
         underline = underline_regex.match(line2)
         if underline is None:
-            return False
+            return ''
         # is the next line an rst section underline?
         striped_header = header.rstrip()
         expected_underline1 = re.sub(r'[A-Za-z\\]|\b\s', '-', striped_header)
         expected_underline2 = re.sub(r'[A-Za-z\\]|\b\s', '=', striped_header)
-        if ((underline.group().rstrip() == expected_underline1) or
-            (underline.group().rstrip() == expected_underline2)):
+        if (
+                (underline.group().rstrip() == expected_underline1) or
+                (underline.group().rstrip() == expected_underline2)):
             return header.strip()
         else:
-            return False
+            return ''
 
     def insert_lines(self, lines, index):
-        """ Insert refactored lines
+        """ Insert lines in the docstring.
 
         Arguments
         ---------
-        new_lines : list
+        lines : list
             The list of lines to insert
 
         index : int
             Index to start the insertion
+
         """
         docstring = self.docstring
         for line in reversed(lines):
             docstring.insert(index, line)
 
     def insert_and_move(self, lines, index):
-        """ Insert refactored lines and move current index to the end.
+        """ Insert lines and move the current index to the end.
 
         """
         self.insert_lines(lines, index)
@@ -325,9 +291,9 @@ class BaseDoc(object):
     def goto_bookmark(self, bookmark_index=-1):
         """ Move to bookmark.
 
-        Move the current index to the  docstring line given my the
-        ``self.bookmarks[bookmark_index]`` and  remove it from the bookmark
-        list. Default value will pop the last entry.
+        Move the current index to the  docstring line given by the
+        ``self.bookmarks[bookmark_index]`` and remove it from the
+        bookmark list. Default value will pop the last entry.
 
         Returns
         -------
@@ -349,7 +315,6 @@ class BaseDoc(object):
         ahead : int
             The number of lines to look ahead.
 
-
         """
         position = self.index + ahead
         try:
@@ -362,7 +327,7 @@ class BaseDoc(object):
         """ Pop a line from the dostrings.
 
         """
-        index = self.index if (index is None) else index
+        index = self.index if index is None else index
         return self._docstring.pop(index)
 
     @property

@@ -1,23 +1,148 @@
-# -*- coding: utf-8 -*-
-#------------------------------------------------------------------------------
-#  file: test_function_doc.py
-#  License: LICENSE.TXT
-#
-#  Copyright (c) 2011, Enthought, Inc.
-#  All rights reserved.
-#------------------------------------------------------------------------------
-from sectiondoc.function_doc import FunctionDoc
-from ._compat import unittest
+from sectiondoc.styles.legacy import class_section, function_section
+from sectiondoc.tests._compat import unittest
 
 
-class TestFunctionDoc(unittest.TestCase):
+class TestLegacyStyleClass(unittest.TestCase):
+
+    def setUp(self):
+        self.maxDiff = None
+
+    def test_refactor_attributes(self):
+        docstring =\
+            """Base abstract docstring refactoring class.
+
+The class' main purpose is to parse the dosctring and find the
+sections that need to be refactored. It also provides a number of
+methods to help with the refactoring. Subclasses should provide
+the methods responsible for refactoring the sections.
+
+Attributes
+----------
+docstring : list
+    A list of strings (lines) that holds docstrings
+
+index : int
+    The current zero-based line number of the docstring that is
+    proccessed.
+"""
+
+        rst = \
+            """Base abstract docstring refactoring class.
+
+The class' main purpose is to parse the dosctring and find the
+sections that need to be refactored. It also provides a number of
+methods to help with the refactoring. Subclasses should provide
+the methods responsible for refactoring the sections.
+
+.. attribute:: docstring
+    :annotation: = list
+
+    A list of strings (lines) that holds docstrings
+
+.. attribute:: index
+    :annotation: = int
+
+    The current zero-based line number of the docstring that is
+    proccessed.
+"""
+
+        docstring_lines = docstring.splitlines()
+        class_doc = class_section(docstring_lines)
+        class_doc.parse()
+        output = '\n'.join(docstring_lines)
+        self.assertMultiLineEqual(rst, output)
+
+    def test_refactor_methods(self):
+        docstring = \
+            """ This is a sample class docstring
+
+Methods
+-------
+extract_fields(indent='', field_check=None)
+    Extract the fields from the docstring
+
+get_field()
+    Get the field description.
+
+get_next_paragraph()
+    Get the next paragraph designated by an empty line.
+
+"""
+
+        rst = \
+            """ This is a sample class docstring
+
+==================================================================== ===================================================
+Method                                                               Description
+==================================================================== ===================================================
+:meth:`extract_fields(indent='', field_check=None) <extract_fields>` Extract the fields from the docstring
+:meth:`get_field() <get_field>`                                      Get the field description.
+:meth:`get_next_paragraph() <get_next_paragraph>`                    Get the next paragraph designated by an empty line.
+==================================================================== ===================================================
+
+"""  # noqa
+
+        docstring_lines = docstring.splitlines()
+        class_doc = class_section(docstring_lines)
+        class_doc.parse()
+        output = '\n'.join(docstring_lines)
+        self.assertMultiLineEqual(rst, output)
+
+    def test_refactor_notes(self):
+        docstring1 =\
+            """ This is a sample class docstring
+
+Notes
+-----
+This is the test.
+Wait we have not finished.
+
+This is not a note.
+"""
+
+        docstring2 =\
+            """ This is a sample class docstring
+
+Notes
+-----
+
+This is the test.
+Wait we have not finished.
+
+This is not a note.
+"""
+
+        rst = \
+            """ This is a sample class docstring
+
+.. note::
+    This is the test.
+    Wait we have not finished.
+
+This is not a note.
+"""
+
+        docstring_lines = docstring1.splitlines()
+        class_doc = class_section(docstring_lines)
+        class_doc.parse()
+        output = '\n'.join(docstring_lines) + '\n'
+        self.assertMultiLineEqual(rst, output)
+
+        docstring_lines = docstring2.splitlines()
+        class_doc = class_section(docstring_lines)
+        class_doc.parse()
+        output = '\n'.join(docstring_lines) + '\n'
+        self.assertMultiLineEqual(rst, output)
+
+
+class TestOldStyleFunction(unittest.TestCase):
 
     def setUp(self):
         self.maxDiff = None
 
     def test_refactor_returns(self):
-        docstring =\
-""" This is a sample function docstring.
+        docstring = \
+            """ This is a sample function docstring.
 
 Returns
 -------
@@ -27,7 +152,7 @@ myvalue : list
 """
 
         rst = \
-""" This is a sample function docstring.
+            """ This is a sample function docstring.
 
 :returns:
     **myvalue** (*list*) --
@@ -36,14 +161,14 @@ myvalue : list
 """
 
         docstring_lines = docstring.splitlines()
-        function_doc = FunctionDoc(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
 
     def test_refactor_raises(self):
-        docstring =\
-""" This is a sample function docstring.
+        docstring = \
+            """ This is a sample function docstring.
 
 Raises
 ------
@@ -56,7 +181,7 @@ ValueError :
 """
 
         rst = \
-""" This is a sample function docstring.
+            """ This is a sample function docstring.
 
 :raises:
     - **TypeError** --
@@ -68,14 +193,14 @@ ValueError :
 """
 
         docstring_lines = docstring.splitlines()
-        function_doc = FunctionDoc(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
 
     def test_refactor_arguments(self):
         docstring =\
-""" This is a sample function docstring
+            """ This is a sample function docstring
 
 Arguments
 ---------
@@ -92,7 +217,7 @@ inputb : float
 """
 
         rst = \
-""" This is a sample function docstring
+            """ This is a sample function docstring
 
 :param inputa:
     The first argument holds the first input!.
@@ -108,14 +233,14 @@ inputb : float
 """
 
         docstring_lines = docstring.splitlines()
-        function_doc = FunctionDoc(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)
 
     def test_refactor_strange_arguments(self):
-        docstring =\
-""" This is a sample function docstring
+        docstring = \
+            """ This is a sample function docstring
 
 Parameters
 ----------
@@ -130,9 +255,8 @@ Parameters
 from_ :
     Arguments with trailing underscore.
 """
-
         rst = \
-""" This is a sample function docstring
+            """ This is a sample function docstring
 
 :param \*args:
     Positional arguments with which this constructor was called
@@ -145,14 +269,14 @@ from_ :
 """
 
         docstring_lines = docstring.splitlines()
-        function_doc = FunctionDoc(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)
 
     def test_refactor_notes(self):
-        docstring =\
-""" This is a sample function docstring.
+        docstring = \
+            """ This is a sample function docstring.
 
 Notes
 -----
@@ -163,7 +287,7 @@ This should not be included.
 """
 
         rst = \
-""" This is a sample function docstring.
+            """ This is a sample function docstring.
 
 .. note::
     This is the test.
@@ -173,14 +297,14 @@ This should not be included.
 """
 
         docstring_lines = docstring.splitlines()
-        function_doc = FunctionDoc(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)
 
     def test_docstring_cases_1(self):
-        docstring1 =\
-""" Sets the selection to the bounds of start and end.
+        docstring1 = \
+            """ Sets the selection to the bounds of start and end.
 
 If the indices are invalid, no selection will be made,
 and any current selection will be cleared.
@@ -198,8 +322,8 @@ Returns
 result : None
 """
 
-        docstring2 =\
-""" Sets the selection to the bounds of start and end.
+        docstring2 = \
+            """ Sets the selection to the bounds of start and end.
 
 If the indices are invalid, no selection will be made,
 and any current selection will be cleared.
@@ -216,8 +340,8 @@ Returns
 result : None
 """
 
-        rst =\
-""" Sets the selection to the bounds of start and end.
+        rst = \
+            """ Sets the selection to the bounds of start and end.
 
 If the indices are invalid, no selection will be made,
 and any current selection will be cleared.
@@ -234,13 +358,13 @@ and any current selection will be cleared.
 """
 
         docstring_lines = docstring1.splitlines()
-        function_doc = FunctionDoc(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
 
         docstring_lines = docstring2.splitlines()
-        function_doc = FunctionDoc(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines)
         self.assertMultiLineEqual(rst, output)
@@ -248,7 +372,7 @@ and any current selection will be cleared.
     def test_docstring_cases_2(self):
 
         docstring = \
-""" Verify that the requested attribute is properly set
+            """ Verify that the requested attribute is properly set
 
 The method compares the attribute value in the Enaml object and
 check if it is synchronized with the toolkit widget. The component
@@ -279,7 +403,7 @@ value :
 """
 
         rst = \
-""" Verify that the requested attribute is properly set
+            """ Verify that the requested attribute is properly set
 
 The method compares the attribute value in the Enaml object and
 check if it is synchronized with the toolkit widget. The component
@@ -308,7 +432,7 @@ through a call to a method function in the test case.
 """
 
         docstring_lines = docstring.splitlines()
-        function_doc = FunctionDoc(docstring_lines)
+        function_doc = function_section(docstring_lines)
         function_doc.parse()
         output = '\n'.join(docstring_lines) + '\n'
         self.assertMultiLineEqual(rst, output)

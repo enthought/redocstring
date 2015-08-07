@@ -3,36 +3,32 @@ Library Reference
 
 The extension is separated into three main parts.
 
-Sphinx extension
-----------------
 
-.. automodule:: sectiondoc
-    :members:
+.. default-role:: autolink
 
 
-Refactor classes
-----------------
+Styles
+------
 
-.. automodule:: sectiondoc.base_doc
-    :members:
-
-.. automodule:: sectiondoc.function_doc
-    :members:
-    :private-members:
-
-.. automodule:: sectiondoc.class_doc
-    :members:
-    :private-members:
-
-Definition items
-----------------
-
-.. automodule:: sectiondoc.definition_items
-    :members:
+.. automodule:: sectiondoc.styles
+   :members:
 
 
-Line functions
---------------
+Sections
+--------
 
-.. automodule:: sectiondoc.line_functions
-    :members:
+.. automodule:: sectiondoc.sections
+   :members:
+
+
+Items
+-----
+
+.. automodule:: sectiondoc.items
+   :members:
+
+Renderers
+---------
+
+.. automodule:: sectiondoc.renderers
+   :members:

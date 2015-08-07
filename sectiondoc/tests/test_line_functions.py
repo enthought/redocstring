@@ -1,43 +1,33 @@
-# -*- coding: utf-8 -*-
-#------------------------------------------------------------------------------
-#  file: test_line_functions.py
-#  License: LICENSE.TXT
-#  Author: Ioannis Tziakos
-#
-#  Copyright (c) 2011, Enthought, Inc.
-#  All rights reserved.
-#------------------------------------------------------------------------------
-from sectiondoc.line_functions import (add_indent, remove_indent, get_indent,
-                                        fix_star, fix_backspace, is_empty,
-                                        replace_at)
-from ._compat import unittest
+from sectiondoc.util import (
+    add_indent, remove_indent, get_indent, fix_star, fix_backspace, is_empty,
+    replace_at)
+from sectiondoc.tests._compat import unittest
 
 
 class TestLineFunctions(unittest.TestCase):
 
     def test_add_indent(self):
-        input = ["This is the first line", "",
-                 "   This is the third line"]
-        expected = ["   This is the first line", "",
-                 "      This is the third line"]
+        input = ["This is the first line", "", "   This is the third line"]
+        expected = [
+            "   This is the first line", "", "      This is the third line"]
         output = add_indent(input, indent=3)
         self.assertEqual(output, expected)
 
-        expected = ["This is the first line", "",
-                 "   This is the third line"]
+        expected = [
+            "This is the first line", "", "   This is the third line"]
         output = add_indent(input, indent=0)
         self.assertEqual(output, expected)
 
-        expected = ["    This is the first line", "",
-                 "       This is the third line"]
+        expected = [
+            "    This is the first line", "", "       This is the third line"]
         output = add_indent(input)
         self.assertEqual(output, expected)
 
     def test_remove_indent(self):
-        input = ["   This is the first line", "",
-                 "      This is the third line"]
-        expected = ["This is the first line", "",
-                 "This is the third line"]
+        input = [
+            "   This is the first line", "", "      This is the third line"]
+        expected = [
+            "This is the first line", "", "This is the third line"]
         output = remove_indent(input)
         self.assertEqual(output, expected)
 

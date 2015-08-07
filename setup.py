@@ -7,8 +7,8 @@
 # -----------------------------------------------------------------------------
 from setuptools import setup, find_packages
 
-MAJOR = 1
-MINOR = 0
+MAJOR = 0
+MINOR = 5
 MICRO = 0
 DEV = 0
 

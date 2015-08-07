@@ -13,7 +13,7 @@ MICRO = 0
 DEV = 0
 
 VERSION = '{0:d}.{1:d}.{2:d}'.format(MAJOR, MINOR, MICRO)
-FULLVERSION = '{0:d}.{1:d}.{2:d}'.format(MAJOR, MINOR, MICRO, DEV)
+FULLVERSION = '{0:d}.{1:d}.{2:d}.dev{3:d}'.format(MAJOR, MINOR, MICRO, DEV)
 IS_RELEASED = False
 
 

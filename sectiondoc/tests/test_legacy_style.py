@@ -1,8 +1,8 @@
-from sectiondoc.styles.old_style import class_section, function_section
+from sectiondoc.styles.legacy import class_section, function_section
 from sectiondoc.tests._compat import unittest
 
 
-class TestOldStyleClass(unittest.TestCase):
+class TestLegacyStyleClass(unittest.TestCase):
 
     def setUp(self):
         self.maxDiff = None

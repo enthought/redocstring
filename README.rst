@@ -44,19 +44,11 @@ Install ``sectiondoc`` from pypi using pip::
 Usage
 -----
 
-Add sectiondoc to the extensions variable of your sphinx ``conf.py``::
+
+Styles can be selected by referencing in ``conf.py`` the module they are defined::
 
     extensions = [
         ...,
-        'sectiondoc',
-        ...,
-    ]
-
-
-Styles can be selected by referencing the module they are defined at::
-
-    extensions = [
-        ...,
-        'sectiondoc.styles.old_style',
+        'sectiondoc.styles.legacy',
         ...,
     ]

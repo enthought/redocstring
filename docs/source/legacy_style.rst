@@ -1,13 +1,12 @@
-Old Style
-#########
+Legacy
+######
 
-The base implementation of Sectiondoc provides rendering for class and
-function/method doc-strings. A number of known (i.e. predefined) sections are
-processed by the :func:`~.function_section` and :func:`~FunctionDoc` classes
-and all unknown sections are rendered using the ``.. rubric::`` directive by
-default.
+Previous versions of Sectiondoc (and the even older refactordoc
+package) supported a single style for rendering sections in
+function/method doc-strings. The old style is still supported in
+recent versions as a **legacy** style.
 
-For class objects the **old style** renders three types of sections:
+For class objects the **legacy** renders three types of sections:
 
 ========== ================================ ============ === =====================
 Heading    Description                      Item         Max Rendered as
@@ -20,7 +19,7 @@ Parameters function arguments and type      ArgumentItem --  Parameters field li
 Notes      Useful notes                     paragraph    1   Note admonition
 ========== ================================ ============ === =====================
 
-For functions the **old style** renders four types of sections:
+For functions the **legacy** renders four types of sections:
 
 ========== =========================== ============ === =====================
 Heading    Description                 Item         Max Rendered as
@@ -29,10 +28,13 @@ Arguments  function arguments and type ArgumentItem --  Parameters field list
 Parameters function arguments and type ArgumentItem --  Parameters field list
 Returns    Return value                ListItem     --  Unordered list
 Raises     Raised exceptions           ListItem     --  Unordered list
-Yileds     Yield values                ListItem     --  Unordered list
+Yields     Yield values                ListItem     --  Unordered list
 Notes      Useful notes                paragraph    1   Note admonition
 ========== =========================== ============ === =====================
 
+.. note::
+   All other sections are rendered using the ``.. rubric::`` directive by
+   default.
 
 layout rules
 ************

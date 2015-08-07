@@ -1,26 +1,25 @@
 Styles
 ------
 
-SectionDoc comes with a number of predefined rendering styles
-
+SectionDoc comes with the following predefined rendering styles
 
 .. toctree::
     :maxdepth: 1
 
-    old_style
+    legacy_style
 
 .. note::
 
-  The default rendering style is currently :mod:`~.old_style`
+  The default rendering style is currently :mod:`~.legacy`
 
 
 Extending
 ---------
 
-Custom styles can be created by instanciating a :class:`~.Style`
-to map a :class:`~.DocRender` factory for each type of object sent
-by autodoc. For example adding the following functions in you
-conf.py defines a rendering style for functions and methods::
+Custom styles can be created by instanciating a :class:`~.Style` to
+map a :class:`~.DocRender` factory for each type of object rendered by
+autodoc. For example adding the following functions in you conf.py
+defines a rendering style for functions and methods::
 
   def function_section(lines):
     return DocRender(
@@ -45,8 +44,8 @@ Specifically the :class:`~.Style` instance will map the ``function``
 and ``method`` docstrings to the dostring rendering funtion
 ``function_section``. The :class:`~DocRender` will then detect the
 sections ``Returns, Arguments, Parameters, Raises, Yields, Notes`` and
-use the mapped combination of section rendering function, Item descreption
-and item rendering type to render the detected section inplace.
+use the mapped combination of section rendering function, Item description
+and item rendering type to render the detected section in-place.
 
 The rendering styles can be further extented by implemeting new Item,
 Renderer instances or section rendering functions.

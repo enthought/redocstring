@@ -1,4 +1,4 @@
-.. RefactorDoc documentation master file
+.. SectionDoc documentation master file
 
 .. include:: ../../README.rst
 

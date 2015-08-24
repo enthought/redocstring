@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sectiondoc',
+extensions = ['sectiondoc.styles.legacy',
               'sphinx.ext.intersphinx',
               'sphinx.ext.todo',
               'sphinx.ext.viewcode',
@@ -87,7 +87,7 @@ latex_documents = [(
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'refactordoc',
+    ('index', 'sectiondoc',
      u'SectionDoc Documentation', [u'Ioannis Tziakos'], 1)]
 
 

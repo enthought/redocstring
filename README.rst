@@ -14,15 +14,15 @@ The sectiondoc extension parses the function and class docstrings as
 they are retrieved by the autodoc extension and renders the section
 blocks into sphinx friendly rst. The extension shares similarities
 with alternatives (such as numpydoc) but aims at reflecting the
-original form of the docstring.
+original form of the docstring and support project specific
+customization.
 
 Key aims of **sectiondoc** are:
 
     - Do not change the order of sections.
     - Allow sphinx directives between (and inside) section blocks.
     - Custom rendering styles
-    - Easier to debug (native support for debugging) and extend
-      (future versions).
+    - (not yet) Easier to debug (native support for debugging).
 
 
 Repository
@@ -40,6 +40,10 @@ Installation
 Install ``sectiondoc`` from pypi using pip::
 
     $ pip install sectiondoc
+
+Install the latest developing version using::
+
+    $ pip install git+https://github.com/enthought/sectiondoc.git#egg=sectiondoc
 
 Usage
 -----

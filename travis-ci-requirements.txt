@@ -1,4 +1,4 @@
 haas
-unittest2 ; python_version < 3
-unittest2py3k ; python version == 3
+unittest2 ; python_version < '3'
+unittest2py3k ; python_version == '3'
 coverage

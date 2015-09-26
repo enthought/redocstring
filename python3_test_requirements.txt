@@ -1,4 +1,0 @@
-haas
-unittest2py3k
-coverage
-coveralls

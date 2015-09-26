@@ -8,8 +8,6 @@ matrix:
       env: REQUIREMENTS=python2_test_requirements.txt
     - python: "pypy"
       env: REQUIREMENTS=python2_test_requirements.txt
-    - python: "3.2"
-      env: REQUIREMENTS=python3_test_requirements.txt
     - python: "3.3"
       env: REQUIREMENTS=python3_test_requirements.txt
     - python: "3.4"

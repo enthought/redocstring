@@ -1,4 +1,0 @@
-Todos
-=====
-
-.. include :: ../../TODO.txt

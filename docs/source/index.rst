@@ -12,7 +12,6 @@ Contents
     styles
     reference
     authors
-    todo
     changelog
     license
 

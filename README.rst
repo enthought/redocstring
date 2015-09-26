@@ -5,8 +5,8 @@ Sectiondoc: Docstring section rendering sphinx extension
    :target: https://travis-ci.org/enthought/sectiondoc
    :alt: Build status
 
-.. image:: https://img.shields.io/coveralls/enthought/sectiondoc.svg
-   :target: https://coveralls.io/r/enthought/sectiondoc?branch=master
+.. image:: http://codecov.io/github/enthought/sectiondoc/coverage.svg?branch=master
+   :target: http://codecov.io/github/enthought/sectiondoc?branch=master
    :alt: Coverage status
 
 

@@ -9,6 +9,10 @@ Sectiondoc: Docstring section rendering sphinx extension
    :target: http://codecov.io/github/enthought/sectiondoc?branch=master
    :alt: Coverage status
 
+.. image:: https://readthedocs.org/projects/sectiondoc/badge/?version=latest
+   :target: http://sectiondoc.readthedocs.org/en/latest/?badge=latest
+   :alt: Documentation Status
+                
 
 The sectiondoc extension parses the function and class docstrings as
 they are retrieved by the autodoc extension and renders the section

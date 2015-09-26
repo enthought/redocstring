@@ -3,24 +3,17 @@ sudo : false
 matrix:
   include:
     - python: "2.6"
-      env: REQUIREMENTS=python2_test_requirements.txt
     - python: "2.7"
-      env: REQUIREMENTS=python2_test_requirements.txt
     - python: "pypy"
-      env: REQUIREMENTS=python2_test_requirements.txt
     - python: "3.3"
-      env: REQUIREMENTS=python3_test_requirements.txt
     - python: "3.4"
-      env: REQUIREMENTS=python3_test_requirements.txt
+    - python: "3.5"
     - python: "pypy3"
-      env: REQUIREMENTS=python3_test_requirements.txt
-
 install:
-  - pip install -r $REQUIREMENTS
+  - pip install -r travis-ci-requirement.txt
   - python setup.py develop
 script:
   - coverage run -m haas -v
-  - coverage report -m
-
 after_success:
-  - coveralls
+  - pip install codecov
+  - codecov

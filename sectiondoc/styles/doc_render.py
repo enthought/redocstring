@@ -141,8 +141,8 @@ class DocRender(object):
         ---------
         item_type : Item
             An Item type or a subclass. This argument is used to check
-            if a line in the docstring is a valid item and to parse the
-            individual list items in the section.
+            if a line in the docstring is a valid item header and to
+            parse the individual list items in the section.
 
         Returns
         -------

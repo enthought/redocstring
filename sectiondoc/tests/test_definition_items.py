@@ -1,4 +1,4 @@
-﻿from sectiondoc.items import OrDefinitionItem, MethodItem, Item
+from sectiondoc.items import OrDefinitionItem, MethodItem, Item, AnyItem
 from sectiondoc.renderers import (
     Argument, Attribute, Definition, ListItem, Method, TableRow)
 from sectiondoc.tests._compat import unittest
@@ -62,6 +62,71 @@ class TestOrDefinitionItem(unittest.TestCase):
             ['term : classifier', '    Block.', '        Definition.'])
         self.assertEqual(
             item, OrDefinitionItem(
+                'term', ['classifier'], ['Block.', '    Definition.']))
+
+
+class TestAnyItem(unittest.TestCase):
+
+    def setUp(self):
+        self.maxDiff = None
+
+    def test_is_item(self):
+        self.assertTrue(AnyItem.is_item("term"))
+        self.assertTrue(AnyItem.is_item("term "))
+        self.assertTrue(AnyItem.is_item("term :"))
+        self.assertTrue(AnyItem.is_item("term : "))
+        self.assertTrue(AnyItem.is_item("term : classifier"))
+        self.assertFalse(AnyItem.is_item(":term : classifier"))
+        self.assertTrue(AnyItem.is_item("term : classifier:"))
+
+        # special cases
+        header_with_object = 'component : class.component.instance'
+        self.assertTrue(AnyItem.is_item(header_with_object))
+
+        header_with_trait = 'properies : Dict(Str, Any)'
+        self.assertTrue(AnyItem.is_item(header_with_trait))
+
+        header_with_or = 'item : ModelIndex or None'
+        self.assertTrue(AnyItem.is_item(header_with_or))
+
+    def test_parse(self):
+        item = AnyItem.parse(['term'])
+        self.assertEqual(item, AnyItem('term', [], []))
+
+        item = AnyItem.parse(['term :'])
+        self.assertEqual(item, AnyItem('term', [], []))
+
+        item = AnyItem.parse(['term', '    Definition.'])
+        self.assertEqual(item, AnyItem('term', [], ['Definition.']))
+
+        item = AnyItem.parse([
+            'term', '    Definition, paragraph 1.',
+            '', '    Definition, paragraph 2.'])
+        self.assertEqual(
+            item,
+            AnyItem(
+                'term', [], [
+                    'Definition, paragraph 1.',
+                    '',
+                    'Definition, paragraph 2.']))
+
+        item = AnyItem.parse(['term :', '    Definition.'])
+        self.assertEqual(item, AnyItem('term', [], ['Definition.']))
+
+        item = AnyItem.parse(['term : classifier', '    Definition.'])
+        self.assertEqual(
+            item, AnyItem('term', ['classifier'], ['Definition.']))
+
+        item = AnyItem.parse(
+            ['term : classifier or classifier', '    Definition.'])
+        self.assertEqual(
+            item,
+            AnyItem('term', ['classifier or classifier'], ['Definition.']))
+
+        item = AnyItem.parse(
+            ['term : classifier', '    Block.', '        Definition.'])
+        self.assertEqual(
+            item, AnyItem(
                 'term', ['classifier'], ['Block.', '    Definition.']))
 
 

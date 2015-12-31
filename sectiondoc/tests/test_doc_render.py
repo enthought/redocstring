@@ -41,7 +41,7 @@ class TestDocRender(unittest.TestCase):
         doc_render = DocRender([])
 
         # when/then
-        self.assertIsNone(doc_render.peek())
+        self.assertEqual(doc_render.peek(), '')
 
         # given
         doc_render = DocRender(['A', 'B'])
@@ -49,7 +49,7 @@ class TestDocRender(unittest.TestCase):
         # when/then
         self.assertEqual(doc_render.peek(), 'A')
         self.assertEqual(doc_render.peek(ahead=1), 'B')
-        self.assertIsNone(doc_render.peek(ahead=2))
+        self.assertEqual(doc_render.peek(ahead=2), '')
 
     def test_remove_if_empty(self):
         # given
@@ -268,14 +268,14 @@ class TestDocRender(unittest.TestCase):
             ['term1', '    Definition1'])
         self.assertEqual(
             doc_render.get_next_block(),
-            ['term2 : classifier', '    Definition2', ''])
+            ['term2 : classifier', '    Definition2'])
         self.assertEqual(
             doc_render.get_next_block(), ['term3'])
         doc_render.index = 2
         self.assertEqual(
             doc_render.get_next_block(),
             ['term4 : classifier',
-             '    Definition3', '', '    MoreDefinition3', ''])
+             '    Definition3', '', '    MoreDefinition3'])
 
     def test_extract_item_blocks(self):
         # given
@@ -299,24 +299,23 @@ class TestDocRender(unittest.TestCase):
             ''])
 
         # when/then
-        self.assertEqual(doc_render.extract_item_blocks(), [])
+        self.assertEqual(doc_render.extract_items(), [])
 
         # when/then
         doc_render.index = 5
         self.assertEqual(
-            doc_render.extract_item_blocks(), [
-                ['term1', '    Definition1'],
-                ['term2 : classifier', '    Definition2', '']])
+            doc_render.extract_items(),
+            [('term1', [], ['Definition1']),
+             ('term2', ['classifier'], ['Definition2'])])
 
         # when/then
         doc_render.index = 7
         self.assertEqual(
-            doc_render.extract_item_blocks(),
-            [[
-                'term4 : classifier',
-                '    Definition3', '', '    MoreDefinition3', '']])
+            doc_render.extract_items(),
+            [('term4', ['classifier'],
+              ['Definition3', '', 'MoreDefinition3'])])
 
-    def _test_render_header(self):
+    def test_render_header(self):
         docstring =\
             """ This is a sample docstring.
 

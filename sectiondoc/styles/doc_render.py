@@ -8,7 +8,7 @@
 # -----------------------------------------------------------------------------
 import re
 
-from sectiondoc.items import OrDefinitionItem
+from sectiondoc.items import AnyItem
 from sectiondoc.util import is_empty, get_indent
 from sectiondoc.sections import rubric
 
@@ -68,9 +68,10 @@ class DocRender(object):
             self._docstring = lines
         self.sections = {} if sections is None else sections
         self.bookmarks = []
+        self.index = 0
 
     def parse(self):
-        """ Parse the docstring.
+        """ Parse the docstring for sections.
 
         The docstring is parsed for sections. If a section is found then
         the corresponding section rendering method is called.
@@ -100,11 +101,11 @@ class DocRender(object):
         lines = method(self, section, renderer, item_class)
         self.insert_and_move(lines, self.index)
 
-    def extract_items(self, item_type):
+    def extract_items(self, item_type=None):
         """ Extract the section items from a docstring.
 
         Parse the items in the description of a section into items of the
-        provided itme type. The method starts at the current line index
+        provided item type. The method starts at the current line index
         position and checks if in the next two lines contain a valid item of
         the desired type. If successful, the lines that belong to the item
         description block (i.e. item header + item body) are popped out from
@@ -143,6 +144,7 @@ class DocRender(object):
             An Item type or a subclass. This argument is used to check
             if a line in the docstring is a valid item header and to
             parse the individual list items in the section.
+            :class:`~.AnyItem` will be used by default.
 
         Returns
         -------
@@ -150,15 +152,15 @@ class DocRender(object):
             List of the collected item instances of :class:`~.Item` type.
 
         """
-        item_type = OrDefinitionItem if (item_type is None) else item_type
+        item_type = AnyItem if item_type is None else item_type
         is_item = item_type.is_item
         item_blocks = []
-        while (not self.eod) and \
-                (is_item(self.peek()) or is_item(self.peek(1))):
+        while (
+                not self.is_section() and
+                (is_item(self.peek()) or is_item(self.peek(1)))):
             self.remove_if_empty(self.index)
             item_blocks.append(self.get_next_block())
-        items = [item_type.parse(block) for block in item_blocks]
-        return items
+        return [item_type.parse(block) for block in item_blocks]
 
     def get_next_block(self):
         """ Get the next item block from the docstring.
@@ -171,18 +173,22 @@ class DocRender(object):
                 <definition>
 
         The end of the field is designated by a line with the same indent
-        as the field header or two empty lines are found in sequence.
+        as the field header or two empty lines in sequence.
 
         """
         item_header = self.pop()
         sub_indent = get_indent(item_header) + ' '
         block = [item_header]
         while not self.eod:
-            peek_0 = self.peek()
-            peek_1 = self.peek(1)
-            if is_empty(peek_0) and not peek_1.startswith(sub_indent):
+            current = self.peek()
+            next = self.peek(1)
+            if is_empty(current) and is_empty(next):
+                self.seek_to_next_non_empty_line()
                 break
-            elif not is_empty(peek_0) and not peek_0.startswith(sub_indent):
+            elif is_empty(current) and not next.startswith(sub_indent):
+                self.pop()
+                break
+            elif not is_empty(current) and not current.startswith(sub_indent):
                 break
             else:
                 line = self.pop()
@@ -229,6 +235,8 @@ class DocRender(object):
 
         """
         docstring = self.docstring
+        if len(docstring) < index:
+            raise IndexError('index out of bounds')
         for line in reversed(lines):
             docstring.insert(index, line)
 
@@ -279,6 +287,7 @@ class DocRender(object):
         """ Remove the line from the docstring if it is empty.
 
         """
+        index = self.index if index is None else index
         if is_empty(self.docstring[index]):
             self.remove_lines(index)
 

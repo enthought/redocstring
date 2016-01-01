@@ -44,6 +44,7 @@ the methods responsible for refactoring the sections.
 
     The current zero-based line number of the docstring that is
     proccessed.
+
 """
 
         docstring_lines = docstring.splitlines()
@@ -72,13 +73,14 @@ get_next_paragraph()
         rst = \
             """ This is a sample class docstring
 
-==================================================================== ===================================================
-Method                                                               Description
-==================================================================== ===================================================
-:meth:`extract_fields(indent='', field_check=None) <extract_fields>` Extract the fields from the docstring
-:meth:`get_field() <get_field>`                                      Get the field description.
-:meth:`get_next_paragraph() <get_next_paragraph>`                    Get the next paragraph designated by an empty line.
-==================================================================== ===================================================
+
+====================================================================  ===================================================
+Method                                                                Description
+====================================================================  ===================================================
+:meth:`extract_fields(indent='', field_check=None) <extract_fields>`  Extract the fields from the docstring
+:meth:`get_field() <get_field>`                                       Get the field description.
+:meth:`get_next_paragraph() <get_next_paragraph>`                     Get the next paragraph designated by an empty line.
+====================================================================  ===================================================
 
 """  # noqa
 
@@ -158,6 +160,7 @@ myvalue : list
     **myvalue** (*list*) --
     A list of important values.
     But we need to say more things about it.
+
 """
 
         docstring_lines = docstring.splitlines()
@@ -190,6 +193,7 @@ ValueError :
 
     - **ValueError** --
       Description of another case where errors are raised.
+
 """
 
         docstring_lines = docstring.splitlines()
@@ -230,6 +234,7 @@ inputb : float
 
     .. note:: this is an optional value.
 :type inputb: float
+
 """
 
         docstring_lines = docstring.splitlines()
@@ -266,6 +271,7 @@ from_ :
     from the enaml source code.
 :param from\_:
     Arguments with trailing underscore.
+
 """
 
         docstring_lines = docstring.splitlines()
@@ -355,6 +361,7 @@ and any current selection will be cleared.
 
 :returns:
     **result** (*None*)
+
 """
 
         docstring_lines = docstring1.splitlines()

@@ -33,4 +33,5 @@ def arguments(doc, header, renderer=Argument, item_class=OrDefinitionItem):
     for item in items:
         renderer.item = item
         lines += renderer.to_rst()
+    lines.append('')
     return lines

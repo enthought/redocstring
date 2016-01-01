@@ -292,12 +292,12 @@ class TestMethodItem(unittest.TestCase):
             'method', ['arguments'], ['Definition in a single line']))
 
 
-class TestMethod(unittest.TestCase):
+class TestMethodRenderer(unittest.TestCase):
 
     def test_to_rst(self):
         # with annotation
         rst = """\
-:meth:`function(arg1, arg2) <function>` This is the best fun
+:meth:`function(arg1, arg2) <function>`  This is the best fun
 """
         item = Item(
             'function', ['arg1', 'arg2'],

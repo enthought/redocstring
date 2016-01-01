@@ -20,4 +20,5 @@ def attributes(doc, header, renderer=Attribute, item_class=OrDefinitionItem):
     for item in items:
         renderer.item = item
         lines += renderer.to_rst()
+    lines.append('')
     return lines

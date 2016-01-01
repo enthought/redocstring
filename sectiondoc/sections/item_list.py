@@ -36,4 +36,5 @@ def item_list(doc, header, renderer=ListItem, item_class=OrDefinitionItem):
     for item in items:
         renderer.item = item
         lines += add_indent(renderer.to_rst(prefix))
+    lines.append('')
     return lines

@@ -50,7 +50,7 @@ class OrDefinitionItem(Item):
             | term [ " : " classifier [ " or " classifier] ]  |
             +-------------------------------------------------+
 
-        Subclasses can subclass to restrict or expand this format.
+        Subclasses can restrict or expand this format.
 
         """
         return definition_regex.match(line) is not None

@@ -6,11 +6,11 @@
 #  Copyright (c) 2011-14, Enthought, Inc.
 #  All rights reserved.
 # -----------------------------------------------------------------------------
-from sectiondoc.items import OrDefinitionItem
+from sectiondoc.items import DefinitionItem
 from sectiondoc.renderers.argument import Argument
 
 
-def arguments(doc, header, renderer=Argument, item_class=OrDefinitionItem):
+def arguments(doc, header, renderer=Argument, item_class=DefinitionItem):
     """ Render the argument section to sphinx friendly format.
 
     Arguments

@@ -1,6 +1,27 @@
-﻿from sectiondoc.items.regex import definition_regex, header_regex
+import re
+
+from sectiondoc.items.regex import header_regex
 from sectiondoc.items.item import Item
 from sectiondoc.util import trim_indent
+
+
+definition_regex = re.compile(r"""
+\*{0,2}            #  no, one or two stars
+\w+\s:             #  a word followed by a space and a semicolumn
+(
+        \s         # just a space
+    |              # OR
+        \s[\w.]+   # dot separated words
+        (\(.*\))?  # with maybe a signature
+    |              # OR
+        \s[\w.]+   # dot separated words
+        (\(.*\))?
+        \sor       # with an or in between
+        \s[\w.]+
+        (\(.*\))?
+)?
+$                  # match at the end of the line
+""", re.VERBOSE)
 
 
 class OrDefinitionItem(Item):

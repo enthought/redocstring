@@ -103,7 +103,7 @@ def is_empty(line):
 #------------------------------------------------------------------------------
 
 def fix_star(word):
-    """ Replace ``*`` with ``\*`` so that is will be parse properly by
+    """ Replace ``*`` with ``\*`` so that is will be parsed properly by
     docutils.
 
     """

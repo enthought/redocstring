@@ -1,43 +1,37 @@
 import re
 
-from sectiondoc.items.regex import header_regex
 from sectiondoc.items.item import Item
 from sectiondoc.util import trim_indent
 
-
-definition_regex = re.compile(r"""
-\*{0,2}            #  no, one or two stars
-\w+\s:             #  a word followed by a space and a semicolumn
+definition_item_regex = re.compile(r"""
+\*{0,2}                        # no, one or two stars
+\w+                            # a word followed by
 (
-        \s         # just a space
-    |              # OR
-        \s[\w.]+   # dot separated words
-        (\(.*\))?  # with maybe a signature
-    |              # OR
-        \s[\w.]+   # dot separated words
-        (\(.*\))?
-        \sor       # with an or in between
-        \s[\w.]+
-        (\(.*\))?
-)?
-$                  # match at the end of the line
+     \s:\s
+     (
+      [\w.]+                   # . separated words
+     |
+      \w+(\(.*\))?             # maybe a signature
+     )
+)*
+$                              # match at the end of the line
 """, re.VERBOSE)
 
 
-class OrDefinitionItem(Item):
+class DefinitionItem(Item):
     """ A docstring definition section item.
 
-    In this section definition item there are two classifiers that are
-    separated by ``or``.
+    In this section definition item, multiple classifiers can be
+    provided as shown in the diagram below.
 
     Syntax diagram::
 
-        +-------------------------------------------------+
-        | term [ " : " classifier [ " or " classifier] ]  |
-        +--+----------------------------------------------+---+
-           | definition                                       |
-           | (body elements)+                                 |
-           +--------------------------------------------------+
+        +-----------------------------+
+        | term [ " : " classifier ]*  |
+        +--+--------------------------+---+
+           | definition                   |
+           | (body elements)+             |
+           +------------------------------+
 
     Attributes
     ----------
@@ -46,15 +40,11 @@ class OrDefinitionItem(Item):
 
     classifiers : list
         The classifiers of the definition. Commonly used to reflect the type
-        of an argument or the signature of a function. Only two classifiers
-        are accepted.
+        of an argument or the signature of a function. Multiple classifiers
+        are allowed separated by colons ``:``.
 
     definition : list
         The list of strings that holds the description the definition item.
-
-    .. note:: An Or Definition item is based on the item of a section definition
-        list as it defined in restructured text
-        (_http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#sections).
 
     """
 
@@ -67,14 +57,14 @@ class OrDefinitionItem(Item):
 
         The expected format is::
 
-            +-------------------------------------------------+
-            | term [ " : " classifier [ " or " classifier] ]  |
-            +-------------------------------------------------+
+            +----------------------------+
+            | term [ " : " classifier ]* |
+            +----------------------------+
 
         Subclasses can restrict or expand this format.
 
         """
-        return definition_regex.match(line) is not None
+        return definition_item_regex.match(line.rstrip()) is not None
 
     @classmethod
     def parse(cls, lines):
@@ -105,7 +95,7 @@ class OrDefinitionItem(Item):
 
         ::
 
-            term : classifier or classifier
+            term : classifier : classifier
                 Definition.
 
         Arguments
@@ -116,15 +106,17 @@ class OrDefinitionItem(Item):
 
         Returns
         -------
-        definition : OrDefinitionItem
+        definition : DefinitionItem
 
         """
         header = lines[0].strip()
-        term, classifiers = header_regex.split(
-            header, maxsplit=1) if (' :' in header) else (header, '')
-        classifiers = [
-            classifier.strip() for classifier in classifiers.split('or')]
-        if classifiers == ['']:
+        components = [
+            component.strip()
+            for component in header.split(":") if component != '']
+        term = components[0]
+        if len(components) > 1:
+            classifiers = components[1:]
+        else:
             classifiers = []
         trimed_lines = trim_indent(lines[1:]) if (len(lines) > 1) else ['']
         definition = [line.rstrip() for line in trimed_lines]

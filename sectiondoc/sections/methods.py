@@ -16,20 +16,14 @@ def methods_table(doc, header, renderer=Method, item_class=MethodItem):
 
     """
     items = doc.extract_items(item_class)
-    lines = []
-    if len(items) > 0:
-        columns = get_column_lengths(items)
-        border = '{0:=^{1}} {0:=^{2}}'.format('', columns[0], columns[1])
-        heading = '{0:<{2}} {1:<{3}}'.format('Method', 'Description',
-                                             columns[0], columns[1])
-        lines += [border]
-        lines += [heading]
-        lines += [border]
-        renderer = Method()
-        for item in items:
-            renderer.item = item
-            lines += renderer.to_rst(columns)
-        lines += [border]
-        lines += ['']
-    lines = [line.rstrip() for line in lines]
-    return lines
+    columns = get_column_lengths(items)
+    border = '{0:=^{1}}  {0:=^{2}}'.format('', columns[0], columns[1])
+    heading = '{0:<{2}}  {1:<{3}}'.format(
+        'Method', 'Description', columns[0], columns[1])
+    lines = [border, heading, border]
+    renderer = Method()
+    for item in items:
+        renderer.item = item
+        lines += renderer.to_rst(columns)
+    lines += [border, '', '']
+    return [line.rstrip() for line in lines]

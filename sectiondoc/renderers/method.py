@@ -25,14 +25,14 @@ class Method(Renderer):
             ... ['This is the best function ever.'])
             >>> renderer = Method(item)
             >>> renderer.to_rst(columns=(40, 20))
-            :meth:`function <function(arg1, arg2)>` This is the best fun
+            :meth:`function <function(arg1, arg2)>`  This is the best fun
 
         """
         item = self.item
         definition = ' '.join([line.strip() for line in item.definition])
         method_role = ':meth:`{0}({1}) <{0}>`'.format(
             item.term, ', '.join(item.classifiers))
-        table_line = '{0:<{first}} {1:<{second}}'
+        table_line = '{0:<{first}}  {1:<{second}}'
         lines = []
         lines += [table_line.format(method_role[:columns[0]],
                                     definition[:columns[1]], first=columns[0],

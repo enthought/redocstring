@@ -5,7 +5,7 @@ signature_regex = re.compile('\((.*)\)')
 header_regex = re.compile(r'\s:\s?')
 definition_regex = re.compile(r"""
 \*{0,2}            #  no, one or two stars
-\w+\s:             #  a word followed by a semicolumn and optionally a space
+\w+\s:             #  a word followed by a space and a semicolumn
 (
         \s         # just a space
     |              # OR

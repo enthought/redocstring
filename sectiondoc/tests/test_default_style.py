@@ -1,8 +1,8 @@
-from sectiondoc.styles.legacy import class_section, function_section
+from sectiondoc.styles.default import class_section, function_section
 from sectiondoc.tests._compat import unittest
 
 
-class TestLegacyStyleClass(unittest.TestCase):
+class TestDefaultStyleClass(unittest.TestCase):
 
     def setUp(self):
         self.maxDiff = None
@@ -137,7 +137,7 @@ This is not a note.
         self.assertMultiLineEqual(rst, output)
 
 
-class TestOldStyleFunction(unittest.TestCase):
+class TestDefaultStyleFunction(unittest.TestCase):
 
     def setUp(self):
         self.maxDiff = None
@@ -175,11 +175,11 @@ myvalue : list
 
 Raises
 ------
-TypeError :
+TypeError
     This is the first paragraph of the description.
     More description.
 
-ValueError :
+ValueError
     Description of another case where errors are raised.
 """
 
@@ -249,15 +249,15 @@ inputb : float
 
 Parameters
 ----------
-*args :
+*args
     Positional arguments with which this constructor was called
     from the enaml source code.
 
-**kwards :
+**kwards
     Keyword arguments with which this constructor was called
     from the enaml source code.
 
-from_ :
+from_
     Arguments with trailing underscore.
 """
         rst = \
@@ -394,7 +394,7 @@ component : enaml.widgets.component.Component
 attribute_name : str
     The string name of the Enaml attribute to check.
 
-value :
+value
     The expected value.
 
 .. note:: It is expected that the user has defined an appropriate

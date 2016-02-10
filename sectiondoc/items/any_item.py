@@ -1,39 +1,28 @@
 import re
 
-from sectiondoc.items.regex import header_regex
+from sectiondoc.items.regex import definition_regex, header_regex
 from sectiondoc.items.item import Item
 from sectiondoc.util import trim_indent
 
-
-definition_regex = re.compile(r"""
-\*{0,2}            #  no, one or two stars
-\w+\s:             #  a word followed by a space and a semicolumn
-(
-        \s         # just a space
-    |              # OR
-        \s[\w.]+   # dot separated words
-        (\(.*\))?  # with maybe a signature
-    |              # OR
-        \s[\w.]+   # dot separated words
-        (\(.*\))?
-        \sor       # with an or in between
-        \s[\w.]+
-        (\(.*\))?
-)?
+any_item_regex = re.compile(r"""
+\*{0,2}            # no, one or two stars
+\w+                # a word followed by
+(\s:?)?            # space or ` :`
+(.+)?              # a classifier
 $                  # match at the end of the line
 """, re.VERBOSE)
 
 
-class OrDefinitionItem(Item):
+class AnyItem(Item):
     """ A docstring definition section item.
 
-    In this section definition item there are two classifiers that are
-    separated by ``or``.
+    In this section item there are it a most one classifier composed
+    of multiple words.
 
     Syntax diagram::
 
         +-------------------------------------------------+
-        | term [ " : " classifier [ " or " classifier] ]  |
+        | term [ " : " text ]                             |
         +--+----------------------------------------------+---+
            | definition                                       |
            | (body elements)+                                 |
@@ -46,15 +35,15 @@ class OrDefinitionItem(Item):
 
     classifiers : list
         The classifiers of the definition. Commonly used to reflect the type
-        of an argument or the signature of a function. Only two classifiers
-        are accepted.
+        of an argument or the signature of a function. Any text after the
+        ` : ` till the end of the line is consider a classifier.
 
     definition : list
         The list of strings that holds the description the definition item.
 
-    .. note:: An Or Definition item is based on the item of a section definition
-        list as it defined in restructured text
-        (_http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#sections).
+    .. note::
+
+       AnyItem is probably closer to numpydoc on describing a section item.
 
     """
 
@@ -68,13 +57,13 @@ class OrDefinitionItem(Item):
         The expected format is::
 
             +-------------------------------------------------+
-            | term [ " : " classifier [ " or " classifier] ]  |
+            | term [ " : "  text ]                            |
             +-------------------------------------------------+
 
         Subclasses can restrict or expand this format.
 
         """
-        return definition_regex.match(line) is not None
+        return any_item_regex.match(line) is not None
 
     @classmethod
     def parse(cls, lines):
@@ -84,11 +73,16 @@ class OrDefinitionItem(Item):
         docstring lines and produces a DefinitionItem with the term,
         classifier and the definition.
 
-        .. note:: The global indention in the definition lines is striped
+        .. note:: The global indention in the definition lines is striped.
 
         The term definition is assumed to be in one of the following formats::
 
             term
+                Definition.
+
+        ::
+
+            term :
                 Definition.
 
         ::
@@ -99,13 +93,14 @@ class OrDefinitionItem(Item):
                 Definition, paragraph 2.
 
         ::
+            term:
+                Definition, paragraph 1.
 
-            term : classifier
-                Definition.
+                Definition, paragraph 2.
 
         ::
 
-            term : classifier or classifier
+            term : classifier
                 Definition.
 
         Arguments
@@ -116,16 +111,14 @@ class OrDefinitionItem(Item):
 
         Returns
         -------
-        definition : OrDefinitionItem
+        definition : AnyItem
 
         """
         header = lines[0].strip()
-        term, classifiers = header_regex.split(
-            header, maxsplit=1) if (' :' in header) else (header, '')
-        classifiers = [
-            classifier.strip() for classifier in classifiers.split('or')]
-        if classifiers == ['']:
-            classifiers = []
-        trimed_lines = trim_indent(lines[1:]) if (len(lines) > 1) else ['']
+        term, classifier = header_regex.split(header, maxsplit=1) if \
+            (' :' in header) else (header, '')
+        classifier = classifier.strip()
+        classifier = [] if classifier == '' else [classifier]
+        trimed_lines = trim_indent(lines[1:]) if (len(lines) > 1) else []
         definition = [line.rstrip() for line in trimed_lines]
-        return Item(term.strip(), classifiers, definition)
+        return cls(term.strip(), classifier, definition)

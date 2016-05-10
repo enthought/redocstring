@@ -6,11 +6,12 @@ SectionDoc comes with the following predefined rendering styles
 .. toctree::
     :maxdepth: 1
 
+    default_style
     legacy_style
 
 .. note::
 
-  The default rendering style is currently :mod:`~.legacy`
+  - The default rendering style is currently :mod:`~.default`
 
 
 Extending

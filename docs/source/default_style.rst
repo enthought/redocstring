@@ -1,36 +1,35 @@
-Legacy
-######
+Default
+#######
 
-Previous versions of Sectiondoc (and the even older refactordoc
-package) supported a single style for rendering sections in
-function/method doc-strings. The old style is still supported in
-recent versions as a **legacy** style.
+Default style is a stricter implementation of legacy where the definition item
+description is parsed using the :class:`~sectiondoc.items.DefinitionItem` which
+follows the ``rst`` definition more closely.
 
-For class objects the **legacy** renders three types of sections:
+For class objects the **default** renders three types of sections:
 
-==========  ================================  ================  ===  =====================
-Heading     Description                       Parse as          Max  Rendered as
-==========  ================================  ================  ===  =====================
-Attributes  Class attributes and their usage  OrDefinitionItem  --   Sphinx attributes
-Arguments   function arguments and type       OrDefinitionItem  --   Parameters field list
-Parameters  function arguments and type       OrDefinitionItem  --   Parameters field list
-Methods     Class methods with summary        MethodItem        --   Table with links to
-                                                                     the methods
-Notes       Useful notes                      paragraph         1    Note admonition
-==========  ================================  ================  ===  =====================
+==========  ================================  ==============  ===  =====================
+Heading     Description                       Parse as        Max  Rendered as
+==========  ================================  ==============  ===  =====================
+Attributes  Class attributes and their usage  DefinitionItem  --   Sphinx attributes
+Arguments   function arguments and type       DefinitionItem  --   Parameters field list
+Parameters  function arguments and type       DefinitionItem  --   Parameters field list
+Methods     Class methods with summary        MethodItem      --   Table with links to
+                                                                   the methods
+Notes       Useful notes                      paragraph       1    Note admonition
+==========  ================================  ==============  ===  =====================
 
 For functions the **default** renders four types of sections:
 
-==========  ===========================  ================  ===  =====================
-Heading     Description                  Parse as          Max  Rendered as
-==========  ===========================  ================  ===  =====================
-Arguments   function arguments and type  OrDefinitionItem  --   Parameters field list
-Parameters  function arguments and type  OrDefinitionItem  --   Parameters field list
-Returns     Return value                 OrDefinitionItem  --   Unordered list
-Raises      Raised exceptions            OrDefinitionItem  --   Unordered list
-Yields      Yield values                 OrDefinitionItem  --   Unordered list
-Notes       Useful notes                 paragraph         1    Note admonition
-==========  ===========================  ================  ===  =====================
+==========  ===========================  ==============  ===  =====================
+Heading     Description                  Parse as        Max  Rendered as
+==========  ===========================  ==============  ===  =====================
+Arguments   function arguments and type  DefinitionItem  --   Parameters field list
+Parameters  function arguments and type  DefinitionItem  --   Parameters field list
+Returns     Return value                 DefinitionItem  --   Unordered list
+Raises      Raised exceptions            DefinitionItem  --   Unordered list
+Yields      Yield values                 DefinitionItem  --   Unordered list
+Notes       Useful notes                 paragraph       1    Note admonition
+==========  ===========================  ==============  ===  =====================
 
 .. note::
    All other sections are rendered using the ``.. rubric::`` directive by
@@ -69,7 +68,7 @@ Argument section
 
        This is the second paragraph.
 
-   inputb : float or int
+   inputb : float : int
        The second argument is a float.
        the default value is 0.
 
@@ -147,11 +146,11 @@ Raises section
 
    Raises
    ------
-   TypeError :
+   TypeError
        This is the first paragraph of the description.
        More description.
 
-   ValueError :
+   ValueError
        Description of another case where errors are raised.
 
 

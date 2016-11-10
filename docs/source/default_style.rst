@@ -1,11 +1,11 @@
 Default
 #######
 
-Default style is a stricter implementation of legacy where the definition item
+Default style is a stricter implementation of legacy_ where the definition item
 description is parsed using the :class:`~sectiondoc.items.DefinitionItem` which
 follows the ``rst`` definition more closely.
 
-For class objects the **default** renders three types of sections:
+For class objects the **default** renders 5 types of sections:
 
 ==========  ================================  ==============  ===  =====================
 Heading     Description                       Parse as        Max  Rendered as
@@ -18,7 +18,7 @@ Methods     Class methods with summary        MethodItem      --   Table with li
 Notes       Useful notes                      paragraph       1    Note admonition
 ==========  ================================  ==============  ===  =====================
 
-For functions the **default** renders four types of sections:
+For functions the **default** renders six types of sections:
 
 ==========  ===========================  ==============  ===  =====================
 Heading     Description                  Parse as        Max  Rendered as
@@ -50,7 +50,7 @@ the following rules:
   - Two consecutive empty lines are found.
   - The line is not identified as a possible header of the section item.
 
-  .. hint:: Please check the doc-string of the specific definition item
+  .. hint:: Please check the docstring of the specific definition item
      class to have more information regarding the valid item header
      format.
 

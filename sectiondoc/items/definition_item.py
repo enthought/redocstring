@@ -41,7 +41,7 @@ class DefinitionItem(Item):
     classifiers : list
         The classifiers of the definition. Commonly used to reflect the type
         of an argument or the signature of a function. Multiple classifiers
-        are allowed separated by colons ``:``.
+        are allowed separated by colons `` : ``.
 
     definition : list
         The list of strings that holds the description the definition item.

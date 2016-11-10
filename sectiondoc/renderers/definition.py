@@ -42,7 +42,6 @@ class Definition(Renderer):
             that the results can be concatenated directly and rendered properly
             by sphinx.
 
-
         """
         item = self.item
         postfix = ' --' if (len(item.definition) > 0) else ''

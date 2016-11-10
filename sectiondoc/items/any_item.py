@@ -16,8 +16,8 @@ $                  # match at the end of the line
 class AnyItem(Item):
     """ A docstring definition section item.
 
-    In this section item there are it a most one classifier composed
-    of multiple words.
+    In this section item the are not restrictions on the classifier's
+    section of the item header.
 
     Syntax diagram::
 
@@ -36,7 +36,7 @@ class AnyItem(Item):
     classifiers : list
         The classifiers of the definition. Commonly used to reflect the type
         of an argument or the signature of a function. Any text after the
-        ` : ` till the end of the line is consider a classifier.
+        ` : ` till the end of the line is consider a single classifier.
 
     definition : list
         The list of strings that holds the description the definition item.
@@ -100,7 +100,7 @@ class AnyItem(Item):
 
         ::
 
-            term : classifier
+            term : any text is valid here
                 Definition.
 
         Arguments

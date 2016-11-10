@@ -1,15 +1,15 @@
 Docstring rendering
 *******************
 
+
 The are five different parts in the pipeline of **sectiondoc** docstring rendering.
 
 Style
 #####
 
-The rendering :class:`~Style` is hooked with autodoc to receive the docstring
-of the various objects and maps the objects types provided by autodoc to
-:class:`~DocRender` instances which are responsible for rendering the provided
-docstring.
+The rendering :class:`~Style` maps the objects types provided by
+autodoc to :class:`~DocRender` factory instances which are responsible
+for rendering the provided docstring.
 
 The DocRender
 #############
@@ -22,7 +22,7 @@ executing :meth:`~.DocRender.parse` to detect sections in the
 docstring. For each section that is discovered the
 :meth:`~.DocRender._render` is called with the name of the discovered
 section to further dispatch processing to the associated section
-rendering function. If a associated function to the section does not
+rendering function. If an associated function to the section does not
 exist the default is to use :func:`~.rubric`.
 
 Section rendering function

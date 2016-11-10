@@ -4,9 +4,9 @@ Legacy
 Previous versions of Sectiondoc (and the even older refactordoc
 package) supported a single style for rendering sections in
 function/method doc-strings. The old style is still supported in
-recent versions as a **legacy** style.
+recent versions as the **legacy** style.
 
-For class objects the **legacy** renders three types of sections:
+For class objects the **legacy** renders five types of sections:
 
 ==========  ================================  ================  ===  =====================
 Heading     Description                       Parse as          Max  Rendered as
@@ -19,7 +19,7 @@ Methods     Class methods with summary        MethodItem        --   Table with 
 Notes       Useful notes                      paragraph         1    Note admonition
 ==========  ================================  ================  ===  =====================
 
-For functions the **default** renders four types of sections:
+For functions the **default** renders six types of sections:
 
 ==========  ===========================  ================  ===  =====================
 Heading     Description                  Parse as          Max  Rendered as
@@ -51,7 +51,7 @@ the following rules:
   - Two consecutive empty lines are found.
   - The line is not identified as a possible header of the section item.
 
-  .. hint:: Please check the doc-string of the specific definition item
+  .. hint:: Please check the docstring of the specific definition item
      class to have more information regarding the valid item header
      format.
 

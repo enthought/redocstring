@@ -6,6 +6,18 @@ from sectiondoc.util import trim_indent
 class MethodItem(Item):
     """ A MethodItem for method descriptions.
 
+    Attributes
+    ----------
+    term : str
+        The term usually reflects the name of the method.
+
+    classifiers : list
+        The classifiers reflect the signature (i.e args and kwargs) of
+        the method.
+
+    definition : list
+        The list of strings that holds the description the method item.
+
     """
 
     @property
@@ -18,9 +30,9 @@ class MethodItem(Item):
 
         The expected header has the following format::
 
-          +------------------------------+
-          | term "(" [  classifier ] ")" |
-          +------------------------------+
+          +---------------------------------------------+
+          | term "(" [ classifier [, classifier]* ] ")" |
+          +---------------------------------------------+
 
         """
         return function_regex.match(line)
@@ -37,12 +49,12 @@ class MethodItem(Item):
 
         The format of the method definition item is expected to be as follows::
 
-          +------------------------------+
-          | term "(" [  classifier ] ")" |
-          +--+---------------------------+---+
-             | definition                    |
-             | (body elements)+              |
-             +-------------------------------+
+          +---------------------------------------------+
+          | term "(" [ classifier [, classifier]* ] ")" |
+          +--+--------------------------------------+---+
+             | definition                           |
+             | (body elements)+                     |
+             +--------------------------------------+
 
         Arguments
         ---------

@@ -16,6 +16,7 @@ class Attribute(Renderer):
     def to_rst(self):
         """ Return the attribute info using the attribute sphinx markup.
 
+
         Examples
         --------
 

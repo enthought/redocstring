@@ -1,11 +1,15 @@
 Change Log
 ==========
 
-Version 0.4.0dev
+Version 0.5.0dev
 ----------------
 
+- The DefinitionItem now follows the rst description
+- Implement a new AnyItem definition.
+- Support rendering styles (#13)
 - Fix documentation built
-- Rename package to sectiondoc.
+- Add `Parameters` section for class docstrings (#22)
+- Rename package to sectiondoc (#16)
 - Fix support and tests on Python 2.6 (#8)
 
 Version 0.3.0

@@ -12,21 +12,25 @@ Sectiondoc: Docstring section rendering sphinx extension
 .. image:: https://readthedocs.org/projects/sectiondoc/badge/?version=latest
    :target: http://sectiondoc.readthedocs.org/en/latest/?badge=latest
    :alt: Documentation Status
-                
+
 
 The sectiondoc extension parses the function and class docstrings as
 they are retrieved by the autodoc extension and renders the section
 blocks into sphinx friendly rst. The extension shares similarities
 with alternatives (such as numpydoc) but aims at reflecting the
 original form of the docstring and support project specific
-customization.
+customizations.
 
-Key aims of **sectiondoc** are:
+Key features of **sectiondoc** are:
 
     - Do not change the order of sections.
     - Allow sphinx directives between (and inside) section blocks.
     - Custom rendering styles
-    - (not yet) Easier to debug (native support for debugging).
+
+.. note::
+
+       Sectiondoc should work with sphinx >= 0.4 that provides
+       the ``autodoc-process-docstring`` hook.
 
 
 Repository

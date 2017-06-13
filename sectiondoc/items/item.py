@@ -5,8 +5,8 @@ from collections import namedtuple
 class Item(namedtuple('Item', ['term', 'classifiers', 'definition'])):
     """ A section item.
 
-    The Item class is responsible to check, parse and render a docstring
-    item into sphinx friendly rst.
+    The Item class is responsible to check, parse a docstring
+    item into a (term, classifiers, definition) tuple.
 
     Format diagram::
 
